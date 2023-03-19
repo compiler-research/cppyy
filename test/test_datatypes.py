@@ -3,8 +3,7 @@ from pytest import raises, skip, mark
 from .support import setup_make, pylong, pyunicode
 
 currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("datatypesDict.so"))
-test_h = str(currpath.join("datatypes.h"))
+test_dct = str(currpath.join("datatypesDict"))
 
 def setup_module(mod):
     setup_make("datatypes")
@@ -13,10 +12,8 @@ def setup_module(mod):
 class TestDATATYPES:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.datatypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.datatypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 5 #cppyy.gbl.N
         at_least_17 = False #201402 < cppyy.gbl.cling.runtime.gCling.process("__cplusplus;")
         cls.has_byte     = at_least_17

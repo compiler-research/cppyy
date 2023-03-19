@@ -3,8 +3,7 @@ from pytest import raises, skip, mark
 from .support import setup_make, ispypy, IS_WINDOWS
 
 currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("doc_helperDict.so"))
-test_h = str(currpath.join("doc_helper.h"))
+test_dct = str(currpath.join("doc_helperDict"))
 
 def setup_module(mod):
     setup_make("doc_helper")
@@ -13,14 +12,12 @@ def setup_module(mod):
 class TestDOCFEATURES:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
 
         # touch __version__ as a test
         assert hasattr(cppyy, '__version__')
 
-        cls.doc_helper = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.doc_helper = cppyy.load_reflection_info(cls.test_dct)
 
         cppyy.cppdef("""
 #include <cmath>

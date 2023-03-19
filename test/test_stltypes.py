@@ -4,8 +4,7 @@ from pytest import raises, skip, mark
 from .support import setup_make, pylong, pyunicode, maxvalue, ispypy
 
 currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("stltypesDict.so"))
-test_h = str(currpath.join("stltypes.h"))
+test_dct = str(currpath.join("stltypesDict"))
 
 def setup_module(mod):
     setup_make("stltypes")
@@ -196,10 +195,8 @@ def getslice_cpython_test(type2test):
 class TestSTLVECTOR:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
     @mark.xfail
@@ -735,10 +732,8 @@ class TestSTLVECTOR:
 class TestSTLSTRING:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
     @mark.xfail
     def test01_string_argument_passing(self):
@@ -1043,10 +1038,8 @@ class TestSTLSTRING:
 class TestSTLLIST:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 13
 
     @mark.xfail
@@ -1167,10 +1160,8 @@ class TestSTLLIST:
 class TestSTLMAP:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 13
 
     @mark.xfail
@@ -1519,10 +1510,8 @@ class TestSTLITERATOR:
 class TestSTLARRAY:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
     @mark.xfail
     def test01_array_of_basic_types(self):
@@ -1612,10 +1601,8 @@ class TestSTLARRAY:
 class TestSTLSTRING_VIEW:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
     @mark.xfail
     def test01_string_through_string_view(self):
@@ -1681,10 +1668,8 @@ class TestSTLSTRING_VIEW:
 class TestSTLDEQUE:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
     @mark.xfail
@@ -1712,10 +1697,8 @@ class TestSTLDEQUE:
 class TestSTLSET:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
     @mark.xfail
@@ -1812,10 +1795,8 @@ class TestSTLSET:
 class TestSTLTUPLE:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
     @mark.xfail
@@ -1908,10 +1889,8 @@ class TestSTLTUPLE:
 class TestSTLPAIR:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
     @mark.xfail
@@ -1931,10 +1910,8 @@ class TestSTLPAIR:
 class TestSTLEXCEPTION:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.stltypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
     def test01_basics(self):
         """Test behavior of std::exception derived classes"""

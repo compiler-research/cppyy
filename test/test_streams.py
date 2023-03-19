@@ -3,8 +3,7 @@ from pytest import raises, mark
 from .support import setup_make
 
 currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("std_streamsDict.so"))
-test_h = str(currpath.join("std_streams.h"))
+test_dct = str(currpath.join("std_streamsDict"))
 
 def setup_module(mod):
     setup_make("std_streams")
@@ -13,10 +12,8 @@ def setup_module(mod):
 class TestSTDStreams:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.streams = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.streams = cppyy.load_reflection_info(cls.test_dct)
 
     def test01_std_ostream(self):
         """Test availability of std::ostream"""

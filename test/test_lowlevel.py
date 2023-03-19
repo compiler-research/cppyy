@@ -3,8 +3,7 @@ from pytest import raises, skip, mark
 from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy
 
 currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("datatypesDict.so"))
-test_h = str(currpath.join("datatypes.h"))
+test_dct = str(currpath.join("datatypesDict"))
 
 def setup_module(mod):
     setup_make("datatypes")
@@ -15,9 +14,7 @@ class TestLOWLEVEL:
         import cppyy
 
         cls.test_dct = test_dct
-        cls.test_h = test_h
-        cls.datatypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.datatypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
     def test00_import_all(self):
@@ -519,9 +516,7 @@ class TestMULTIDIMARRAYS:
         import cppyy
 
         cls.test_dct = test_dct
-        cls.test_h = test_h
-        cls.datatypes = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.datatypes = cppyy.load_reflection_info(cls.test_dct)
         cls.numeric_builtin_types = [
             'short', 'unsigned short', 'int', 'unsigned int', 'long', 'unsigned long',
             'long long', 'unsigned long long', 'float', 'double'

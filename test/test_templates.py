@@ -3,8 +3,7 @@ from pytest import raises, mark
 from .support import setup_make, pylong
 
 currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("templatesDict.so"))
-test_h = str(currpath.join("templates.h"))
+test_dct = str(currpath.join("templatesDict"))
 
 def setup_module(mod):
     setup_make("templates")
@@ -13,10 +12,8 @@ def setup_module(mod):
 class TestTEMPLATES:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.templates = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
     @mark.xfail
     def test00_template_back_reference(self):
@@ -1192,10 +1189,8 @@ class TestTEMPLATES:
 class TestTEMPLATED_TYPEDEFS:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.templates = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
     @mark.xfail
     def test01_using(self):
@@ -1312,10 +1307,8 @@ class TestTEMPLATED_TYPEDEFS:
 class TestTEMPLATE_TYPE_REDUCTION:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.templates = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
     @mark.xfail
     def test01_reduce_binary(self):

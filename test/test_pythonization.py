@@ -3,8 +3,7 @@ from pytest import raises, mark
 from .support import setup_make, pylong
 
 currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("pythonizablesDict.so"))
-test_h = str(currpath.join("pythonizables.h"))
+test_dct = str(currpath.join("pythonizablesDict"))
 
 def setup_module(mod):
     setup_make("pythonizables")
@@ -13,10 +12,8 @@ def setup_module(mod):
 class TestClassPYTHONIZATION:
     def setup_class(cls):
         cls.test_dct = test_dct
-        cls.test_h = test_h
         import cppyy
-        cls.pyzables = cppyy.load_library(cls.test_dct)
-        cppyy.include(cls.test_h)
+        cls.pyzables = cppyy.load_reflection_info(cls.test_dct)
 
     @mark.xfail
     def test00_api(self):
