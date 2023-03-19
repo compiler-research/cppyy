@@ -191,10 +191,20 @@ nullptr       = _backend.nullptr
 default       = _backend.default
 
 def load_reflection_info(name):
-    gDLM = gbl.cling.runtime.gDLM
-    sc = gDLM.loadLibrary(name)
-    if sc == -1:
-        raise RuntimeError("Unable to load reflection library "+name)
+#    with _stderr_capture() as err:
+    InterOp = gbl.InterOp
+    gCling = gbl.cling.runtime.gCling
+    #FIXME: Remove the .so and add logic in libinterop
+    name = name + ".so"
+    result = InterOp.LoadLibrary(gCling, name)
+    if name.endswith("Dict.so"):
+        header = name[:-7] + ".h";
+        InterOp.Declare(gCling, '#include "' + header +'"')
+
+    if result == False:
+        raise RuntimeError('Could not load library "%s"' % (name))
+
+    return True
 
 def _begin_capture_stderr():
     _backend._begin_capture_stderr()
