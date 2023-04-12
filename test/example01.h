@@ -1,3 +1,6 @@
+#ifndef EXAMPLE_01_H
+#define EXAMPLE_01_H
+
 #include <string>
 
 class payload {
@@ -113,3 +116,5 @@ class example01a : public example01 {
 public:
    example01a(int a) : example01(a) {}
 };
+
+#endif // EXAMPLE_01_H
