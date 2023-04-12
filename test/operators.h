@@ -1,6 +1,8 @@
 #ifndef CPPYY_TEST_OPERATORS_H
 #define CPPYY_TEST_OPERATORS_H
 
+const int N = 5;
+
 class number  {
 public:
     number() { m_int = 0; }
