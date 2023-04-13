@@ -154,7 +154,6 @@ class TestADVANCEDCPP:
 
         raises(TypeError, gbl.a_ns)
 
-    @mark.xfail
     def test03a_namespace_lookup_on_update(self):
         """Test whether namespaces can be shared across dictionaries."""
 

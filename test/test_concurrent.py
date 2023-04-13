@@ -230,7 +230,6 @@ class TestCONCURRENT:
         p = Processor()
         cppyy.gbl.FloatDim2.callback(p)
 
-    @mark.xfail
     def test06_overload_reuse_in_threads(self):
         """Threads reuse overload objects; check for clashes"""
 

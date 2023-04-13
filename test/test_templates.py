@@ -15,7 +15,6 @@ class TestTEMPLATES:
         import cppyy
         cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test00_template_back_reference(self):
         """Template reflection"""
 
@@ -898,7 +897,6 @@ class TestTEMPLATES:
         assert s.Schedule6['FPTA::Node&'](ns.Time(1.0), ann_ref_mod, tn).fId == 88
         assert tn.fData == 81
 
-    @mark.xfail
     def test30_mix_and_match(self):
         """Mix of (non-)templated across inheritance"""
 

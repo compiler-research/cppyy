@@ -15,7 +15,6 @@ class TestPYTHONIFY:
         import cppyy
         cls.example01 = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test01_load_dictionary_cache(self):
         """Test whether loading a dictionary twice results in the same object"""
 
@@ -552,7 +551,6 @@ class TestPYTHONIFY_UI:
         import cppyy
         cls.example01 = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test01_pythonizations(self):
         """Test addition of user-defined pythonizations"""
 
@@ -572,7 +570,6 @@ class TestPYTHONIFY_UI:
         assert e[1] == 2
         assert e[5] == 6
 
-    @mark.xfail
     def test02_fragile_pythonizations(self):
         """Test pythonizations error reporting"""
 
@@ -581,7 +578,6 @@ class TestPYTHONIFY_UI:
         example01_pythonize = 1
         raises(TypeError, cppyy.py.add_pythonization, example01_pythonize)
 
-    @mark.xfail
     def test03_write_access_to_globals(self):
         """Test overwritability of globals"""
 
