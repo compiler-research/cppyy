@@ -213,7 +213,7 @@ jobs:
         python -m pip install pytest
         python -m pip install pytest-xdist
         echo ::group::Test Logs
-        python -m pytest -n auto -sv --max-worker-restart 512 | tee test.log 2>&1
+        python -m pytest -n 1 -sv --max-worker-restart 512 | tee test.log 2>&1
         export PYTEST_RETCODE="${PIPESTATUS[0]}"
         echo ::endgroup::
         echo "TEST SUMMARY: \n"
