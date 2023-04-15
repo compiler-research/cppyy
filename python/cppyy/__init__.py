@@ -216,12 +216,12 @@ def cppexec(stmt):
     with _stderr_capture() as err:
         errcode = ctypes.c_int(0)
         try:
-            gbl.cling.runtime.gCling.ProcessLine(stmt, ctypes.pointer(errcode))
+            errcode = gbl.InterOp.Process(gbl.cling.runtime.gCling, stmt)
         except Exception as e:
             sys.stderr.write("%s\n\n" % str(e))
             if not errcode.value: errcode.value = 1
 
-    if errcode.value:
+    if not errcode == 0:
         raise SyntaxError('Failed to parse the given C++ code%s' % err.err)
     elif err.err and err.err[1:] != '\n':
         sys.stderr.write(err.err[1:])

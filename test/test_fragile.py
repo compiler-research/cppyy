@@ -535,7 +535,6 @@ class TestFRAGILE:
         assert "expectedunqualified-id" in err
         assert "1aap=42;" in err
 
-    @mark.xfail
     def test22_cppexec(self):
         """Interactive access to the Cling global scope"""
 
