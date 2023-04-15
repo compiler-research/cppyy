@@ -1672,7 +1672,6 @@ class TestSTLDEQUE:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
-    @mark.xfail
     def test01_deque_byvalue_regression(self):
         """Return by value of a deque used to crash"""
 

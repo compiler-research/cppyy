@@ -510,7 +510,6 @@ class TestTEMPLATES:
 
         assert round(q.X() - 6.3, 8) == 0.
 
-    @mark.xfail
     def test20_templated_ctor_with_defaults(self):
         """Templated constructor with defaults used to be ignored"""
 
@@ -1243,7 +1242,6 @@ class TestTEMPLATED_TYPEDEFS:
 
         raises(TypeError, tct.__getitem__, 'gibberish', dum, 4)
 
-    @mark.xfail
     def test03_mapped_type_as_template_arg(self):
         """Test that mapped types can be used as template arguments"""
 

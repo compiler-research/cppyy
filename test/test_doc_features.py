@@ -889,7 +889,6 @@ class TestADVERTISED:
         cppyy.gbl.Advert04.ptr2ptr_init(s)
         assert s.i == 42
 
-    @mark.xfail
     def test05_ptr_ptr_with_array(self):
         """Example of ptr-ptr with array"""
 
