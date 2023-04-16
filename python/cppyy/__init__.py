@@ -182,7 +182,7 @@ del make_smartptr
 #--- interface to Cling ------------------------------------------------------
 class _stderr_capture(object):
     def __init__(self):
-       self._capture = False
+       self._capture = not gbl.InterOp.IsDebugOutputEnabled()
        self.err = ""
 
     def __enter__(self):
@@ -197,7 +197,6 @@ class _stderr_capture(object):
 def cppdef(src):
     """Declare C++ source <src> to Cling."""
     with _stderr_capture() as err:
-        print(src)
         errcode = gbl.InterOp.Declare(gbl.cling.runtime.gCling, src)
     if not errcode == 0 or err.err:
         if 'warning' in err.err.lower() and not 'error' in err.err.lower():
