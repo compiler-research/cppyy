@@ -230,7 +230,6 @@ namespace Namespace {
         c = Concrete(*args)
         assert c.m_int == 27
 
-    @mark.xfail
     def test_keyword_arguments(self):
         import cppyy
         from cppyy.gbl import Concrete

@@ -145,7 +145,6 @@ class TestOVERLOADS:
             a = array.array(l, numbers)
             assert round(cmean(len(a), a) - mean, 8) == 0
 
-    @mark.xfail
     def test08_const_non_const_overloads(self):
         """Check selectability of const/non-const overloads"""
 

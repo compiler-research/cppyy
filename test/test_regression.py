@@ -148,7 +148,6 @@ class TestREGRESSION:
         a.m_t = 21;
         assert a.do_stuff() == 24
 
-    @mark.xfail
     def test06_default_float_or_unsigned_argument(self):
         """Calling with default argument for float or unsigned, which not parse"""
 

@@ -184,7 +184,6 @@ class TestCROSSINHERITANCE:
         assert d.sum_all(-7, -5)             == 1
         assert Base1.call_sum_all(d, -7, -5) == 1
 
-    @mark.xfail
     def test06_const_methods(self):
         """Declared const methods should keep that qualifier"""
 
@@ -207,7 +206,6 @@ class TestCROSSINHERITANCE:
         assert CX.IBase4.call_get_value(c1) == 17
         assert CX.IBase4.call_get_value(c2) == 27
 
-    @mark.xfail
     def test07_templated_base(self):
         """Derive from a base class that is instantiated from a template"""
 
