@@ -573,7 +573,6 @@ class TestFRAGILE:
 
         cppyy.include('sanitizer/asan_interface.h')
 
-    @mark.xfail
     def test25_cppdef_error_reporting(self):
         """Check error reporting of cppyy.cppdef"""
 
@@ -592,7 +591,9 @@ class TestFRAGILE:
           # missing return statement
             cppyy.cppdef("""\
             namespace fragile {
-                double add42d(double d) { d + 42.; }
+                void add42d(double d) {
+                  #warning return plastic for recycling!
+                }
             }""")
 
         assert len(w) == 1
