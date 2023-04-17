@@ -546,20 +546,19 @@ class TestFRAGILE:
         with raises(SyntaxError):
             cppyy.cppexec("doesnotexist");
 
-    @mark.xfail
     def test23_set_debug(self):
-        """Setting of global gDebug variable"""
+        """Setting of debugging facilities"""
 
         import cppyy
 
         cppyy.set_debug()
-        assert cppyy.gbl.CppyyLegacy.gDebug == 10
+        assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == True
         cppyy.set_debug(False)
-        assert cppyy.gbl.CppyyLegacy.gDebug ==  0
+        assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == False
         cppyy.set_debug(True)
-        assert cppyy.gbl.CppyyLegacy.gDebug == 10
+        assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == True
         cppyy.set_debug(False)
-        assert cppyy.gbl.CppyyLegacy.gDebug ==  0
+        assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == False
 
     @mark.xfail
     def test24_asan(self):

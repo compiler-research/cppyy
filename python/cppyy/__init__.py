@@ -362,10 +362,7 @@ def add_autoload_map(fname):
 
 def set_debug(enable=True):
     """Enable/disable debug output."""
-    if enable:
-        gbl.CppyyLegacy.gDebug = 10
-    else:
-        gbl.CppyyLegacy.gDebug =  0
+    gbl.InterOp.EnableDebugOutput(enable)
 
 def _get_name(tt):
     if type(tt) == str:
