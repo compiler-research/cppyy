@@ -101,7 +101,6 @@ class TestREGRESSION:
 
         assert 1 == cppyy.gbl.py2long(1)
 
-    @mark.xfail
     def test04_avx(self):
         """Test usability of AVX by default."""
 
