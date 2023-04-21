@@ -1202,13 +1202,12 @@ class TestCROSSINHERITANCE:
             with raises(TypeError):
                 PyDerived()
 
-    @mark.xfail
     def test27_interfaces(self):
         """Inherit from base with non-standard offset"""
 
         import cppyy
 
-        cppyy.gbl.cling.runtime.gCling.Declare("""\
+        cppyy.gbl.InterOp.Declare(cppyy.gbl.cling.runtime.gCling, """\
         namespace NonStandardOffset {
         struct Calc1 {
           virtual int calc1() = 0;

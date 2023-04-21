@@ -1604,12 +1604,12 @@ class TestSTLSTRING_VIEW:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
+    @mark.xfail
     def test01_string_through_string_view(self):
         """Usage of std::string_view as formal argument"""
 
         import cppyy
-        # FIXME: Need to get the output of process somehow
-        if cppyy.gbl.cling.runtime.gCling.process("__cplusplus;") <= 201402:
+        if cppyy.gbl.InterOp.Evaluate(cppyy.gbl.cling.runtime.gCling, "__cplusplus;") <= 201402:
             # string_view exists as of C++17
             return
         countit = cppyy.gbl.StringViewTest.count

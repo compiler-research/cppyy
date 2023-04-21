@@ -15,7 +15,7 @@ class TestDATATYPES:
         import cppyy
         cls.datatypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 5 #cppyy.gbl.N
-        at_least_17 = False #201402 < cppyy.gbl.cling.runtime.gCling.process("__cplusplus;")
+        at_least_17 = 201402 < cppyy.gbl.InterOp.Evaluate(cppyy.gbl.cling.runtime.gCling, "__cplusplus;")
         cls.has_byte     = at_least_17
         cls.has_optional = at_least_17
 
@@ -1700,7 +1700,6 @@ class TestDATATYPES:
 
         assert 'foo' in dir(ns.libuntitled1_ExportedSymbols().kotlin.root.com.justamouse.kmmdemo)
 
-    @mark.xfail
     def test33_pointer_to_array(self):
         """Usability of pointer to array"""
 

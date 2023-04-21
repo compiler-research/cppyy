@@ -210,7 +210,7 @@ def cppexec(stmt):
     if stmt and stmt[-1] != ';':
         stmt += ';'
 
-  # capture stderr, but note that ProcessLine could legitimately be writing to
+  # capture stderr, but note that Process could legitimately be writing to
   # std::cerr, in which case the captured output needs to be printed as normal
     with _stderr_capture() as err:
         errcode = ctypes.c_int(0)
@@ -383,7 +383,7 @@ def sizeof(tt):
         try:
             sz = ctypes.sizeof(tt)
         except TypeError:
-            sz = gbl.cling.runtime.gCling.ProcessLine("sizeof(%s);" % (_get_name(tt),))
+            sz = gbl.InterOp.Evaluate(gbl.cling.runtime.gCling, "sizeof(%s);" % (_get_name(tt),))
         _sizes[tt] = sz
         return sz
 
@@ -396,7 +396,7 @@ def typeid(tt):
         return _typeids[tt]
     except KeyError:
         tidname = 'typeid_'+str(len(_typeids))
-        gbl.cling.runtime.gCling.ProcessLine(
+        cppexec(
             "namespace _cppyy_internal { auto* %s = &typeid(%s); }" %\
             (tidname, _get_name(tt),))
         tid = getattr(gbl._cppyy_internal, tidname)
