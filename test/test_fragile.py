@@ -670,7 +670,6 @@ class TestSTDNOTINGLOBAL:
         # FIXME: Need to get the output of process somehow
         cls.has_byte = 201402 < cppyy.gbl.cling.runtime.gCling.process("__cplusplus;")
 
-    @mark.xfail
     def test01_stl_in_std(self):
         """STL classes should live in std:: only"""
 

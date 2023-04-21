@@ -915,7 +915,6 @@ class TestADVANCEDCPP:
 
         assert ns.deeper.some_other_func_xc() == 42
 
-    @mark.xfail
     def test29_castcpp(self):
         """Allow casting a Python class to a C++ one"""
 
