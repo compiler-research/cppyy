@@ -661,7 +661,6 @@ class TestREGRESSION:
         r22.c = cppyy.nullptr
         assert r22.Countable.s_count == 0
 
-    @mark.xfail
     def test24_C_style_enum(self):
         """Support C-style enum variable declarations"""
 
