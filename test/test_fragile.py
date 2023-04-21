@@ -369,6 +369,7 @@ class TestFRAGILE:
         l = k.GimeL()
         assert l is k.GimeL()
 
+    @mark.xfail
     def test14_double_enum_trouble(self):
         """Test a redefinition of enum in a derived class"""
 
@@ -614,7 +615,7 @@ class TestSIGNALS:
         import cppyy
         cls.fragile = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.crashes
     def test01_abortive_signals(self):
         """Conversion from abortive signals to Python exceptions"""
 

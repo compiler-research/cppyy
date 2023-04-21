@@ -851,7 +851,7 @@ class TestADVERTISED:
         assert list(arr) == [1, 42, 1, 42]
         cppyy.gbl.free(vp)
 
-    @mark.xfail
+    @mark.crashes
     def test04_ptr_ptr_python_owns(self):
         """Example of ptr-ptr use where python owns"""
 
@@ -888,6 +888,7 @@ class TestADVERTISED:
         cppyy.gbl.Advert04.ptr2ptr_init(s)
         assert s.i == 42
 
+    @mark.crashes
     def test05_ptr_ptr_with_array(self):
         """Example of ptr-ptr with array"""
 

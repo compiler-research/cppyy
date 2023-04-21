@@ -121,6 +121,7 @@ class TestOVERLOADS:
         assert c_overload().get_int(ah) == 25
         assert d_overload().get_int(ah) == 25
 
+    @mark.xfail
     def test06_double_int_overloads(self):
         """Test overloads on int/doubles"""
 

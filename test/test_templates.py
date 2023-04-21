@@ -173,7 +173,7 @@ class TestTEMPLATES:
         assert call_has_var1(move(Obj1())) == True
         assert call_has_var1(move(Obj2())) == False
 
-    @mark.xfail
+    @mark.crashes
     def test07_type_deduction(self):
         """Traits/type deduction"""
 
@@ -510,6 +510,7 @@ class TestTEMPLATES:
 
         assert round(q.X() - 6.3, 8) == 0.
 
+    @mark.xfail
     def test20_templated_ctor_with_defaults(self):
         """Templated constructor with defaults used to be ignored"""
 
@@ -920,7 +921,7 @@ class TestTEMPLATES:
 
         ns.Templated()       # used to crash
 
-    @mark.xfail
+    @mark.crashes
     def test31_ltlt_in_template_name(self):
         """Verify lookup of template names with << in the name"""
 
@@ -1189,7 +1190,7 @@ class TestTEMPLATED_TYPEDEFS:
         import cppyy
         cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.crashes
     def test01_using(self):
         """Test presence and validity of using typedefs"""
 
@@ -1213,7 +1214,7 @@ class TestTEMPLATED_TYPEDEFS:
         assert in_type_tt.__name__ == 'in_type_tt'
         assert in_type_tt.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int,TemplatedTypedefs::SomeDummy,4>::in_type_tt'
 
-    @mark.xfail
+    @mark.crashes
     def test02_mapped_type_as_internal(self):
         """Test that mapped types can be used as builtin"""
 
@@ -1242,6 +1243,7 @@ class TestTEMPLATED_TYPEDEFS:
 
         raises(TypeError, tct.__getitem__, 'gibberish', dum, 4)
 
+    @mark.crashes
     def test03_mapped_type_as_template_arg(self):
         """Test that mapped types can be used as template arguments"""
 

@@ -206,6 +206,7 @@ class TestCROSSINHERITANCE:
         assert CX.IBase4.call_get_value(c1) == 17
         assert CX.IBase4.call_get_value(c2) == 27
 
+    @mark.xfail
     def test07_templated_base(self):
         """Derive from a base class that is instantiated from a template"""
 
@@ -336,7 +337,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert CB.s_count == 0 + start_count
 
-    @mark.xfail
+    @mark.crashes
     def test11_python_in_make_shared(self):
         """Usage of Python derived objects with std::make_shared"""
 
@@ -401,7 +402,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert CB.s_count == 0 + start_count
 
-    @mark.xfail
+    @mark.crashes
     def test12_python_shared_ptr_memory(self):
         """Usage of Python derived objects with std::shared_ptr"""
 

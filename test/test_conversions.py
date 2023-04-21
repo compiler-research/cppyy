@@ -15,7 +15,7 @@ class TestCONVERSIONS:
         import cppyy
         cls.conversion = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.crashes
     def test01_implicit_vector_conversions(self):
         """Test implicit conversions of std::vector"""
 

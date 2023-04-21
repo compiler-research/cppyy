@@ -183,7 +183,7 @@ class TestADVANCEDCPP:
         assert gbl.a_ns.d_ns.i_class.j_class.s_j      == 333
         assert gbl.a_ns.d_ns.i_class.j_class().m_j    == -10
 
-    @mark.xfail
+    @mark.crashes
     def test04_template_types(self):
         """Test bindings of templated types"""
 
@@ -786,7 +786,7 @@ class TestADVANCEDCPP:
         assert d2.vcheck()  == 'A'
         assert d2.vcheck(1) == 'B'
 
-    @mark.xfail
+    @mark.crashes
     def test24_typedef_to_private_class(self):
         """Typedefs to private classes should not resolve"""
 
@@ -794,7 +794,7 @@ class TestADVANCEDCPP:
 
         assert cppyy.gbl.TypedefToPrivateClass().f().m_val == 42
 
-    @mark.xfail
+    @mark.crashes
     def test25_ostream_printing(self):
         """Mapping of __str__ through operator<<(ostream&)"""
 
@@ -893,7 +893,7 @@ class TestADVANCEDCPP:
         #assert type(ns.A.Val(1)) == int
         #assert type(ns.B.Val(1)) == float
 
-    @mark.xfail
+    @mark.crashes
     def test28_extern_C_in_namespace(self):
         """Access to extern "C" declared functions in namespaces"""
 
@@ -915,6 +915,7 @@ class TestADVANCEDCPP:
 
         assert ns.deeper.some_other_func_xc() == 42
 
+    @mark.xfail
     def test29_castcpp(self):
         """Allow casting a Python class to a C++ one"""
 

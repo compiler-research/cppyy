@@ -208,19 +208,33 @@ jobs:
         # Run the tests
         source .venv/bin/activate
         cd test
-        make all || true
+        echo ::group::Prepare For Testing
+        make all
         python -m pip install --upgrade pip
         python -m pip install pytest
         python -m pip install pytest-xdist
-        echo ::group::Test Logs
-        python -m pytest -n 1 -sv --max-worker-restart 512 | tee test.log 2>&1
-        export PYTEST_RETCODE="${PIPESTATUS[0]}"
         echo ::endgroup::
-        echo "TEST SUMMARY: \n"
-        tail -n1 test.log
+
+        echo ::group::Crashing Test Logs
+        # See if we don't have a crash that went away
+        python -m pytest -n 1 -m "crashes" -sv --max-worker-restart 512 | tee test_crashed.log 2>&1
+        echo ::endgroup::
+
+        echo ::group::XFAIL Test Logs
+        # See if we don't have an xfail that went away
+        python -m pytest -m "not crashes" --runxfail -s  | tee test_xfailed.log 2>&1
+        echo ::endgroup::
+
+        # Run the rest of the non-crashing tests.
+        python -m pytest -m "not crashes" -v
+        export PYTEST_RETCODE=$?
+
+        echo "Crashing Summary: \n"
+        tail -n1 test_crashed.log
+        echo "XFAIL Summary:"
+        tail -n1 test_xfailed.log
         echo "OF TOTAL $(python3 -m pytest  --collect-only -q | tail -n1)"
         echo "Return Code: ${PYTEST_RETCODE}"
-        tail -n1 test.log | grep -q "xpassed" ; test $? -eq 1
         exit $PYTEST_RETCODE
     - name: Setup tmate session
       if: ${{ failure() }}

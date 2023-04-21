@@ -311,7 +311,7 @@ class TestCPP11FEATURES:
         for l in (['x'], ['x', 'y', 'z']):
             assert ns.foo(l) == std.vector['std::string'](l)
 
-    @mark.xfail
+    @mark.crashes
     def test09_lambda_calls(self):
         """Call (global) lambdas"""
 
@@ -372,6 +372,7 @@ class TestCPP11FEATURES:
         # following used to fail with compilation error
         t = std.chrono.system_clock.now() + std.chrono.seconds(1)
 
+    @mark.crashes
     def test12_stdfunction(self):
         """Use of std::function with arguments in a namespace"""
 

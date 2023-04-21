@@ -1376,7 +1376,7 @@ class TestSTLITERATOR:
         assert b1 != b2
         assert b1 == e2
 
-    @mark.xfail
+    @mark.crashes
     def test02_STL_like_class_iterators(self):
         """Test the iterator protocol mapping for an STL like class"""
 
@@ -1513,7 +1513,7 @@ class TestSTLARRAY:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.crashes
     def test01_array_of_basic_types(self):
         """Usage of std::array of basic types"""
 
@@ -1526,7 +1526,7 @@ class TestSTLARRAY:
             a[i] = i
             assert a[i] == i
 
-    @mark.xfail
+    @mark.crashes
     def test02_array_of_pods(self):
         """Usage of std::array of PODs"""
 
@@ -1550,7 +1550,7 @@ class TestSTLARRAY:
         assert a[2].px == 6
         assert a[2].py == 7
 
-    @mark.xfail
+    @mark.crashes
     def test03_array_of_pointer_to_pods(self):
         """Usage of std::array of pointer to PODs"""
 
@@ -1581,7 +1581,7 @@ class TestSTLARRAY:
             assert gbl.ArrayTest.get_pa_px(a.data(), i) == 13*i
             assert gbl.ArrayTest.get_pa_py(a.data(), i) == 42*i
 
-    @mark.xfail
+    @mark.crashes
     def test04_array_from_aggregate(self):
         """Initialize an array from an aggregate contructor"""
 

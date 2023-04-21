@@ -1109,7 +1109,7 @@ class TestDATATYPES:
 
         assert not d2
 
-    @mark.xfail
+    @mark.crashes
     def test22_buffer_shapes(self):
         """Correctness of declared buffer shapes"""
 
@@ -1522,7 +1522,7 @@ class TestDATATYPES:
         d.execute = d.xyz
         assert d.do_execute() == "xyz"
 
-    @mark.xfail
+    @mark.crashes
     def test30_multi_dim_arrays_of_builtins(test):
         """Multi-dim arrays of builtins"""
 
@@ -2060,7 +2060,7 @@ class TestDATATYPES:
             r2 = ns.make_R2()
             assert r2.s.x == 1
 
-    @mark.xfail
+    @mark.crashes
     def test41_complex_numpy_arrays(self):
         """Usage of complex numpy arrays"""
 
