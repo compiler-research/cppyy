@@ -20,7 +20,6 @@ class TestOPERATORS:
         import gc
         gc.collect()
 
-    @mark.xfail
     def test01_math_operators(self):
         """Test overloading of math operators"""
 
@@ -44,7 +43,6 @@ class TestOPERATORS:
         assert (number(5)  << 2) == number(20)
         assert (number(20) >> 2) == number(5)
 
-    @mark.xfail
     def test02_unary_math_operators(self):
         """Test overloading of unary math operators"""
 
@@ -62,7 +60,6 @@ class TestOPERATORS:
         nn = -n;
         assert nn == number(-100)
 
-    @mark.xfail
     def test03_comparison_operators(self):
         """Test overloading of comparison operators"""
 
@@ -77,7 +74,6 @@ class TestOPERATORS:
         assert (number(20) != number(10)) == True
         assert (number(20) == number(10)) == False
 
-    @mark.xfail
     def test04_boolean_operator(self):
         """Test implementation of operator bool"""
 
@@ -119,7 +115,6 @@ class TestOPERATORS:
         assert o.m_double == 3.1415
         assert float(o)   == 3.1415
 
-    @mark.xfail
     def test06_approximate_types(self):
         """Test converter operators of approximate types"""
 
@@ -144,7 +139,6 @@ class TestOPERATORS:
         assert round(o.m_float - 3.14, 5) == 0.
         assert round(float(o) - 3.14, 5)  == 0.
 
-    @mark.xfail
     def test07_virtual_operator_eq(self):
         """Test use of virtual bool operator=="""
 
@@ -319,7 +313,6 @@ class TestOPERATORS:
             assert (+n).i ==  42
             #assert (~n).i == ~42
 
-    @mark.xfail
     def test13_comma_operator(self):
         """Comma operator"""
 
