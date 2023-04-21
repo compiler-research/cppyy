@@ -35,7 +35,6 @@ class TestAPI:
         assert API.Overload_Check(m)
         assert API.Overload_CheckExact(m)
 
-    @mark.xfail
     def test02_interpreter_access(self):
         """Access to the python interpreter"""
 

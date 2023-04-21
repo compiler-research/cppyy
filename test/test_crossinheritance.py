@@ -1245,7 +1245,6 @@ class TestCROSSINHERITANCE:
         assert obj.calc2()       == 2
         assert ns.callback2(obj) == 2
 
-    @mark.xfail
     def test28_cross_deep(self):
         """Deep inheritance hierarchy"""
 

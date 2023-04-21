@@ -1018,7 +1018,6 @@ class TestREGRESSION:
         v = cppyy.gbl.std.vector[int]()
         str(v)
 
-    @mark.xfail
     def test35_filesytem(self):
         """Static path object used to crash on destruction"""
 
