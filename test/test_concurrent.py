@@ -95,8 +95,9 @@ class TestCONCURRENT:
 
         cppyy.include("CPyCppyy/PyException.h")
 
-        cppyy.cppdef("""namespace thread_test {
+        cppyy.cppdef("""
         #include <thread>
+        namespace thread_test {
 
         struct consumer {
             virtual ~consumer() {}
@@ -163,15 +164,14 @@ class TestCONCURRENT:
         assert "RuntimeError" in w.err_msg
         assert "all wrong"    in w.err_msg
 
-    @mark.xfail
     def test05_float2d_callback(self):
         """Passing of 2-dim float arguments"""
 
         import cppyy
 
         cppyy.cppdef("""\
-        namespace FloatDim2 {
         #include <thread>
+        namespace FloatDim2 {
 
         struct Buffer {
             Buffer() = default;
