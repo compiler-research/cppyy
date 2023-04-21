@@ -1524,7 +1524,6 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert ns.Component.get_count() == 0
 
-    @mark.xfail
     def test32_by_value_arguments(self):
         """Override base function taking by-value arguments"""
 

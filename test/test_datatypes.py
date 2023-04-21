@@ -2023,7 +2023,6 @@ class TestDATATYPES:
         assert b.name     == "aap"
         assert b.buf_type == ns.SHAPE
 
-    @mark.xfail
     def test40_more_aggregates(self):
         """More aggregate testings (used to fail/report errors)"""
 
