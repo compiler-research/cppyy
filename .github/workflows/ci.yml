@@ -231,6 +231,10 @@ jobs:
 
         echo "Crashing Summary: \n"
         tail -n1 test_crashed.log
+        echo "Progress id Summary:"
+        # We sum all of the failing tests line number, the greater the sum the
+        # closer towards the end of the test cases we are.
+        cat --number test_xfailed.log | grep '> ' | sed 's@^[^0-9]*\([0-9]\+\).*@\1@' | paste -s -d+ | bc
         echo "XFAIL Summary:"
         tail -n1 test_xfailed.log
         echo "OF TOTAL $(python3 -m pytest  --collect-only -q | tail -n1)"
