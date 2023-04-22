@@ -323,7 +323,6 @@ class TestLOWLEVEL:
             for meth in meth_types:
                 with raises(TypeError): getattr(ctd, 'set_'+meth+ext)(i)
 
-    @mark.xfail
     def test09_numpy_bool_array(self):
         """Test passing of numpy bool array"""
 
@@ -440,7 +439,6 @@ class TestLOWLEVEL:
         assert not ns.gime_null()
         assert list(ns.gime_null()) == []
 
-    @mark.xfail
     def test13_array_interface(self):
         """Test usage of __array__ from numpy"""
 
