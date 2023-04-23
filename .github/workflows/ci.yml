@@ -89,7 +89,7 @@ jobs:
       run: |
         # Install deps
         ###sudo apt update
-        sudo apt install git g++ debhelper devscripts gnupg python3
+        sudo apt install git g++ debhelper devscripts gnupg python3 valgrind
         conda install -y -q -c conda-forge \
           distro \
           pytest
@@ -278,18 +278,23 @@ jobs:
         python -m pytest -m "not crashes" --runxfail -s  | tee test_xfailed.log 2>&1
         echo ::endgroup::
         echo ::group::Passing Test Logs
+
         # Run the rest of the non-crashing tests.
+        declare -i RETCODE=0
+
         set -o pipefail
-        python -m pytest -m "not crashes and not xfail" -v | tee test_passing.log 2>&1
-        export PYTEST_RETCODE=$?
+        valgrind --error-exitcode=1 --suppressions=../etc/valgrind-cppyy-cling.supp python -m pytest -m "not crashes and not xfail" -v
+        export RETCODE=+$?
         echo ::endgroup::
+
+        RETCODE=+$?
+
         echo "Crashing Summary: \n"
         tail -n1 test_crashed.log
         echo "XFAIL Summary:"
         tail -n1 test_xfailed.log
-        echo "Passing Summary:"
-        tail -n1 test_passing.log
-        exit $PYTEST_RETCODE
+        echo "Return Code: ${RETCODE}"
+        exit $RETCODE
     - name: Setup tmate session
       if: ${{ failure() }}
       uses: mxschmitt/action-tmate@v3
