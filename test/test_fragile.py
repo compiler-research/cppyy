@@ -476,7 +476,7 @@ class TestFRAGILE:
         assert not 'ESysConstants' in dd
         assert not 'kDoRed' in dd
 
-    @mark.xfail
+    @mark.crashes
     def test20_capture_output(self):
         """Capture cerr into a string"""
 
