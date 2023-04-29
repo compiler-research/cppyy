@@ -45,3 +45,10 @@ try:
     ispypy = True
 except ImportError:
     ispypy = False
+
+import cppyy
+IS_CLANG_REPL = cppyy.cppexec("""#ifndef __CLING__
+                              true
+                              #else
+                              false
+                              #endif""")

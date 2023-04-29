@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS
+from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("doc_helperDict"))
@@ -199,6 +199,7 @@ namespace Namespace {
         e = bind_object(addressof(d), Abstract)
         assert type(e) == cppyy.gbl.Abstract
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test_classes_and_structs(self):
         import cppyy
         from cppyy.gbl import Concrete, Namespace
@@ -1129,6 +1130,7 @@ class TestTALKEXAMPLES:
         m = PyMyClass(1)
         assert CC.callb(m, 2) == 5
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test_cross_and_templates(self):
         """Template instantiation with cross-inheritance example"""
 

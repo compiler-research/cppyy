@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, IS_WINDOWS, ispypy
+from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL
 
 
 class TestREGRESSION:
@@ -778,6 +778,7 @@ class TestREGRESSION:
         gc.collect()
         assert ns.count() == 0
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Crashes with ClangRepl")
     def test28_exception_as_shared_ptr(self):
         """shared_ptr of an exception object null-checking"""
 
@@ -1010,6 +1011,7 @@ class TestREGRESSION:
         pt_type = cppyy.gbl.property_types.ReferenceWavefunction['double']
         assert cppyy.gbl.std.get[0](cppyy.gbl.property_types.run_as[pt_type]()) ==  20.
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Crashes with ClangRepl")
     def test34_print_empty_collection(self):
         """Print empty collection through Cling"""
 

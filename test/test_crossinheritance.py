@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_MAC_ARM
+from .support import setup_make, pylong, IS_MAC_ARM, IS_CLANG_REPL
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -9,13 +9,13 @@ test_dct = str(currpath.join("crossinheritanceDict"))
 def setup_module(mod):
     setup_make("crossinheritance")
 
-
 class TestCROSSINHERITANCE:
     def setup_class(cls):
         cls.test_dct = test_dct
         import cppyy
         cls.example01 = cppyy.load_reflection_info(cls.test_dct)
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Crashes with ClangRepl")
     def test01_override_function(self):
         """Test ability to override a simple function"""
 
@@ -709,6 +709,7 @@ class TestCROSSINHERITANCE:
         assert obj.message()  == "Hello, World!"
         assert ns.saywot(obj) == "Hello, World!"
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test19_cpp_side_multiple_inheritance(self):
         """Hierarchy with multiple inheritance on the C++ side"""
 
@@ -744,6 +745,7 @@ class TestCROSSINHERITANCE:
             def abstract1(self):
                 return ns.Result(1)
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test20_basic_multiple_inheritance(self):
         """Basic multiple inheritance"""
 
@@ -822,6 +824,7 @@ class TestCROSSINHERITANCE:
         assert a.m_2 == 42
         assert a.m_3 == 67
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test21_multiple_inheritance_with_constructors(self):
         """Multiple inheritance with constructors"""
 
@@ -909,6 +912,7 @@ class TestCROSSINHERITANCE:
         assert a.m_2 ==  88
         assert a.m_3 == -11
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test22_multiple_inheritance_with_defaults(self):
         """Multiple inheritance with defaults"""
 
@@ -1245,6 +1249,7 @@ class TestCROSSINHERITANCE:
         assert obj.calc2()       == 2
         assert ns.callback2(obj) == 2
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test28_cross_deep(self):
         """Deep inheritance hierarchy"""
 
@@ -1281,6 +1286,7 @@ class TestCROSSINHERITANCE:
             assert inst.fun1() == val1
             assert inst.fun2() == inst.fun1()
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test29_cross_deep_multi(self):
         """Deep multi-inheritance hierarchy"""
 
@@ -1523,6 +1529,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert ns.Component.get_count() == 0
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test32_by_value_arguments(self):
         """Override base function taking by-value arguments"""
 

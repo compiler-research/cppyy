@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy
+from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -1911,6 +1911,7 @@ class TestSTLEXCEPTION:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test01_basics(self):
         """Test behavior of std::exception derived classes"""
 

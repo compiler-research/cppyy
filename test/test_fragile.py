@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_MAC_ARM
+from .support import setup_make, ispypy, IS_WINDOWS, IS_MAC_ARM, IS_CLANG_REPL
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -145,6 +145,7 @@ class TestFRAGILE:
 
         g = fragile.G()
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Crashes with ClangRepl")
     def test08_unhandled_scoped_datamember(self):
         """Test that an unhandled scoped data member does not cause infinite recursion"""
 
@@ -283,6 +284,7 @@ class TestFRAGILE:
 
         assert 'operator<' not in dirS
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test12_imports(self):
         """Test ability to import from namespace (or fail with ImportError)"""
 
@@ -503,6 +505,7 @@ class TestFRAGILE:
 
         assert capture.str() == "Hello, World\n"
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test21_failing_cppcode(self):
         """Check error behavior of failing C++ code"""
 
@@ -572,6 +575,7 @@ class TestFRAGILE:
 
         cppyy.include('sanitizer/asan_interface.h')
 
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test25_cppdef_error_reporting(self):
         """Check error reporting of cppyy.cppdef"""
 
