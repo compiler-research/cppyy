@@ -258,7 +258,6 @@ class TestCONCURRENT:
         for t in threads:
             t.join()
 
-    @mark.crashes
     def test07_overload_reuse_in_threads_wo_gil(self):
         """Threads reuse overload objects; check for clashes if no GIL"""
 

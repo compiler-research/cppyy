@@ -1241,7 +1241,6 @@ class TestTEMPLATED_TYPEDEFS:
 
         raises(TypeError, tct.__getitem__, 'gibberish', dum, 4)
 
-    @mark.crashes
     def test03_mapped_type_as_template_arg(self):
         """Test that mapped types can be used as template arguments"""
 
