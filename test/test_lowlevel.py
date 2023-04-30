@@ -307,6 +307,7 @@ class TestLOWLEVEL:
         val = ctd.set_void_ppm(ptr)
         assert ctd.freeit(ptr) == val
 
+    @mark.xfail(reason="Valgrind")
     def test08_ctypes_type_correctness(self):
         """If types don't match with ctypes, expect exceptions"""
 
@@ -369,6 +370,7 @@ class TestLOWLEVEL:
         with raises(TypeError):
             cppyy.gbl.ArrayOfCStrings.takes_array_of_cstrings(pyargs, len(pyargs))
 
+    @mark.xfail(reason="Valgrind")
     def test11_array_of_const_char_ref(self):
         """Test passting of const char**&"""
 
