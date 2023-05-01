@@ -36,7 +36,6 @@ class TestCONCURRENT:
         for t in threads:
             t.join()
 
-    @mark.crashes
     def test02_futures(self):
         """Run with Python futures"""
 

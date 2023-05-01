@@ -594,7 +594,6 @@ namespace Zoo {
         Integer1.__repr__ = lambda self: repr(self.m_data)
         assert str([Integer1(j) for j in range(10)]) == '[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]'
 
-    @mark.xfail
     def test05_pythonizer(self):
         """Implement and test a pythonizor"""
 
