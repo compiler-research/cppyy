@@ -590,7 +590,6 @@ class TestADVANCEDCPP:
         assert c2.m_c == 3
         c2.__destruct__()
 
-    @mark.xfail
     def test14_new_overloader(self):
         """Verify that class-level overloaded new/delete are called"""
 

@@ -212,7 +212,6 @@ class TestCPP11FEATURES:
 
       # further usage is tested in datatypes.py:test15_nullptr_passing
 
-    @mark.xfail
     def test07_move(self):
         """Move construction, assignment, and methods"""
 
