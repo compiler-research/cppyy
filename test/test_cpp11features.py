@@ -44,7 +44,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail
+    @mark.crashes
     def test02_smart_ptr_construction(self):
         """Shared/Unique pointer ctor is templated, requiring special care"""
 
@@ -72,7 +72,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail
+    @mark.crashes
     def test03_smart_ptr_memory_handling(self):
         """Test shared/unique pointer memory ownership"""
 
@@ -103,7 +103,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail
+    @mark.crashes
     def test04_shared_ptr_passing(self):
         """Ability to pass shared_ptr<Derived> through shared_ptr<Base>"""
 
@@ -413,7 +413,7 @@ class TestCPP11FEATURES:
             assert hash(sw)  == 17
             assert hash(sw)  == 17
 
-    @mark.xfail
+    @mark.crashes(reason="Clang-Repl only")
     def test14_shared_ptr_passing(self):
         """Ability to pass normal pointers through shared_ptr by value"""
 

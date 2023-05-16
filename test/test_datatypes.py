@@ -1275,7 +1275,7 @@ class TestDATATYPES:
         if self.has_byte:
             run(self, cppyy.gbl.sum_byte_data, buf, total)
 
-    @mark.xfail
+    @mark.crashes(reason="Clang-Repl")
     def test26_function_pointers(self):
         """Function pointer passing"""
 
@@ -1338,7 +1338,7 @@ class TestDATATYPES:
         ns = cppyy.gbl.FuncPtrReturn
         assert ns.foo()() == "Hello, World!"
 
-    @mark.xfail
+    @mark.crashes(reason="Clang-Repl")
     def test27_callable_passing(self):
         """Passing callables through function pointers"""
 
@@ -1969,7 +1969,7 @@ class TestDATATYPES:
             assert len(f1.fPtrArr) == 3
             assert list(f1.fPtrArr) == [1., 2., 3]
 
-    @mark.xfail
+    @mark.crashes(reason="Clang-Repl")
     def test39_aggregates(self):
         """Initializer construction of aggregates"""
 
@@ -2022,7 +2022,7 @@ class TestDATATYPES:
         assert b.name     == "aap"
         assert b.buf_type == ns.SHAPE
 
-    @mark.xfail
+    @mark.crashes(reason="Clang-Repl")
     def test40_more_aggregates(self):
         """More aggregate testings (used to fail/report errors)"""
 

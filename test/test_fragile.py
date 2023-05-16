@@ -145,7 +145,7 @@ class TestFRAGILE:
 
         g = fragile.G()
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Crashes with ClangRepl")
+    @mark.crashes(reason="Crashes with ClangRepl")
     def test08_unhandled_scoped_datamember(self):
         """Test that an unhandled scoped data member does not cause infinite recursion"""
 
@@ -563,7 +563,7 @@ class TestFRAGILE:
         cppyy.set_debug(False)
         assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == False
 
-    @mark.xfail
+    @mark.crashes
     def test24_asan(self):
         """Check availability of ASAN with gcc"""
 

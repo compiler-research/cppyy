@@ -688,7 +688,7 @@ namespace Zoo {
         assert Zoo.identify_animal(Zoo.free_lion) == "the animal is a lion"
         assert Zoo.identify_animal_smart(Zoo.free_lion) == "the animal is a lion"
 
-    @mark.xfail
+    @mark.crashes
     def test09_templated_function(self):
         """Templated free function"""
 
@@ -1271,7 +1271,7 @@ class TestTALKEXAMPLES:
         with raises(CC.MyException):
             CC.throw_error()
 
-    @mark.xfail
+    @mark.crashes(reason="Clang-Repl")
     def test_unicode(self):
         """Unicode non-UTF-8 example"""
 
