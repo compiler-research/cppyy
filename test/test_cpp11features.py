@@ -310,7 +310,7 @@ class TestCPP11FEATURES:
         for l in (['x'], ['x', 'y', 'z']):
             assert ns.foo(l) == std.vector['std::string'](l)
 
-    @mark.crashes
+    @mark.xfail
     def test09_lambda_calls(self):
         """Call (global) lambdas"""
 

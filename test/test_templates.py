@@ -173,7 +173,7 @@ class TestTEMPLATES:
         assert call_has_var1(move(Obj1())) == True
         assert call_has_var1(move(Obj2())) == False
 
-    @mark.crashes
+    @mark.xfail
     def test07_type_deduction(self):
         """Traits/type deduction"""
 
@@ -919,7 +919,7 @@ class TestTEMPLATES:
 
         ns.Templated()       # used to crash
 
-    @mark.crashes
+    @mark.xfail
     def test31_ltlt_in_template_name(self):
         """Verify lookup of template names with << in the name"""
 
@@ -1188,7 +1188,7 @@ class TestTEMPLATED_TYPEDEFS:
         import cppyy
         cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.crashes
+    @mark.xfail
     def test01_using(self):
         """Test presence and validity of using typedefs"""
 
@@ -1212,7 +1212,7 @@ class TestTEMPLATED_TYPEDEFS:
         assert in_type_tt.__name__ == 'in_type_tt'
         assert in_type_tt.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int,TemplatedTypedefs::SomeDummy,4>::in_type_tt'
 
-    @mark.crashes
+    @mark.xfail
     def test02_mapped_type_as_internal(self):
         """Test that mapped types can be used as builtin"""
 

@@ -688,7 +688,7 @@ namespace Zoo {
         assert Zoo.identify_animal(Zoo.free_lion) == "the animal is a lion"
         assert Zoo.identify_animal_smart(Zoo.free_lion) == "the animal is a lion"
 
-    @mark.crashes
+    @mark.xfail
     def test09_templated_function(self):
         """Templated free function"""
 

@@ -694,7 +694,7 @@ class TestADVANCEDCPP:
         assert cppyy.gbl.overload_one_way().gime() == 1
         assert cppyy.gbl.overload_the_other_way().gime() == "aap"
 
-    @mark.crashes
+    @mark.xfail
     def test21_access_to_global_variables(self):
         """Access global_variables_and_pointers"""
 
@@ -785,7 +785,7 @@ class TestADVANCEDCPP:
         assert d2.vcheck()  == 'A'
         assert d2.vcheck(1) == 'B'
 
-    @mark.crashes
+    @mark.xfail
     def test24_typedef_to_private_class(self):
         """Typedefs to private classes should not resolve"""
 

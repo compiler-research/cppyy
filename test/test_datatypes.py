@@ -19,7 +19,7 @@ class TestDATATYPES:
         cls.has_byte     = at_least_17
         cls.has_optional = at_least_17
 
-    @mark.crashes
+    @mark.xfail
     def test01_instance_data_read_access(self):
         """Read access to instance public data and verify values"""
 
@@ -191,7 +191,7 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.crashes
+    @mark.xfail
     def test02_instance_data_write_access(self):
         """Test write access to instance public data and verify values"""
 
@@ -376,7 +376,7 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.crashes
+    @mark.xfail
     def test04_class_read_access(self):
         """Test read access to class public data and verify values"""
 
@@ -1109,7 +1109,7 @@ class TestDATATYPES:
 
         assert not d2
 
-    @mark.crashes
+    @mark.xfail
     def test22_buffer_shapes(self):
         """Correctness of declared buffer shapes"""
 
@@ -1522,7 +1522,7 @@ class TestDATATYPES:
         d.execute = d.xyz
         assert d.do_execute() == "xyz"
 
-    @mark.crashes
+    @mark.xfail
     def test30_multi_dim_arrays_of_builtins(test):
         """Multi-dim arrays of builtins"""
 

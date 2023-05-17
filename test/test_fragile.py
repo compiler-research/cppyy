@@ -562,7 +562,7 @@ class TestFRAGILE:
         cppyy.set_debug(False)
         assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == False
 
-    @mark.crashes
+    @mark.xfail
     def test24_asan(self):
         """Check availability of ASAN with gcc"""
 

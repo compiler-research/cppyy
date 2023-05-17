@@ -1403,7 +1403,7 @@ class TestCROSSINHERITANCE:
         class PyDerived(ns.Base):
             pass
 
-    @mark.crashes
+    @mark.xfail
     def test31_object_rebind(self):
         """Usage of bind_object to cast with Python derived objects"""
 
