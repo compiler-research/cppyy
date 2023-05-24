@@ -322,7 +322,7 @@ class TestCPP11FEATURES:
         assert cppyy.gbl.gMyLambda(2)  == 42
         assert cppyy.gbl.gMyLambda(40) == 80
 
-        if cppyy.gbl.InterOp.Evaluate(cppyy.gbl.cling.runtime.gCling, "__cplusplus;") >= 201402:
+        if cppyy.gbl.InterOp.Evaluate("__cplusplus;") >= 201402:
             cppyy.cppdef("auto gime_a_lambda1() { return []() { return 42; }; }")
             l1 = cppyy.gbl.gime_a_lambda1()
             assert l1
@@ -343,7 +343,7 @@ class TestCPP11FEATURES:
 
         import cppyy
 
-        if 201703 <= cppyy.gbl.InterOp.Evaluate(cppyy.gbl.cling.runtime.gCling, "__cplusplus;"):
+        if 201703 <= cppyy.gbl.InterOp.Evaluate("__cplusplus;"):
             assert cppyy.gbl.std.optional
             assert cppyy.gbl.std.nullopt
 

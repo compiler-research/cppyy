@@ -158,26 +158,25 @@ gbl.std.move  = _backend.move
 import os
 def add_default_paths():
     libInterOp = gbl.InterOp
-    gCling = gbl.cling.runtime.gCling
     if os.getenv('CONDA_PREFIX'):
       # MacOS, Linux
         lib_path = os.path.join(os.getenv('CONDA_PREFIX'), 'lib')
-        if os.path.exists(lib_path): libInterOp.AddSearchPath(gCling, lib_path)
+        if os.path.exists(lib_path): libInterOp.AddSearchPath(lib_path)
 
       # Windows
         lib_path = os.path.join(os.getenv('CONDA_PREFIX'), 'Library', 'lib')
-        if os.path.exists(lib_path): libInterOp.AddSearchPath(gCling, lib_path)
+        if os.path.exists(lib_path): libInterOp.AddSearchPath(lib_path)
 
   # assuming that we are in PREFIX/lib/python/site-packages/cppyy, add PREFIX/lib to the search path
     lib_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir, os.path.pardir))
-    if os.path.exists(lib_path): libInterOp.AddSearchPath(gCling, lib_path)
+    if os.path.exists(lib_path): libInterOp.AddSearchPath(lib_path)
 
     try:
         with open('/etc/ld.so.conf') as ldconf:
             for line in ldconf:
                 f = line.strip()
                 if (os.path.exists(f)):
-                    libInterOp.AddSearchPath(gCling, f)
+                    libInterOp.AddSearchPath(f)
     except IOError:
         pass
 add_default_paths()
@@ -193,13 +192,12 @@ default       = _backend.default
 def load_reflection_info(name):
 #    with _stderr_capture() as err:
     InterOp = gbl.InterOp
-    gCling = gbl.cling.runtime.gCling
     #FIXME: Remove the .so and add logic in libinterop
     name = name + ".so"
-    result = InterOp.LoadLibrary(gCling, name)
+    result = InterOp.LoadLibrary(name)
     if name.endswith("Dict.so"):
         header = name[:-7] + ".h";
-        InterOp.Declare(gCling, '#include "' + header +'"')
+        InterOp.Declare('#include "' + header +'"')
 
     if result == False:
         raise RuntimeError('Could not load library "%s"' % (name))

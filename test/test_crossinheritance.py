@@ -1211,7 +1211,7 @@ class TestCROSSINHERITANCE:
 
         import cppyy
 
-        cppyy.gbl.InterOp.Declare(cppyy.gbl.cling.runtime.gCling, """\
+        cppyy.gbl.InterOp.Declare("""\
         namespace NonStandardOffset {
         struct Calc1 {
           virtual int calc1() = 0;

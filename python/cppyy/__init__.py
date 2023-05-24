@@ -197,7 +197,7 @@ class _stderr_capture(object):
 def cppdef(src):
     """Declare C++ source <src> to Cling."""
     with _stderr_capture() as err:
-        errcode = gbl.InterOp.Declare(gbl.cling.runtime.gCling, src)
+        errcode = gbl.InterOp.Declare(src)
     if not errcode == 0 or err.err:
         if 'warning' in err.err.lower() and not 'error' in err.err.lower():
             warnings.warn(err.err, SyntaxWarning)
@@ -215,7 +215,7 @@ def cppexec(stmt):
     with _stderr_capture() as err:
         errcode = ctypes.c_int(0)
         try:
-            errcode = gbl.InterOp.Process(gbl.cling.runtime.gCling, stmt)
+            errcode = gbl.InterOp.Process(stmt)
         except Exception as e:
             sys.stderr.write("%s\n\n" % str(e))
             if not errcode.value: errcode.value = 1
@@ -231,8 +231,7 @@ def load_library(name):
     """Explicitly load a shared library."""
     with _stderr_capture() as err:
         InterOp = gbl.InterOp
-        gCling = gbl.cling.runtime.gCling
-        result = InterOp.LoadLibrary(gCling, name)
+        result = InterOp.LoadLibrary(name)
     if result == False:
         raise RuntimeError('Could not load library "%s": %s' % (name, err.err))
 
@@ -241,7 +240,7 @@ def load_library(name):
 def include(header):
     """Load (and JIT) header file <header> into Cling."""
     with _stderr_capture() as err:
-        errcode = gbl.InterOp.Declare(gbl.cling.runtime.gCling, '#include "%s"' % header)
+        errcode = gbl.InterOp.Declare('#include "%s"' % header)
     if not errcode == 0:
         raise ImportError('Failed to load header file "%s"%s' % (header, err.err))
     return True
@@ -249,7 +248,7 @@ def include(header):
 def c_include(header):
     """Load (and JIT) header file <header> into Cling."""
     with _stderr_capture() as err:
-        errcode = gbl.InterOp.Declare(gbl.cling.runtime.gCling, """extern "C" {
+        errcode = gbl.InterOp.Declare("""extern "C" {
 #include "%s"
 }""" % header)
     if not errcode == 0:
@@ -260,7 +259,7 @@ def add_include_path(path):
     """Add a path to the include paths available to Cling."""
     if not os.path.isdir(path):
         raise OSError('No such directory: %s' % path)
-    gbl.InterOp.AddIncludePath(gbl.cling.runtime.gCling, path)
+    gbl.InterOp.AddIncludePath(path)
 
 def add_library_path(path):
     """Add a path to the library search paths available to Cling."""
@@ -383,7 +382,7 @@ def sizeof(tt):
         try:
             sz = ctypes.sizeof(tt)
         except TypeError:
-            sz = gbl.InterOp.Evaluate(gbl.cling.runtime.gCling, "sizeof(%s);" % (_get_name(tt),))
+            sz = gbl.InterOp.Evaluate("sizeof(%s);" % (_get_name(tt),))
         _sizes[tt] = sz
         return sz
 

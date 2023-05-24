@@ -21,7 +21,7 @@ def _backend_files():
 def _api_files():
     import cppyy, os
 
-    # FIXME: Need to use gCling.GetIncludePaths
+    # FIXME: We should add an interface in InterOp.
     paths = str(cppyy.gbl.runtime.gCling.GetIncludePath()).split('-I')
     for p in paths:
         if not p: continue

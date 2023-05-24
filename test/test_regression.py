@@ -1031,7 +1031,7 @@ class TestREGRESSION:
 
         import cppyy
 
-        if cppyy.gbl.InterOp.Evaluate(cppyy.gbl.cling.runtime.gCling, "__cplusplus;") > 201402:
+        if cppyy.gbl.InterOp.Evaluate("__cplusplus;") > 201402:
             cppyy.cppdef("""\
             #include <filesystem>
             std::string stack_std_path() {
