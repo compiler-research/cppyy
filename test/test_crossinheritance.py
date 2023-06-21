@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_MAC_ARM, IS_CLANG_REPL
+from .support import setup_make, pylong, IS_MAC_ARM, IS_CLANG_REPL, IS_CLANG_DEBUG
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -15,7 +15,7 @@ class TestCROSSINHERITANCE:
         import cppyy
         cls.example01 = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Crashes with ClangRepl")
+    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
     def test01_override_function(self):
         """Test ability to override a simple function"""
 

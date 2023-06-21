@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL
+from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -840,7 +840,7 @@ class TestSTLSTRING:
                 for k in range(2):
                     assert str_array_4[i][j][k] == vals[i*4+j*2+k]
 
-    @mark.xfail
+    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
     def test05_stlstring_and_unicode(self):
         """Mixing unicode and std::string"""
 
@@ -1625,7 +1625,7 @@ class TestSTLSTRING_VIEW:
         assert countit(v)    == 4
         assert countit_cr(v) == 4
 
-    @mark.xfail
+    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
     def test02_string_view_from_unicode(self):
         """Life-time management of converted unicode strings"""
 

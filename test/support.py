@@ -52,3 +52,8 @@ IS_CLANG_REPL = cppyy.cppexec("""#ifndef __CLING__
                               #else
                               false
                               #endif\n""")
+IS_CLANG_DEBUG = cppyy.cppexec("""#ifdef NDEBUG
+                               false
+                               #else
+                               true
+                               #endif\n""")

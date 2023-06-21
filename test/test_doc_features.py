@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL
+from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLANG_DEBUG
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("doc_helperDict"))
@@ -993,7 +993,7 @@ class TestADVERTISED:
         assert n.p[2] == 0x3
         assert len(n.p) == 3
 
-    @mark.xfail
+    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
     def test09_custom_str(self):
         """Example of customized str"""
 

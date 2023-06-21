@@ -1,6 +1,6 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLANG_DEBUG
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -591,7 +591,7 @@ class TestTEMPLATES:
         v = MyVec["float"](2)
         v[0] = 1        # used to throw TypeError
 
-    @mark.xfail
+    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes in ClangRepl")
     def test24_stdfunction_templated_arguments(self):
         """Use of std::function with templated arguments"""
 

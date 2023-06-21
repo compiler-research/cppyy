@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL
+from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG
 
 
 class TestREGRESSION:
@@ -1011,7 +1011,7 @@ class TestREGRESSION:
         pt_type = cppyy.gbl.property_types.ReferenceWavefunction['double']
         assert cppyy.gbl.std.get[0](cppyy.gbl.property_types.run_as[pt_type]()) ==  20.
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Crashes with ClangRepl")
+    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
     def test34_print_empty_collection(self):
         """Print empty collection through Cling"""
 
@@ -1151,7 +1151,7 @@ class TestREGRESSION:
             assert ai.name[:5] == u'hello'
         cppyy.ll.array_delete(aa)
 
-    @mark.xfail
+    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with Clang-Repl with assert in CodeGen::CodeGenFunction::EmitAggExpr")
     def test39_vector_of_pointers_conversion(self):
         """vector<T*>'s const T*& used to be T**, now T*"""
 
