@@ -271,13 +271,19 @@ jobs:
         echo ::endgroup::
         echo ::group::Crashing Test Logs
         # See if we don't have a crash that went away
-        python -m pytest -n 1 -m "xfail" --runxfail -sv --max-worker-restart 512 | tee test_crashed.log 2>&1
-        echo ::endgroup::
-        echo ::group::XFAIL Test Logs
         # Comment out all xfails but the ones that have a run=False condition.
         find . -name "*.py" -exec sed -i '/run=False/!s/^ *@mark.xfail\(.*\)/#&/' {} \;
+        git diff
+        python -m pytest -n 1 -m "xfail" --runxfail -sv --max-worker-restart 512 | tee test_crashed.log 2>&1
+        git checkout .
+        echo ::endgroup::
+        echo ::group::XFAIL Test Logs
+        # Rewrite all xfails that have a run clause to skipif. This way we will
+        # avoid conditionally crashing xfails
+        find . -name "*.py" -exec sed -i -E 's/(^ *)@mark.xfail\(run=(.*)/\1@mark.skipif(condition=not \2/g' {} \;
+        git diff
         # See if we don't have an xfail that went away
-        python -m pytest -m "xfail" --runxfail -sv  | tee test_xfailed.log 2>&1
+        python -m pytest --runxfail -sv  | tee test_xfailed.log 2>&1
         git checkout .
         echo ::endgroup::
         echo ::group::Passing Test Logs
