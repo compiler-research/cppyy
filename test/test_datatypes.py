@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode
+from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -1275,7 +1275,7 @@ class TestDATATYPES:
         if self.has_byte:
             run(self, cppyy.gbl.sum_byte_data, buf, total)
 
-    @mark.crashes(reason="Clang-Repl")
+    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
     def test26_function_pointers(self):
         """Function pointer passing"""
 
@@ -1338,7 +1338,7 @@ class TestDATATYPES:
         ns = cppyy.gbl.FuncPtrReturn
         assert ns.foo()() == "Hello, World!"
 
-    @mark.crashes(reason="Clang-Repl")
+    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
     def test27_callable_passing(self):
         """Passing callables through function pointers"""
 
@@ -1969,7 +1969,7 @@ class TestDATATYPES:
             assert len(f1.fPtrArr) == 3
             assert list(f1.fPtrArr) == [1., 2., 3]
 
-    @mark.crashes(reason="Clang-Repl")
+    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
     def test39_aggregates(self):
         """Initializer construction of aggregates"""
 
@@ -2022,7 +2022,7 @@ class TestDATATYPES:
         assert b.name     == "aap"
         assert b.buf_type == ns.SHAPE
 
-    @mark.crashes(reason="Clang-Repl")
+    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
     def test40_more_aggregates(self):
         """More aggregate testings (used to fail/report errors)"""
 
@@ -2060,7 +2060,7 @@ class TestDATATYPES:
             r2 = ns.make_R2()
             assert r2.s.x == 1
 
-    @mark.crashes
+    @mark.xfail(run=False, reason="Clang-Repl")
     def test41_complex_numpy_arrays(self):
         """Usage of complex numpy arrays"""
 

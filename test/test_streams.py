@@ -32,7 +32,7 @@ class TestSTDStreams:
 
         assert not (cppyy.gbl.std.cout is None)
 
-    @mark.crashes
+    @mark.xfail(run=False, reason="Crashes")
     def test03_consistent_naming_if_char_traits(self):
         """Naming consistency if char_traits"""
 

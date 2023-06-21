@@ -228,7 +228,7 @@ class TestREGRESSION:
         cppyy.cppdef(code)
         cppyy.gbl.some_foo_calling_python()
 
-    @mark.crashes
+    @mark.xfail(run=False, reason="Crashes")
     def test10_enum_in_global_space(self):
         """Enum declared in search.h did not appear in global space"""
 
@@ -1021,7 +1021,7 @@ class TestREGRESSION:
         v = cppyy.gbl.std.vector[int]()
         str(v)
 
-    @mark.crashes
+    @mark.xfail(run=False, reason="Crashes")
     def test35_filesytem(self):
         """Static path object used to crash on destruction"""
 

@@ -183,7 +183,7 @@ class TestADVANCEDCPP:
         assert gbl.a_ns.d_ns.i_class.j_class.s_j      == 333
         assert gbl.a_ns.d_ns.i_class.j_class().m_j    == -10
 
-    @mark.crashes
+    @mark.xfail(run=False, reason="Crashes")
     def test04_template_types(self):
         """Test bindings of templated types"""
 
@@ -793,7 +793,7 @@ class TestADVANCEDCPP:
 
         assert cppyy.gbl.TypedefToPrivateClass().f().m_val == 42
 
-    @mark.crashes
+    @mark.xfail(run=False, reason="Crashes")
     def test25_ostream_printing(self):
         """Mapping of __str__ through operator<<(ostream&)"""
 

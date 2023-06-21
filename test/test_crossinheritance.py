@@ -337,7 +337,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert CB.s_count == 0 + start_count
 
-    @mark.crashes
+    @mark.xfail(run=False, reason="Crashes")
     def test11_python_in_make_shared(self):
         """Usage of Python derived objects with std::make_shared"""
 
@@ -402,7 +402,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert CB.s_count == 0 + start_count
 
-    @mark.crashes
+    @mark.xfail(run=False, reason="Crashes")
     def test12_python_shared_ptr_memory(self):
         """Usage of Python derived objects with std::shared_ptr"""
 
