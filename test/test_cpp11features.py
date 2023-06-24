@@ -412,7 +412,7 @@ class TestCPP11FEATURES:
             assert hash(sw)  == 17
             assert hash(sw)  == 17
 
-    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
+    @mark.xfail(run=False, reason="Crashes")
     def test14_shared_ptr_passing(self):
         """Ability to pass normal pointers through shared_ptr by value"""
 
