@@ -501,7 +501,6 @@ class TestSTLVECTOR:
         ll4[1] = 'a'
         raises(TypeError, a.vector_pair, ll4)
 
-    @mark.xfail
     def test12_vector_lifeline(self):
         """Check lifeline setting on vectors of objects"""
 
@@ -1604,7 +1603,7 @@ class TestSTLSTRING_VIEW:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL)
     def test01_string_through_string_view(self):
         """Usage of std::string_view as formal argument"""
 

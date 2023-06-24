@@ -195,7 +195,6 @@ class TestClassPYTHONIZATION:
         assert mine.__smartptr__().get().m_check == 0xcdcdcdcd
         assert mine.say_hi() == "Hi!"
 
-    @mark.xfail
     def test07_creates_flag(self):
         """Effect of creates flag on return type"""
 

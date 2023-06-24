@@ -15,7 +15,7 @@ class TestCPP11FEATURES:
         import cppyy
         cls.cpp11features = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.xfail(reason="Valgrind")
     def test01_smart_ptr(self):
         """Usage and access of std::shared/unique_ptr<>"""
 
@@ -483,7 +483,7 @@ class TestCPP11FEATURES:
         with raises(TypeError):
             ns.returnptr_move(up)
 
-    @mark.xfail
+    @mark.xfail(reason="Valgrind")
     def test17_unique_ptr_data(self):
         """std::unique_ptr as data means implicitly no copy ctor"""
 

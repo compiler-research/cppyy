@@ -206,7 +206,6 @@ class TestCROSSINHERITANCE:
         assert CX.IBase4.call_get_value(c1) == 17
         assert CX.IBase4.call_get_value(c2) == 27
 
-    @mark.xfail
     def test07_templated_base(self):
         """Derive from a base class that is instantiated from a template"""
 
@@ -376,7 +375,6 @@ class TestCROSSINHERITANCE:
         assert call_shared(v) == 13
         assert v.some_imp() == 13
 
-    @mark.xfail
     def test12a_counter_test(self):
         """Test countable base counting"""
 
@@ -1249,7 +1247,6 @@ class TestCROSSINHERITANCE:
         assert obj.calc2()       == 2
         assert ns.callback2(obj) == 2
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test28_cross_deep(self):
         """Deep inheritance hierarchy"""
 

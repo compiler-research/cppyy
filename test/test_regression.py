@@ -742,7 +742,6 @@ class TestREGRESSION:
         with raises(TypeError):
             io.BackendPlatformName = "aap"
 
-    @mark.xfail
     def test27_exception_by_value(self):
         """Proper memory management of exception return by value"""
 
@@ -778,7 +777,6 @@ class TestREGRESSION:
         gc.collect()
         assert ns.count() == 0
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Crashes with ClangRepl")
     def test28_exception_as_shared_ptr(self):
         """shared_ptr of an exception object null-checking"""
 
@@ -922,7 +920,6 @@ class TestREGRESSION:
         required = {'prod', 'a', 'b', 'smth', 'my_enum'}
         assert all_names.intersection(required) == required
 
-    @mark.xfail
     def test32_typedef_class_enum(self):
         """Use of class enum with typedef'd type"""
 
@@ -1243,7 +1240,6 @@ class TestREGRESSION:
         arg = ns.TestDictClass([TestPair(ns.TestEnum.Bar, 4), TestPair(ns.TestEnum.Foo, 12)])
         assert ns.TestClass(arg)
 
-    @mark.xfail
     def test41_typedefed_enums(self):
         """Typedef-ed enums do not have enum tag in declarations"""
 

@@ -1651,7 +1651,7 @@ class TestDATATYPES:
         assert type(p.data_c[0]) == float
         assert p.intensity == 5.
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL)
     def test32_anonymous_struct(self):
         """Anonymous struct creates an unnamed type"""
 

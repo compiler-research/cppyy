@@ -370,7 +370,6 @@ class TestFRAGILE:
         l = k.GimeL()
         assert l is k.GimeL()
 
-    @mark.xfail
     def test14_double_enum_trouble(self):
         """Test a redefinition of enum in a derived class"""
 

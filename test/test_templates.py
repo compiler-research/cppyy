@@ -985,7 +985,6 @@ class TestTEMPLATES:
         assert len(cppyy.gbl.gLutData6) == (1<<3)+1
         assert len(cppyy.gbl.gLutData8) == 14<<2
 
-    @mark.xfail
     def test32_template_of_function_with_templated_args(self):
         """Lookup of templates of function with templated args used to fail"""
 

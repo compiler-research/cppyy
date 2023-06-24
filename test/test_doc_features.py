@@ -377,7 +377,6 @@ namespace Namespace {
 
         pass
 
-    @mark.xfail
     def test_typedefs(self):
         import cppyy
         from cppyy.gbl import Concrete, Concrete_t

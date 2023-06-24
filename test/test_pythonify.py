@@ -205,7 +205,6 @@ class TestPYTHONIFY:
         assert cppyy.gbl.ns_example01.globalAddOneToInt(4) == 5
         assert cppyy.gbl.ns_example01.globalAddOneToInt(4) == 5
 
-    @mark.xfail
     def test09_memory(self):
         """Test proper C++ destruction by the garbage collector"""
 
@@ -297,7 +296,6 @@ class TestPYTHONIFY:
         assert e.overloadedAddDataToInt(4, 5)    == 10
         assert e.overloadedAddDataToInt(6, 7, 8) == 22
 
-    @mark.xfail
     def test12_typedefs(self):
         """Test access and use of typedefs"""
 
@@ -345,7 +343,6 @@ class TestPYTHONIFY:
        assert 2 == e.fresh(1)
        assert 3 == e.fresh(2)
 
-    @mark.xfail
     def test16_subclassing(self):
         """A sub-class on the python side should have that class as type"""
 
