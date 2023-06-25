@@ -1270,7 +1270,7 @@ class TestTALKEXAMPLES:
         with raises(CC.MyException):
             CC.throw_error()
 
-    @mark.xfail(run=False, reason="Clang-Repl")
+    @mark.xfail
     def test_unicode(self):
         """Unicode non-UTF-8 example"""
 

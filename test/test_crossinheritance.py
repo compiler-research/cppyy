@@ -336,7 +336,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert CB.s_count == 0 + start_count
 
-    @mark.xfail(run=False, reason="Crashes")
+    @mark.xfail
     def test11_python_in_make_shared(self):
         """Usage of Python derived objects with std::make_shared"""
 
