@@ -33,7 +33,6 @@ class TestPYTHONIFY:
         with raises(AttributeError):
             cppyy.gbl.nonexistingclass
 
-    @mark.xfail
     def test03_calling_static_functions(self):
         """Test calling of static methods"""
 
@@ -69,7 +68,6 @@ class TestPYTHONIFY:
         assert res == "aap"
         raises(TypeError, example01_class.staticStrcpy, 1.)    # TODO: id.
 
-    @mark.xfail
     def test04_constructing_and_calling(self):
         """Test object and method calls"""
 
@@ -120,7 +118,6 @@ class TestPYTHONIFY:
         instance.__destruct__()
         assert example01_class.getCount() == 0
 
-    @mark.xfail
     def test05_passing_object_by_pointer(self):
         """Pass object by pointer"""
 
@@ -146,7 +143,6 @@ class TestPYTHONIFY:
         e.__destruct__()
         assert example01_class.getCount() == 0
 
-    @mark.xfail
     def test06_returning_object_by_pointer(self):
         """Return an object py pointer"""
 
@@ -169,7 +165,6 @@ class TestPYTHONIFY:
         e.__destruct__()
         assert example01_class.getCount() == 0
 
-    @mark.xfail
     def test07_returning_object_by_value(self):
         """Return an object by value"""
 

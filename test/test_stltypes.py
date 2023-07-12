@@ -299,7 +299,6 @@ class TestSTLVECTOR:
             pass
         v.__destruct__()
 
-    @mark.xfail
     def test04_vector_iteration(self):
         """Test iteration over an std::vector<int>"""
 
@@ -325,7 +324,6 @@ class TestSTLVECTOR:
 
         v.__destruct__()
 
-    @mark.xfail
     def test05_push_back_iterables_with_iadd(self):
         """Test usage of += of iterable on push_back-able container"""
 
@@ -364,7 +362,6 @@ class TestSTLVECTOR:
         v += []
         assert len(v) == sz
 
-    @mark.xfail
     def test06_vector_indexing(self):
         """Test python-style indexing to an std::vector<int>"""
 
@@ -706,7 +703,6 @@ class TestSTLVECTOR:
 
         assert cppsum == pysum
 
-    @mark.xfail
     def test20_vector_cstring(self):
         """Usage of a vector of const char*"""
 
@@ -811,7 +807,6 @@ class TestSTLSTRING:
         assert repr(std.string('ab\0c')) == repr(b'ab\0c')
         assert str(std.string('ab\0c'))  == str('ab\0c')
 
-    @mark.xfail
     def test04_array_of_strings(self):
         """Access to global arrays of strings"""
 
@@ -876,7 +871,6 @@ class TestSTLSTRING:
         assert str(uas.get_string_cr(bval)) == 'ℕ'
         assert str(uas.get_string_cc(bval)) == 'ℕ'
 
-    @mark.xfail
     def test06_stlstring_bytes_and_text(self):
         """Mixing of bytes and str"""
 
@@ -894,7 +888,6 @@ class TestSTLSTRING:
         assert repr(ns.string_field) == repr(b'\xe9')
         assert str(ns.string_field)  == str(b'\xe9')       # b/c fails to decode
 
-    @mark.xfail
     def test07_stlstring_in_dictionaries(self):
         """Mixing str and std::string as dictionary keys"""
 
@@ -1202,7 +1195,6 @@ class TestSTLMAP:
                 assert key   == self.N-1
                 assert value == (self.N-1)*(self.N-1)
 
-    @mark.xfail
     def test02_keyed_maptype(self):
         """Test access to a map<std::string,int>"""
 
@@ -1231,7 +1223,6 @@ class TestSTLMAP:
             for key, value in m:
                 pass
 
-    @mark.xfail
     def test04_unsignedvalue_typemap_types(self):
         """Test assignability of maps with unsigned value types"""
 
@@ -1257,7 +1248,6 @@ class TestSTLMAP:
 
             raises(ValueError, mul.__setitem__, 'minus two', -2)
 
-    @mark.xfail
     def test05_STL_like_class_indexing_overloads(self):
         """Test overloading of operator[] in STL like class"""
 
@@ -1268,7 +1258,6 @@ class TestSTLMAP:
         assert a["some string" ] == 'string'
         assert a[3.1415] == 'double'
 
-    @mark.xfail
     def test06_initialize_from_dict(self):
         """Test std::map initializion from Python dict"""
 
@@ -1284,7 +1273,6 @@ class TestSTLMAP:
             with raises(TypeError):
                 m = mtype[int, str]({'1' : 1, '2' : 2})
 
-    @mark.xfail
     def test07_map_cpp17_style(self):
         """C++17 style initialization of std::map"""
 
@@ -1299,7 +1287,6 @@ class TestSTLMAP:
             assert m['1'] == 2
             assert m['2'] == 1
 
-    @mark.xfail
     def test08_map_derived_objects(self):
         """Enter derived objects through an initializer list"""
 
@@ -1512,7 +1499,6 @@ class TestSTLARRAY:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test01_array_of_basic_types(self):
         """Usage of std::array of basic types"""
 
@@ -1525,7 +1511,6 @@ class TestSTLARRAY:
             a[i] = i
             assert a[i] == i
 
-    @mark.xfail
     def test02_array_of_pods(self):
         """Usage of std::array of PODs"""
 
@@ -1951,7 +1936,7 @@ class TestSTLEXCEPTION:
         assert YourError.__cpp_name__ == 'ErrorNamespace::YourError'
         assert YourError.__module__   == 'cppyy.gbl.ErrorNamespace'
 
-    @mark.xfail
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test02_raising(self):
         """Raise a C++ std::exception derived class as a Python excption"""
 
@@ -1988,7 +1973,7 @@ class TestSTLEXCEPTION:
         except cppyy.gbl.YourError as e:
             assert e.what() == 'Oops'
 
-    @mark.xfail
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test03_memory(self):
         """Memory handling of C++ c// helper for exception base class testing"""
 

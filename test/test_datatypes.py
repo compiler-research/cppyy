@@ -836,7 +836,6 @@ class TestDATATYPES:
         assert not hasattr(cl, 'c_five')
         assert cl.CEnum2.c_six == 6
 
-    @mark.xfail
     def test13_string_passing(self):
         """Test passing/returning of a const char*"""
 
@@ -1484,7 +1483,6 @@ class TestDATATYPES:
         gc.collect()
         raises(TypeError, c, 3, 3) # lambda gone out of scope
 
-    @mark.xfail
     def test29_std_function_life_lines(self):
         """Life lines to std::function data members"""
 
@@ -1818,7 +1816,6 @@ class TestDATATYPES:
         m = ns.create_matrix(N, M)
         assert ns.destroy_matrix(ns.g_matrix, N, M)
 
-    @mark.xfail
     def test37_legacy_matrix_of_structs(self):
         """Handling of legacy matrix of structs"""
 
@@ -1882,7 +1879,6 @@ class TestDATATYPES:
         m = ns.create_matrix(N, M)
         assert ns.destroy_matrix(ns.g_matrix, N, M)
 
-    @mark.xfail
     def test38_plain_old_data(self):
         """Initializer construction of PODs"""
 
@@ -2122,7 +2118,6 @@ class TestDATATYPES:
         assert c*(c*c) == p*(p*p)
         assert (c*c)*c == (p*p)*p
 
-    @mark.xfail
     def test43_ccharp_memory_handling(self):
         """cppyy side handled memory of C strings"""
 
@@ -2216,7 +2211,6 @@ class TestDATATYPES:
             assert buf1.data1[i] == 1.*i
             assert buf1.data2[i] == 2.*i
 
-    @mark.xfail
     def test45_const_ref_data(self):
         """Proper indirection for addressing const-ref data"""
 

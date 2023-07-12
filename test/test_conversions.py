@@ -40,7 +40,6 @@ class TestCONVERSIONS:
         assert CNS.sumit(range(N), v2)          == total
         assert CNS.sumit(range(N), range(M, N)) == total
 
-    @mark.xfail
     def test02_memory_handling_of_temporaries(self):
         """Verify that memory of temporaries is properly cleaned up"""
 
@@ -62,7 +61,6 @@ class TestCONVERSIONS:
         gc.collect()
         assert CC.s_count == 0
 
-    @mark.xfail
     def test03_error_handling(self):
         """Verify error handling"""
 

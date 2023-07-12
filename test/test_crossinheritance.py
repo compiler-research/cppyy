@@ -236,7 +236,6 @@ class TestCROSSINHERITANCE:
         p1 = TPyDerived1()
         assert p1.get_value() == 13
 
-    @mark.xfail
     def test08_error_handling(self):
         """Python errors should propagate through wrapper"""
 
@@ -513,7 +512,6 @@ class TestCROSSINHERITANCE:
         assert m.get_data()   == 42
         assert m.get_data_v() == 42
 
-    @mark.xfail
     def test15_object_returns(self):
         """Return of C++ objects from overridden functions"""
 
@@ -581,7 +579,6 @@ class TestCROSSINHERITANCE:
         assert not not new_obj
         assert new_obj.whoami() == "PyDerived4"
 
-    @mark.xfail
     def test16_cctor_access_controlled(self):
         """Python derived class of C++ class with access controlled cctor"""
 
@@ -623,7 +620,6 @@ class TestCROSSINHERITANCE:
             obj = PyDerived()
             assert ns.callit(obj) == "PyDerived"
 
-    @mark.xfail
     def test17_deep_hierarchy(self):
         """Test a deep Python hierarchy with pure virtual functions"""
 
@@ -670,7 +666,6 @@ class TestCROSSINHERITANCE:
         assert obj.whoami()   == "PyDerived4"
         assert ns.callit(obj) == "PyDerived4"
 
-    @mark.xfail
     def test18_abstract_hierarchy(self):
         """Hierarchy with abstract classes"""
 
@@ -713,7 +708,6 @@ class TestCROSSINHERITANCE:
         assert obj.message()  == "Hello, World!"
         assert ns.saywot(obj) == "Hello, World!"
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test19_cpp_side_multiple_inheritance(self):
         """Hierarchy with multiple inheritance on the C++ side"""
 
@@ -749,7 +743,6 @@ class TestCROSSINHERITANCE:
             def abstract1(self):
                 return ns.Result(1)
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test20_basic_multiple_inheritance(self):
         """Basic multiple inheritance"""
 
@@ -828,7 +821,6 @@ class TestCROSSINHERITANCE:
         assert a.m_2 == 42
         assert a.m_3 == 67
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test21_multiple_inheritance_with_constructors(self):
         """Multiple inheritance with constructors"""
 
@@ -916,7 +908,6 @@ class TestCROSSINHERITANCE:
         assert a.m_2 ==  88
         assert a.m_3 == -11
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test22_multiple_inheritance_with_defaults(self):
         """Multiple inheritance with defaults"""
 
@@ -1007,7 +998,6 @@ class TestCROSSINHERITANCE:
         a = MyPyDerived(27, 55, nArgs=2)
         verify(a, 27, 55, 67)
 
-    @mark.xfail
     def test23_const_byvalue_return(self):
         """Const by-value return in overridden method"""
 
@@ -1118,7 +1108,6 @@ class TestCROSSINHERITANCE:
 
         assert DerivedNoCopyNoMove().callme() == "Hello, World!"
 
-    @mark.xfail
     def test25_default_ctor_and_multiple_inheritance(self):
         """Regression test: default ctor did not get added"""
 
@@ -1159,7 +1148,6 @@ class TestCROSSINHERITANCE:
         d = DerivedMulti()
         assert d
 
-    @mark.xfail
     def test26_no_default_ctor(self):
         """Make sure no default ctor is created if not viable"""
 
@@ -1289,7 +1277,6 @@ class TestCROSSINHERITANCE:
             assert inst.fun1() == val1
             assert inst.fun2() == inst.fun1()
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test29_cross_deep_multi(self):
         """Deep multi-inheritance hierarchy"""
 

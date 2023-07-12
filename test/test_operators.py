@@ -14,7 +14,6 @@ class TestOPERATORS:
         cls.test_dct = test_dct
         import cppyy
         cls.operators = cppyy.load_reflection_info(cls.test_dct)
-        cls.N = cppyy.gbl.N
 
     def teardown_method(self, meth):
         import gc
@@ -87,7 +86,6 @@ class TestOPERATORS:
         n = number(0)
         assert not n
 
-    @mark.xfail
     def test05_exact_types(self):
         """Test converter operators of exact types"""
 
@@ -178,7 +176,6 @@ class TestOPERATORS:
         assert not b1 == d2
         assert not d2 == b1
 
-    @mark.xfail
     def test08_call_to_getsetitem_mapping(self):
         """Map () to []"""
 

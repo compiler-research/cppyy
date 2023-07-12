@@ -16,7 +16,6 @@ class TestADVANCEDCPP:
         import cppyy
         cls.advanced = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test01_default_arguments(self):
         """Test usage of default arguments"""
 
@@ -604,7 +603,6 @@ class TestADVANCEDCPP:
         gc.collect()
         assert cppyy.gbl.new_overloader.s_instances == 0
 
-    @mark.xfail
     def test15_template_instantiation_with_vector_of_float(self):
         """Test template instantiation with a std::vector<float>"""
 
@@ -631,7 +629,6 @@ class TestADVANCEDCPP:
         assert f(3.) == 3.
         assert type(f(4.)) == type(4.)
 
-    @mark.xfail
     def test17_assign_to_return_byref(self):
         """Test assignment to an instance returned by reference"""
 
@@ -685,7 +682,6 @@ class TestADVANCEDCPP:
         assert a.__eq__(a) == False
         assert b.__eq__(b) == False
 
-    @mark.xfail
     def test20_overload_order_with_proper_return(self):
         """Test return type against proper overload w/ const and covariance"""
 

@@ -310,7 +310,6 @@ namespace Namespace {
         assert hasattr(cppyy, 'nullptr')
         assert not cppyy.nullptr
 
-    @mark.xfail
     def test_operator_conversions(self):
         import cppyy
         from cppyy.gbl import Concrete
@@ -436,7 +435,7 @@ namespace Namespace {
         pc = PyConcrete4()
         assert call_abstract_method(pc) == "Hello, Python World! (4)"
 
-    @mark.xfail
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test_multi_x_inheritance(self):
         """Multiple cross-inheritance"""
 
@@ -1271,7 +1270,6 @@ class TestTALKEXAMPLES:
         with raises(CC.MyException):
             CC.throw_error()
 
-    @mark.xfail
     def test_unicode(self):
         """Unicode non-UTF-8 example"""
 

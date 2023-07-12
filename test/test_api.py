@@ -43,7 +43,6 @@ class TestAPI:
 
         assert API.Exec('import sys')
 
-    @mark.xfail
     def test03_instance_conversion(self):
         """Proxy object conversions"""
 
@@ -141,7 +140,6 @@ class TestAPI:
         assert type(gA3b) == cppyy.gbl.APICheck3
         assert not gA3b.wasFromMemoryCalled()
 
-    @mark.xfail
     def test05_custom_executor(self):
         """Custom type executor"""
 

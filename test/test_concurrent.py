@@ -86,7 +86,6 @@ class TestCONCURRENT:
         if t.is_alive():        # was timed-out
             cppyy.gbl.test12_timeout.stopit[0] = True
 
-    @mark.xfail
     def test04_cpp_threading_with_exceptions(self):
         """Threads and Python exceptions"""
 

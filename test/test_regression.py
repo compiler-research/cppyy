@@ -272,7 +272,6 @@ class TestREGRESSION:
             except AttributeError:
                 pass
 
-    @mark.xfail
     def test13_char_star_over_char(self):
         """Map str to const char* over char"""
 
@@ -308,7 +307,6 @@ class TestREGRESSION:
         assert cppyy.gbl.csoc3.call('0')  == 'string'
         assert cppyy.gbl.csoc3.call('00') == 'string'
 
-    @mark.xfail
     def test14_struct_direct_definition(self):
         """Struct defined directly in a scope miseed scope in renormalized name"""
 
@@ -491,7 +489,6 @@ class TestREGRESSION:
         assert type(a+b) == cppyy.gbl.std.string
         assert a+b == 'ab'
 
-    @mark.xfail
     def test19_std_string_hash(self):
         """Hashing of std::string"""
 
@@ -508,7 +505,6 @@ class TestREGRESSION:
         for s in ['abc', 'text', '321', 'stuff', 'very long string']:
             d[s] = 1
 
-    @mark.xfail
     def test20_signed_char_ref(self):
         """Signed char executor was self-referencing"""
 
@@ -527,7 +523,6 @@ class TestREGRESSION:
 
         assert obj.getter() == 'c'
 
-    @mark.xfail
     def test21_temporaries_and_vector(self):
         """Extend a life line to references into a vector if needed"""
 

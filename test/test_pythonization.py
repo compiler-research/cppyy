@@ -230,7 +230,6 @@ class TestClassPYTHONIZATION:
         # associative  container, with 'index' a key, not a counter
         #raises(IndexError, d.__getitem__, 1)
 
-    @mark.xfail
     def test09_cpp_side_pythonization(self):
         """Use of C++ side pythonizations"""
 
