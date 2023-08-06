@@ -47,13 +47,13 @@ except ImportError:
     ispypy = False
 
 import cppyy
-IS_CLANG_REPL = (cppyy.gbl.InterOp.Evaluate("""#ifndef __CLING__ 
-                                               true
-                                               #else
-                                               false
-                                               #endif\n""") == 1)
-IS_CLANG_DEBUG = (cppyy.gbl.InterOp.Evaluate("""#ifdef NDEBUG
-                                                false
-                                                #else
-                                                true
-                                                #endif\n""") == 1)
+IS_CLANG_REPL = (cppyy.gbl.Cpp.Evaluate("""#ifndef __CLING__ 
+                                           true
+                                           #else
+                                           false
+                                           #endif\n""") == 1)
+IS_CLANG_DEBUG = (cppyy.gbl.Cpp.Evaluate("""#ifdef NDEBUG
+                                            false
+                                            #else
+                                            true
+                                            #endif\n""") == 1)

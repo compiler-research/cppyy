@@ -305,7 +305,7 @@ class TestTEMPLATES:
         assert iavec[5] == 5
 
       # with variadic template
-        if cppyy.gbl.InterOp.Evaluate("__cplusplus;") > 201402:
+        if cppyy.gbl.Cpp.Evaluate("__cplusplus;") > 201402:
             assert nsup.matryoshka[int, 3].type
             assert nsup.matryoshka[int, 3, 4].type
             assert nsup.make_vector[int , 3]
@@ -313,7 +313,7 @@ class TestTEMPLATES:
             assert nsup.make_vector[int , 4]().m_val == 4
 
       # with inner types using
-        assert cppyy.gbl.InterOp.Evaluate("using_problem::Bar::Foo")
+        assert cppyy.gbl.Cpp.Evaluate("using_problem::Bar::Foo")
         assert nsup.Foo
         assert nsup.Bar.Foo       # used to fail
 

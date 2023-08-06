@@ -554,13 +554,13 @@ class TestFRAGILE:
         import cppyy
 
         cppyy.set_debug()
-        assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == True
+        assert cppyy.gbl.Cpp.IsDebugOutputEnabled() == True
         cppyy.set_debug(False)
-        assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == False
+        assert cppyy.gbl.Cpp.IsDebugOutputEnabled() == False
         cppyy.set_debug(True)
-        assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == True
+        assert cppyy.gbl.Cpp.IsDebugOutputEnabled() == True
         cppyy.set_debug(False)
-        assert cppyy.gbl.InterOp.IsDebugOutputEnabled() == False
+        assert cppyy.gbl.Cpp.IsDebugOutputEnabled() == False
 
     @mark.xfail
     def test24_asan(self):
@@ -671,7 +671,7 @@ class TestSIGNALS:
 class TestSTDNOTINGLOBAL:
     def setup_class(cls):
         import cppyy
-        cls.has_byte = 201402 < cppyy.gbl.InterOp.Evaluate("__cplusplus;")
+        cls.has_byte = 201402 < cppyy.gbl.Cpp.Evaluate("__cplusplus;")
 
     def test01_stl_in_std(self):
         """STL classes should live in std:: only"""

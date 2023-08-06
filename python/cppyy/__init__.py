@@ -181,7 +181,7 @@ del make_smartptr
 #--- interface to Cling ------------------------------------------------------
 class _stderr_capture(object):
     def __init__(self):
-       self._capture = not gbl.InterOp.IsDebugOutputEnabled()
+       self._capture = not gbl.Cpp.IsDebugOutputEnabled()
        self.err = ""
 
     def __enter__(self):
@@ -196,7 +196,7 @@ class _stderr_capture(object):
 def cppdef(src):
     """Declare C++ source <src> to Cling."""
     with _stderr_capture() as err:
-        errcode = gbl.InterOp.Declare(src)
+        errcode = gbl.Cpp.Declare(src)
     if not errcode == 0 or err.err:
         if 'warning' in err.err.lower() and not 'error' in err.err.lower():
             warnings.warn(err.err, SyntaxWarning)
@@ -214,7 +214,7 @@ def cppexec(stmt):
     with _stderr_capture() as err:
         errcode = ctypes.c_int(0)
         try:
-            errcode = gbl.InterOp.Process(stmt)
+            errcode = gbl.Cpp.Process(stmt)
         except Exception as e:
             sys.stderr.write("%s\n\n" % str(e))
             if not errcode.value: errcode.value = 1
@@ -229,8 +229,8 @@ def cppexec(stmt):
 def load_library(name):
     """Explicitly load a shared library."""
     with _stderr_capture() as err:
-        InterOp = gbl.InterOp
-        result = InterOp.LoadLibrary(name)
+        CppInterOp = gbl.Cpp
+        result = CppInterOp.LoadLibrary(name)
     if result == False:
         raise RuntimeError('Could not load library "%s": %s' % (name, err.err))
 
@@ -239,7 +239,7 @@ def load_library(name):
 def include(header):
     """Load (and JIT) header file <header> into Cling."""
     with _stderr_capture() as err:
-        errcode = gbl.InterOp.Declare('#include "%s"' % header)
+        errcode = gbl.Cpp.Declare('#include "%s"' % header)
     if not errcode == 0:
         raise ImportError('Failed to load header file "%s"%s' % (header, err.err))
     return True
@@ -247,7 +247,7 @@ def include(header):
 def c_include(header):
     """Load (and JIT) header file <header> into Cling."""
     with _stderr_capture() as err:
-        errcode = gbl.InterOp.Declare("""extern "C" {
+        errcode = gbl.Cpp.Declare("""extern "C" {
 #include "%s"
 }""" % header)
     if not errcode == 0:
@@ -258,7 +258,7 @@ def add_include_path(path):
     """Add a path to the include paths available to Cling."""
     if not os.path.isdir(path):
         raise OSError('No such directory: %s' % path)
-    gbl.InterOp.AddIncludePath(path)
+    gbl.Cpp.AddIncludePath(path)
 
 def add_library_path(path):
     """Add a path to the library search paths available to Cling."""
@@ -359,7 +359,7 @@ def add_autoload_map(fname):
 
 def set_debug(enable=True):
     """Enable/disable debug output."""
-    gbl.InterOp.EnableDebugOutput(enable)
+    gbl.Cpp.EnableDebugOutput(enable)
 
 def _get_name(tt):
     if type(tt) == str:
@@ -381,7 +381,7 @@ def sizeof(tt):
         try:
             sz = ctypes.sizeof(tt)
         except TypeError:
-            sz = gbl.InterOp.Evaluate("sizeof(%s);" % (_get_name(tt),))
+            sz = gbl.Cpp.Evaluate("sizeof(%s);" % (_get_name(tt),))
         _sizes[tt] = sz
         return sz
 
