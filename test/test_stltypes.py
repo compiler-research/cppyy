@@ -1588,7 +1588,7 @@ class TestSTLSTRING_VIEW:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail(condition=not IS_CLANG_REPL)
+    @mark.xfail(condition=not IS_CLANG_REPL, reason="Fails with Cling")
     def test01_string_through_string_view(self):
         """Usage of std::string_view as formal argument"""
 
@@ -1895,7 +1895,7 @@ class TestSTLEXCEPTION:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
+    @mark.xfail
     def test01_basics(self):
         """Test behavior of std::exception derived classes"""
 
@@ -1936,7 +1936,7 @@ class TestSTLEXCEPTION:
         assert YourError.__cpp_name__ == 'ErrorNamespace::YourError'
         assert YourError.__module__   == 'cppyy.gbl.ErrorNamespace'
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
+    @mark.xfail(run=IS_CLANG_REPL, reason="Crashes with Cling")
     def test02_raising(self):
         """Raise a C++ std::exception derived class as a Python excption"""
 
@@ -1973,7 +1973,7 @@ class TestSTLEXCEPTION:
         except cppyy.gbl.YourError as e:
             assert e.what() == 'Oops'
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
+    @mark.xfail(run=IS_CLANG_REPL, reason="Crashes with Cling")
     def test03_memory(self):
         """Memory handling of C++ c// helper for exception base class testing"""
 
