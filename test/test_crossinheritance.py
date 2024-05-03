@@ -128,7 +128,7 @@ class TestCROSSINHERITANCE:
         assert c4.m_int == 88
         assert CX.IBase2.call_get_value(c4) == 77
 
-    @mark.xfail
+    @mark.xfail(run=not IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
     def test04_arguments(self):
         """Test ability to override functions that take arguments"""
 
