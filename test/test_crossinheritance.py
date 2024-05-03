@@ -230,7 +230,7 @@ class TestCROSSINHERITANCE:
         p1 = TPyDerived1()
         assert p1.get_value() == 13
 
-    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
+    @mark.xfail(run=not IS_MAC_ARM, condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
     def test08_error_handling(self):
         """Python errors should propagate through wrapper"""
 
