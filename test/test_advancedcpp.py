@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_WINDOWS, ispypy, IS_CLANG_REPL
+from .support import setup_make, pylong, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC_ARM
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("advancedcppDict"))
@@ -724,7 +724,7 @@ class TestADVANCEDCPP:
         assert len(cppyy.gbl.gtestv1) == 1
         assert len(cppyy.gbl.gtestv2) == 1
 
-    @mark.xfail
+    @mark.xfail(run=not IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
     def test22_exceptions(self):
         """Catching of C++ exceptions"""
 
