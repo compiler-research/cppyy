@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import mark, raises, skip
-from .support import setup_make, IS_CLANG_REPL
+from .support import setup_make, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM
 
 noboost = False
 if not (os.path.exists(os.path.join(os.path.sep, 'usr', 'include', 'boost')) or \
@@ -15,6 +15,7 @@ class TestBOOSTANY:
 
         cppyy.include('boost/any.hpp')
 
+    @mark.skipif((IS_MAC_ARM or IS_MAC_X86), reason="Fails to include boost on OS X")
     def test01_any_class(self):
         """Availability of boost::any"""
 
@@ -67,7 +68,7 @@ class TestBOOSTANY:
         assert len(extract) == 200
 
 
-@mark.skipif(noboost == True, reason="boost not found")
+@mark.skipif(((noboost == True) or IS_MAC_ARM or IS_MAC_X86), reason="boost not found")
 class TestBOOSTOPERATORS:
     def setup_class(cls):
         import cppyy
@@ -134,7 +135,7 @@ class TestBOOSTVARIANT:
         assert type(boost.get['BV::C'](v[2])) == cpp.BV.C
 
 
-@mark.skipif(noboost == True, reason="boost not found")
+@mark.skipif(((noboost == True) or IS_MAC_ARM or IS_MAC_X86), reason="boost not found")
 class TestBOOSTERASURE:
     def setup_class(cls):
         import cppyy
