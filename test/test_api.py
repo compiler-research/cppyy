@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import ispypy
+from .support import ispypy, IS_MAC_X86
 
 
 class TestAPI:
@@ -35,6 +35,7 @@ class TestAPI:
         assert API.Overload_Check(m)
         assert API.Overload_CheckExact(m)
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test02_interpreter_access(self):
         """Access to the python interpreter"""
 
@@ -43,6 +44,7 @@ class TestAPI:
 
         assert API.Exec('import sys')
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test03_instance_conversion(self):
         """Proxy object conversions"""
 

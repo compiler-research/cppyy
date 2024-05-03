@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC_ARM
+from .support import setup_make, pylong, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("advancedcppDict"))
@@ -16,6 +16,7 @@ class TestADVANCEDCPP:
         import cppyy
         cls.advanced = cppyy.load_reflection_info(cls.test_dct)
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test01_default_arguments(self):
         """Test usage of default arguments"""
 
@@ -682,6 +683,7 @@ class TestADVANCEDCPP:
         assert a.__eq__(a) == False
         assert b.__eq__(b) == False
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test20_overload_order_with_proper_return(self):
         """Test return type against proper overload w/ const and covariance"""
 

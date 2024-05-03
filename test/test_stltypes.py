@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG
+from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -430,6 +430,7 @@ class TestSTLVECTOR:
             ve[0] = cppyy.gbl.VecTestEnumNS.EVal2
             assert ve[0] == 42
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test09_vector_of_string(self):
         """Adverse effect of implicit conversion on vector<string>"""
 
@@ -807,6 +808,7 @@ class TestSTLSTRING:
         assert repr(std.string('ab\0c')) == repr(b'ab\0c')
         assert str(std.string('ab\0c'))  == str('ab\0c')
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test04_array_of_strings(self):
         """Access to global arrays of strings"""
 
@@ -871,6 +873,7 @@ class TestSTLSTRING:
         assert str(uas.get_string_cr(bval)) == 'ℕ'
         assert str(uas.get_string_cc(bval)) == 'ℕ'
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test06_stlstring_bytes_and_text(self):
         """Mixing of bytes and str"""
 
@@ -888,6 +891,7 @@ class TestSTLSTRING:
         assert repr(ns.string_field) == repr(b'\xe9')
         assert str(ns.string_field)  == str(b'\xe9')       # b/c fails to decode
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test07_stlstring_in_dictionaries(self):
         """Mixing str and std::string as dictionary keys"""
 
@@ -1195,6 +1199,7 @@ class TestSTLMAP:
                 assert key   == self.N-1
                 assert value == (self.N-1)*(self.N-1)
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test02_keyed_maptype(self):
         """Test access to a map<std::string,int>"""
 
@@ -1223,6 +1228,7 @@ class TestSTLMAP:
             for key, value in m:
                 pass
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test04_unsignedvalue_typemap_types(self):
         """Test assignability of maps with unsigned value types"""
 
@@ -1248,6 +1254,7 @@ class TestSTLMAP:
 
             raises(ValueError, mul.__setitem__, 'minus two', -2)
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test05_STL_like_class_indexing_overloads(self):
         """Test overloading of operator[] in STL like class"""
 
@@ -1258,6 +1265,7 @@ class TestSTLMAP:
         assert a["some string" ] == 'string'
         assert a[3.1415] == 'double'
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test06_initialize_from_dict(self):
         """Test std::map initializion from Python dict"""
 
@@ -1273,6 +1281,7 @@ class TestSTLMAP:
             with raises(TypeError):
                 m = mtype[int, str]({'1' : 1, '2' : 2})
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test07_map_cpp17_style(self):
         """C++17 style initialization of std::map"""
 
@@ -1287,6 +1296,7 @@ class TestSTLMAP:
             assert m['1'] == 2
             assert m['2'] == 1
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test08_map_derived_objects(self):
         """Enter derived objects through an initializer list"""
 

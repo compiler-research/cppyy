@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG
+from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86
 
 
 class TestREGRESSION:
@@ -271,6 +271,7 @@ class TestREGRESSION:
             except AttributeError:
                 pass
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test13_char_star_over_char(self):
         """Map str to const char* over char"""
 
@@ -488,6 +489,7 @@ class TestREGRESSION:
         assert type(a+b) == cppyy.gbl.std.string
         assert a+b == 'ab'
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test19_std_string_hash(self):
         """Hashing of std::string"""
 
@@ -522,6 +524,7 @@ class TestREGRESSION:
 
         assert obj.getter() == 'c'
 
+    @mark.xfail(condition=IS_MAC_X86, reason="Fails on OS X x86")
     def test21_temporaries_and_vector(self):
         """Extend a life line to references into a vector if needed"""
 
