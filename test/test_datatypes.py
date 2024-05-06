@@ -2,6 +2,8 @@ import py, os, sys
 from pytest import raises, skip, mark
 from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM
 
+IS_MAC = IS_MAC_X86 or IS_MAC_ARM
+
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
 
@@ -1274,7 +1276,7 @@ class TestDATATYPES:
         if self.has_byte:
             run(self, cppyy.gbl.sum_byte_data, buf, total)
 
-    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
+    @mark.xfail(run=not(((IS_CLANG_REPL and IS_MAC) or (not IS_CLANG_REPL and IS_MAC))), reason="Crashes")
     def test26_function_pointers(self):
         """Function pointer passing"""
 
@@ -1337,7 +1339,7 @@ class TestDATATYPES:
         ns = cppyy.gbl.FuncPtrReturn
         assert ns.foo()() == "Hello, World!"
 
-    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
+    @mark.xfail(run=not(((IS_CLANG_REPL and IS_MAC) or (not IS_CLANG_REPL and IS_MAC))), reason="Crashes")
     def test27_callable_passing(self):
         """Passing callables through function pointers"""
 
@@ -1483,7 +1485,7 @@ class TestDATATYPES:
         gc.collect()
         raises(TypeError, c, 3, 3) # lambda gone out of scope
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test29_std_function_life_lines(self):
         """Life lines to std::function data members"""
 
@@ -2211,7 +2213,7 @@ class TestDATATYPES:
             assert buf1.data1[i] == 1.*i
             assert buf1.data2[i] == 2.*i
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test45_const_ref_data(self):
         """Proper indirection for addressing const-ref data"""
 

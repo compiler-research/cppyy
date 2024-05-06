@@ -185,7 +185,7 @@ class TestREGRESSION:
 
         assert sys.getrefcount(x) == old_refcnt
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test08_typedef_identity(self):
         """Nested typedefs should retain identity"""
 
@@ -1088,7 +1088,7 @@ class TestREGRESSION:
 
             assert cppyy.addressof(res) == cppyy.addressof(arr)
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test38_char16_arrays(self):
         """Access to fixed-size char16 arrays as data members"""
 

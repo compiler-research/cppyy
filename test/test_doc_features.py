@@ -574,8 +574,9 @@ namespace Zoo {
         assert not isinstance(i, int)
         assert isinstance(i, Integer1)
 
+    @mark.xfail(run=False, condition=(IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason= "Crashes on OS X Cling")
     def test03_STL_containers(self):
-        """Instantiate STL contaienrs with new class"""
+        """Instantiate STL containers with new class"""
 
         from cppyy.gbl import Integer1
         from cppyy.gbl.std import vector
@@ -849,6 +850,7 @@ class TestADVERTISED:
         assert list(arr) == [1, 42, 1, 42]
         cppyy.gbl.free(vp)
 
+    @mark.xfail(run=False, condition=(IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason= "Crashes on OS X Cling")
     def test04_ptr_ptr_python_owns(self):
         """Example of ptr-ptr use where python owns"""
 
@@ -1091,7 +1093,7 @@ class TestTALKEXAMPLES:
 
         cppyy.gbl.talk_examples
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test_template_instantiation(self):
         """Run-time template instantiation example"""
 

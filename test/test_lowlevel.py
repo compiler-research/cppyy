@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLANG_REPL
+from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -338,7 +338,7 @@ class TestLOWLEVEL:
         x = np.array([True], dtype=bool)
         assert cppyy.gbl.convert_bool(x)
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test10_array_of_const_char_star(self):
         """Test passting of const char*[]"""
 

@@ -389,7 +389,7 @@ class TestSTLVECTOR:
         assert v2[-1] == v[-2]
         assert v2[self.N-4] == v[-2]
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test07_vector_bool(self):
         """Usability of std::vector<bool> which can be a specialization"""
 
@@ -408,7 +408,7 @@ class TestSTLVECTOR:
         assert len(vb[4:8]) == 4
         assert list(vb[4:8]) == [False]*3+[True]
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test08_vector_enum(self):
         """Usability of std::vector<> of some enums"""
 
@@ -430,7 +430,7 @@ class TestSTLVECTOR:
             ve[0] = cppyy.gbl.VecTestEnumNS.EVal2
             assert ve[0] == 42
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(run=not (IS_MAC_ARM or IS_MAC_X86), condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
     def test09_vector_of_string(self):
         """Adverse effect of implicit conversion on vector<string>"""
 
@@ -565,7 +565,7 @@ class TestSTLVECTOR:
             i += 1
         assert i == len(result)
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test14_vector_of_vector_of_(self):
         """Nested vectors"""
 
@@ -625,7 +625,7 @@ class TestSTLVECTOR:
         v = cppyy.gbl.std.vector(l)
         assert list(l) == l
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test18_array_interface(self):
         """Test usage of __array__ from numpy"""
 
@@ -672,7 +672,7 @@ class TestSTLVECTOR:
         v = np.array(v, dtype=np.intc)
         assert ns.func(v) == sum(v)
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test19_vector_point3d(self):
         """Iteration over a vector of by-value objects"""
 

@@ -1,6 +1,6 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLANG_DEBUG
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -615,7 +615,7 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.std.function['double(std::vector<double>)']
 
-    @mark.xfail
+    @mark.xfail(run=(IS_MAC_ARM or IS_MAC_X86) and IS_CLANG_REPL)
     def test25_stdfunction_ref_and_ptr_args(self):
         """Use of std::function with reference or pointer args"""
 
@@ -1123,7 +1123,7 @@ class TestTEMPLATES:
                         run_n = getattr(cppyy.gbl, 'TNaRun_%d' % n)
                         getattr(run_n, t)
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test33_using_template_argument(self):
         """`using` type as template argument"""
 
@@ -1153,7 +1153,7 @@ class TestTEMPLATES:
         assert ns.testptr
         assert cppyy.gbl.std.vector[ns.testptr]
 
-    @mark.xfail
+    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
     def test34_cstring_template_argument(self):
         """`const char*` use over std::string"""
 
@@ -1178,6 +1178,7 @@ class TestTEMPLATES:
         assert ns.stringify(ctypes.c_char_p(bytes("Noot", "ascii"))) == "Noot "
 
 
+@mark.skipif(((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL), reason="setup class fails with OS X cling")
 class TestTEMPLATED_TYPEDEFS:
     def setup_class(cls):
         cls.test_dct = test_dct
@@ -1295,6 +1296,7 @@ class TestTEMPLATED_TYPEDEFS:
         assert cppyy.gbl.FailedTypeDeducer.B[int]().result()      == 5
 
 
+@mark.skipif(((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL), reason="setup class fails with OS X cling")
 class TestTEMPLATE_TYPE_REDUCTION:
     def setup_class(cls):
         cls.test_dct = test_dct
