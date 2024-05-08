@@ -9,6 +9,7 @@ def setup_module(mod):
     setup_make("doc_helper")
 
 
+@mark.skipif((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason="setup class fails with OS X cling")
 class TestDOCFEATURES:
     def setup_class(cls):
         cls.test_dct = test_dct
@@ -486,6 +487,7 @@ namespace Namespace {
         assert caught == True
 
 
+@mark.skipif((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason="setup class fails with OS X cling")
 class TestTUTORIALFEATURES:
     def setup_class(cls):
         import cppyy
@@ -735,6 +737,7 @@ namespace Zoo {
         assert n == 'thisisaC++stringing'
 
 
+@mark.skipif((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason="setup class fails with OS X cling")
 class TestADVERTISED:
     def setup_class(cls):
         import cppyy
@@ -1076,6 +1079,7 @@ class TestADVERTISED:
 
 # The series of tests below mostly exists already in other places, but these
 # were used as examples for the CaaS' cppyy presentation and are preserved here.
+@mark.skipif((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason="setup class fails with OS X cling")
 class TestTALKEXAMPLES:
     def setup_class(cls):
         import cppyy

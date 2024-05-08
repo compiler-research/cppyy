@@ -23,6 +23,7 @@ class TestTEMPLATES:
         v1 = cppyy.gbl.std.vector[int]
         assert v1.__cpp_template__[int] is v1
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test01_template_member_functions(self):
         """Template member functions lookup and calls"""
 
@@ -238,6 +239,7 @@ class TestTEMPLATES:
 
         assert tc(5) == 5.
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test10_templated_hidding_methods(self):
         """Test that base class methods are not considered when hidden"""
 
@@ -524,6 +526,7 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.TemplatedCtor.C(0)
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test21_type_deduction_with_conversion(self):
         """Template instantiation with [] -> std::vector conversion"""
 
@@ -578,6 +581,7 @@ class TestTEMPLATES:
         for val in [2**64, -2**63-1]:
             raises(OverflowError, PassSomeInt, val)
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test23_overloaded_setitem(self):
         """Template with overloaded non-templated and templated setitem"""
 

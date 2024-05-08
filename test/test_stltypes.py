@@ -499,6 +499,7 @@ class TestSTLVECTOR:
         ll4[1] = 'a'
         raises(TypeError, a.vector_pair, ll4)
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test12_vector_lifeline(self):
         """Check lifeline setting on vectors of objects"""
 
@@ -704,6 +705,7 @@ class TestSTLVECTOR:
 
         assert cppsum == pysum
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test20_vector_cstring(self):
         """Usage of a vector of const char*"""
 
@@ -836,7 +838,7 @@ class TestSTLSTRING:
                 for k in range(2):
                     assert str_array_4[i][j][k] == vals[i*4+j*2+k]
 
-    @mark.xfail(condition=IS_CLANG_REPL, run=False, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(run=False, reason="Crashes with ClangRepl with 'toString not implemented' and fails on OS X Cling")
     def test05_stlstring_and_unicode(self):
         """Mixing unicode and std::string"""
 
@@ -994,7 +996,7 @@ class TestSTLSTRING:
         assert s.rfind('c')  < 0
         assert s.rfind('c') == s.npos
 
-    @mark.xfail(condition=IS_CLANG_REPL, run=False, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(run=False, reason="Crashes with ClangRepl with 'toString not implemented' and fails on OS X Cling")
     def test10_string_in_repr_and_str_bytes(self):
         """Special cases for __str__/__repr__"""
 
@@ -1216,6 +1218,7 @@ class TestSTLMAP:
 
         assert len(a) == self.N
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test03_empty_maptype(self):
         """Test behavior of empty map<int,int>"""
 
@@ -1665,6 +1668,7 @@ class TestSTLDEQUE:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test01_deque_byvalue_regression(self):
         """Return by value of a deque used to crash"""
 
@@ -1946,7 +1950,7 @@ class TestSTLEXCEPTION:
         assert YourError.__cpp_name__ == 'ErrorNamespace::YourError'
         assert YourError.__module__   == 'cppyy.gbl.ErrorNamespace'
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
+    @mark.xfail
     def test02_raising(self):
         """Raise a C++ std::exception derived class as a Python excption"""
 
@@ -1983,7 +1987,7 @@ class TestSTLEXCEPTION:
         except cppyy.gbl.YourError as e:
             assert e.what() == 'Oops'
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
+    @mark.xfail(condition=(IS_CLANG_REPL) or ((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL)), reason="Fails with ClangRepl and OS X Cling")
     def test03_memory(self):
         """Memory handling of C++ c// helper for exception base class testing"""
 

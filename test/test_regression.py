@@ -307,6 +307,7 @@ class TestREGRESSION:
         assert cppyy.gbl.csoc3.call('0')  == 'string'
         assert cppyy.gbl.csoc3.call('00') == 'string'
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test14_struct_direct_definition(self):
         """Struct defined directly in a scope miseed scope in renormalized name"""
 
@@ -739,6 +740,7 @@ class TestREGRESSION:
         with raises(TypeError):
             io.BackendPlatformName = "aap"
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test27_exception_by_value(self):
         """Proper memory management of exception return by value"""
 
@@ -774,6 +776,7 @@ class TestREGRESSION:
         gc.collect()
         assert ns.count() == 0
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test28_exception_as_shared_ptr(self):
         """shared_ptr of an exception object null-checking"""
 

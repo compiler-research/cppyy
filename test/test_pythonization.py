@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM
+from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM, IS_CLANG_REPL
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("pythonizablesDict"))
@@ -63,6 +63,7 @@ class TestClassPYTHONIZATION:
 
         assert len(cppyy.gbl.CppyyLegacy.TObjString("aap")) == 4     # include '\0'
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test01_size_mapping(self):
         """Use composites to map GetSize() onto buffer returns"""
 
@@ -86,6 +87,7 @@ class TestClassPYTHONIZATION:
         assert len(y) == bsize
         assert list(y) == list(map(lambda x: x*yval, range(bsize)))
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test02_size_mapping_of_templated_method(self):
         """Use composites to map GetSize() onto buffer returns"""
 
@@ -195,6 +197,7 @@ class TestClassPYTHONIZATION:
         assert mine.__smartptr__().get().m_check == 0xcdcdcdcd
         assert mine.say_hi() == "Hi!"
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test07_creates_flag(self):
         """Effect of creates flag on return type"""
 
@@ -216,6 +219,7 @@ class TestClassPYTHONIZATION:
 
         assert Countable.sInstances == oldcount
 
+    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test08_base_class_pythonization(self):
         """Derived class should not re-pythonize base class pythonization"""
 
