@@ -31,6 +31,7 @@ fun:_ZN4llvm16SelectionDAGISel17CodeGenAndEmitDAGEv
 fun:_ZN4llvm16SelectionDAGISel20SelectAllBasicBlocksERKNS_8FunctionE
 fun:_ZN4llvm16SelectionDAGISel20runOnMachineFunctionERNS_15MachineFunctionE
 }
+
 {
 LLVM 18 suppressions : setBits
 Memcheck:Cond
@@ -47,6 +48,7 @@ fun:_ZN4llvm16SelectionDAGISel17CodeGenAndEmitDAGEv
 fun:_ZN4llvm16SelectionDAGISel20SelectAllBasicBlocksERKNS_8FunctionE
 fun:_ZN4llvm16SelectionDAGISel20runOnMachineFunctionERNS_15MachineFunctionE
 }
+
 {
 LLVM 18 suppressions : CodeGen
 Memcheck:Cond
@@ -63,6 +65,7 @@ fun:_ZN5clang17IncrementalParser5ParseEN4llvm9StringRefE
 fun:_ZN5clang11Interpreter5ParseEN4llvm9StringRefE
 fun:_ZN3Cpp11Interpreter5ParseEN4llvm9StringRefE
 }
+
 {
 LLVM 18 suppressions : CodeGen
 Memcheck:Cond
