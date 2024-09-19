@@ -1558,7 +1558,6 @@ class TestDATATYPES:
                 p = (ctype * len(buf)).from_buffer(buf)
                 assert [p[j] for j in range(width*height)] == [2*j for j in range(width*height)]
 
-    @mark.xfail
     def test31_anonymous_union(self):
         """Anonymous unions place there fields in the parent scope"""
 
