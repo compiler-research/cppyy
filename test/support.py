@@ -42,6 +42,11 @@ if 'darwin' in sys.platform:
         os.environ["CPPYY_UNCAUGHT_QUIET"] = "1"
     else:
         IS_MAC_X86 = 1
+IS_MAC = IS_MAC_ARM or IS_MAC_X86
+
+IS_LINUX = 0
+if 'linux' in sys.platform:
+    IS_LINUX = 1
 
 try:
     import __pypy__

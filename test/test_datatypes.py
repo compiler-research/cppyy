@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM
+from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 IS_MAC = IS_MAC_X86 or IS_MAC_ARM
 
@@ -378,7 +378,7 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.xfail
+    @mark.xfail(condition= not(IS_CLANG_REPL), reason="Fails on with Cling")
     def test04_class_read_access(self):
         """Test read access to class public data and verify values"""
 
@@ -442,7 +442,7 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.xfail
+    @mark.xfail(condition = not(IS_CLANG_REPL), reason="Fails on Cling")
     def test05_class_data_write_access(self):
         """Test write access to class public data and verify values"""
 
@@ -578,7 +578,7 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.xfail
+    @mark.xfail(condition= IS_MAC, reason="Fails on OS X")
     def test08_global_builtin_type(self):
         """Test access to a global builtin type"""
 
@@ -1967,7 +1967,6 @@ class TestDATATYPES:
             assert len(f1.fPtrArr) == 3
             assert list(f1.fPtrArr) == [1., 2., 3]
 
-    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
     def test39_aggregates(self):
         """Initializer construction of aggregates"""
 

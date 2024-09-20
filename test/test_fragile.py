@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_MAC_ARM, IS_CLANG_REPL
+from .support import setup_make, ispypy, IS_LINUX, IS_WINDOWS, IS_MAC_ARM, IS_CLANG_REPL
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -562,7 +562,7 @@ class TestFRAGILE:
         cppyy.set_debug(False)
         assert cppyy.gbl.Cpp.IsDebugOutputEnabled() == False
 
-    @mark.xfail
+    @mark.xfail(condition = IS_LINUX, reason="Fails on Ubuntu")
     def test24_asan(self):
         """Check availability of ASAN with gcc"""
 

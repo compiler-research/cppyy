@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM
+from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 
 class TestREGRESSION:
@@ -587,7 +587,6 @@ class TestREGRESSION:
         r21.Bar([1,2])  # used to call Bar(Foo x) through implicit conversion
         assert r21.what_called == 'Bar(il<size=2>)'
 
-    @mark.xfail
     def test23_copy_constructor(self):
         """Copy construct an object into an empty (NULL) proxy"""
 
