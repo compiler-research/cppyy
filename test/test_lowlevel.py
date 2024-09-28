@@ -32,7 +32,6 @@ class TestLOWLEVEL:
 
         assert cppyy.types.LowLevelView
 
-    @mark.xfail
     def test02_builtin_cpp_casts(self):
         """C++ casting of builtin types"""
 

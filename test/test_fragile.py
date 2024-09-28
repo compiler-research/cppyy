@@ -284,7 +284,6 @@ class TestFRAGILE:
 
         assert 'operator<' not in dirS
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test12_imports(self):
         """Test ability to import from namespace (or fail with ImportError)"""
 

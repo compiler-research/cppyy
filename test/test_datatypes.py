@@ -661,7 +661,6 @@ class TestDATATYPES:
         assert gbl.g_pod.m_int == 43
         assert gbl.g_pod.m_double == 2.14
 
-    @mark.xfail
     def test10_enum(self):
         """Test access to enums"""
 
@@ -781,7 +780,6 @@ class TestDATATYPES:
         assert type(sc.vraioufaux.faux) == bool  # no bool as base class
         assert isinstance(sc.vraioufaux.faux, bool)
 
-    @mark.xfail
     def test12_enum_scopes(self):
         """Enum accessibility and scopes"""
 

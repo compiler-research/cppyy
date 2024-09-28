@@ -146,7 +146,7 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.test04_variadic_func['int', 'double', 'void*']() == 3
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL, reason="Fails with Cling")
     def test05_variadic_overload(self):
         """Call an overloaded variadic function"""
 
@@ -342,7 +342,6 @@ class TestTEMPLATES:
         assert type(d.get3()) == int
         assert d.get3() == 5
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails on Clang-REPL")
     def test14_templated_return_type(self):
         """Use of a templated return type"""
 
@@ -565,7 +564,6 @@ class TestTEMPLATES:
         assert l2v.test3[int]([d1])     == 1
         assert l2v.test3[int]([d1, d1]) == 2
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails on Clang-REPL")
     def test22_type_deduction_of_proper_integer_size(self):
         """Template type from integer arg should be big enough"""
 

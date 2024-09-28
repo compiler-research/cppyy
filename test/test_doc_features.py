@@ -200,7 +200,6 @@ namespace Namespace {
         e = bind_object(addressof(d), Abstract)
         assert type(e) == cppyy.gbl.Abstract
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test_classes_and_structs(self):
         import cppyy
         from cppyy.gbl import Concrete, Namespace
@@ -939,7 +938,6 @@ class TestADVERTISED:
         val = createit(ptr)
         assert destroyit(ptr) == val
 
-    @mark.xfail
     def test07_array_of_arrays(self):
         """Example of array of array usage"""
 

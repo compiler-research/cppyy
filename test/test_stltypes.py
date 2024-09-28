@@ -1909,7 +1909,6 @@ class TestSTLEXCEPTION:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test01_basics(self):
         """Test behavior of std::exception derived classes"""
 
@@ -1950,7 +1949,7 @@ class TestSTLEXCEPTION:
         assert YourError.__cpp_name__ == 'ErrorNamespace::YourError'
         assert YourError.__module__   == 'cppyy.gbl.ErrorNamespace'
 
-    @mark.xfail(condition = IS_MAC or (IS_LINUX and IS_CLANG_REPL), reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test02_raising(self):
         """Raise a C++ std::exception derived class as a Python excption"""
 
@@ -1987,7 +1986,7 @@ class TestSTLEXCEPTION:
         except cppyy.gbl.YourError as e:
             assert e.what() == 'Oops'
 
-    @mark.xfail(condition=(IS_CLANG_REPL) or ((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL)), reason="Fails with ClangRepl and OS X Cling")
+    @mark.xfail(condition=(IS_MAC_ARM or IS_MAC_X86), reason="Fails with OS X")
     def test03_memory(self):
         """Memory handling of C++ c// helper for exception base class testing"""
 
