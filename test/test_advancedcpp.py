@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86
+from .support import setup_make, pylong, IS_WINDOWS, IS_LINUX, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("advancedcppDict"))
@@ -183,7 +183,6 @@ class TestADVANCEDCPP:
         assert gbl.a_ns.d_ns.i_class.j_class.s_j      == 333
         assert gbl.a_ns.d_ns.i_class.j_class().m_j    == -10
 
-    @mark.xfail(run=False, reason="Crashes")
     def test04_template_types(self):
         """Test bindings of templated types"""
 
@@ -664,7 +663,7 @@ class TestADVANCEDCPP:
         assert float(a)  == 4321.
         assert float(a)  == a.m_d
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL, reason="Fails on Cling")
     def test19_comparator(self):
         """Check that the global operator!=/== is picked up"""
 
