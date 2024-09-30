@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_LINUX, IS_WINDOWS, IS_MAC_ARM, IS_CLANG_REPL
+from .support import setup_make, ispypy, IS_LINUX, IS_WINDOWS, IS_MAC_ARM, IS_CLANG_REPL, IS_MAC
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -476,7 +476,7 @@ class TestFRAGILE:
         assert not 'ESysConstants' in dd
         assert not 'kDoRed' in dd
 
-    @mark.xfail(run=False, reason="Crashes")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test20_capture_output(self):
         """Capture cerr into a string"""
 

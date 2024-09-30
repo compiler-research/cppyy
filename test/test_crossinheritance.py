@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC_X86, IS_CLANG_REPL, IS_CLANG_DEBUG
+from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -230,7 +230,7 @@ class TestCROSSINHERITANCE:
         p1 = TPyDerived1()
         assert p1.get_value() == 13
 
-    @mark.xfail(run=not IS_MAC_ARM, condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(run=not IS_MAC_ARM, condition=IS_MAC, reason="Fails on OS X")
     def test08_error_handling(self):
         """Python errors should propagate through wrapper"""
 
@@ -507,7 +507,7 @@ class TestCROSSINHERITANCE:
         assert m.get_data()   == 42
         assert m.get_data_v() == 42
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test15_object_returns(self):
         """Return of C++ objects from overridden functions"""
 
@@ -575,7 +575,7 @@ class TestCROSSINHERITANCE:
         assert not not new_obj
         assert new_obj.whoami() == "PyDerived4"
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test16_cctor_access_controlled(self):
         """Python derived class of C++ class with access controlled cctor"""
 
@@ -617,7 +617,7 @@ class TestCROSSINHERITANCE:
             obj = PyDerived()
             assert ns.callit(obj) == "PyDerived"
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test17_deep_hierarchy(self):
         """Test a deep Python hierarchy with pure virtual functions"""
 
@@ -664,7 +664,7 @@ class TestCROSSINHERITANCE:
         assert obj.whoami()   == "PyDerived4"
         assert ns.callit(obj) == "PyDerived4"
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test18_abstract_hierarchy(self):
         """Hierarchy with abstract classes"""
 
@@ -997,7 +997,7 @@ class TestCROSSINHERITANCE:
         a = MyPyDerived(27, 55, nArgs=2)
         verify(a, 27, 55, 67)
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test23_const_byvalue_return(self):
         """Const by-value return in overridden method"""
 
@@ -1241,7 +1241,7 @@ class TestCROSSINHERITANCE:
         assert obj.calc2()       == 2
         assert ns.callback2(obj) == 2
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test28_cross_deep(self):
         """Deep inheritance hierarchy"""
 

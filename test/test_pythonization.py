@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM, IS_CLANG_REPL
+from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("pythonizablesDict"))
@@ -234,7 +234,7 @@ class TestClassPYTHONIZATION:
         # associative  container, with 'index' a key, not a counter
         #raises(IndexError, d.__getitem__, 1)
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test09_cpp_side_pythonization(self):
         """Use of C++ side pythonizations"""
 

@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
+from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -430,7 +430,7 @@ class TestSTLVECTOR:
             ve[0] = cppyy.gbl.VecTestEnumNS.EVal2
             assert ve[0] == 42
 
-    @mark.xfail(run=not (IS_MAC_ARM or IS_MAC_X86), condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(run=not (IS_MAC_ARM or IS_MAC_X86), condition=IS_MAC, reason="Fails on OS X")
     def test09_vector_of_string(self):
         """Adverse effect of implicit conversion on vector<string>"""
 
@@ -582,7 +582,7 @@ class TestSTLVECTOR:
         assert vv[1][0] == 3
         assert vv[1][1] == 4
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
     def test15_vector_slicing(self):
         """Advanced test of vector slicing"""
 
@@ -609,7 +609,7 @@ class TestSTLVECTOR:
       # additional test from CPython's test suite
         getslice_cpython_test(vector[int])
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
     def test16_vector_construction(self):
         """Vector construction following CPython's sequence"""
 
@@ -810,7 +810,7 @@ class TestSTLSTRING:
         assert repr(std.string('ab\0c')) == repr(b'ab\0c')
         assert str(std.string('ab\0c'))  == str('ab\0c')
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, run=False, reason="Fails on OS X")
     def test04_array_of_strings(self):
         """Access to global arrays of strings"""
 
@@ -838,7 +838,7 @@ class TestSTLSTRING:
                 for k in range(2):
                     assert str_array_4[i][j][k] == vals[i*4+j*2+k]
 
-    @mark.xfail(run=False, reason="Crashes with ClangRepl with 'toString not implemented' and fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test05_stlstring_and_unicode(self):
         """Mixing unicode and std::string"""
 
@@ -875,7 +875,7 @@ class TestSTLSTRING:
         assert str(uas.get_string_cr(bval)) == 'ℕ'
         assert str(uas.get_string_cc(bval)) == 'ℕ'
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test06_stlstring_bytes_and_text(self):
         """Mixing of bytes and str"""
 
@@ -893,7 +893,7 @@ class TestSTLSTRING:
         assert repr(ns.string_field) == repr(b'\xe9')
         assert str(ns.string_field)  == str(b'\xe9')       # b/c fails to decode
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test07_stlstring_in_dictionaries(self):
         """Mixing str and std::string as dictionary keys"""
 
@@ -996,7 +996,7 @@ class TestSTLSTRING:
         assert s.rfind('c')  < 0
         assert s.rfind('c') == s.npos
 
-    @mark.xfail(run=False, reason="Crashes with ClangRepl with 'toString not implemented' and fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC, run = False,  reason="Crashes on OS X")
     def test10_string_in_repr_and_str_bytes(self):
         """Special cases for __str__/__repr__"""
 
@@ -1201,7 +1201,7 @@ class TestSTLMAP:
                 assert key   == self.N-1
                 assert value == (self.N-1)*(self.N-1)
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test02_keyed_maptype(self):
         """Test access to a map<std::string,int>"""
 
@@ -1231,7 +1231,7 @@ class TestSTLMAP:
             for key, value in m:
                 pass
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test04_unsignedvalue_typemap_types(self):
         """Test assignability of maps with unsigned value types"""
 
@@ -1257,7 +1257,7 @@ class TestSTLMAP:
 
             raises(ValueError, mul.__setitem__, 'minus two', -2)
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test05_STL_like_class_indexing_overloads(self):
         """Test overloading of operator[] in STL like class"""
 
@@ -1268,7 +1268,7 @@ class TestSTLMAP:
         assert a["some string" ] == 'string'
         assert a[3.1415] == 'double'
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test06_initialize_from_dict(self):
         """Test std::map initializion from Python dict"""
 
@@ -1284,7 +1284,7 @@ class TestSTLMAP:
             with raises(TypeError):
                 m = mtype[int, str]({'1' : 1, '2' : 2})
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test07_map_cpp17_style(self):
         """C++17 style initialization of std::map"""
 
@@ -1299,7 +1299,7 @@ class TestSTLMAP:
             assert m['1'] == 2
             assert m['2'] == 1
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test08_map_derived_objects(self):
         """Enter derived objects through an initializer list"""
 
@@ -1347,7 +1347,7 @@ class TestSTLITERATOR:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
     def test01_builtin_vector_iterators(self):
         """Test iterator comparison with operator== reflected"""
 
@@ -1578,7 +1578,6 @@ class TestSTLARRAY:
             assert gbl.ArrayTest.get_pa_px(a.data(), i) == 13*i
             assert gbl.ArrayTest.get_pa_py(a.data(), i) == 42*i
 
-    @mark.xfail(run=False, reason="Crashes")
     def test04_array_from_aggregate(self):
         """Initialize an array from an aggregate contructor"""
 
@@ -1715,7 +1714,7 @@ class TestSTLSET:
             assert i in s
             assert i in r
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails on OS X Cling")
     def test02_set_iterators(self):
         """Access to set iterators and their comparisons"""
 

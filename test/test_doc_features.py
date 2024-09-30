@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM
+from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC, IS_MAC_X86, IS_MAC_ARM
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("doc_helperDict"))
@@ -435,7 +435,7 @@ namespace Namespace {
         pc = PyConcrete4()
         assert call_abstract_method(pc) == "Hello, Python World! (4)"
 
-    @mark.xfail(condition=((IS_MAC_X86 or IS_MAC_ARM) and IS_CLANG_REPL), reason="Fails on OSX with Clang-REPL")
+    @mark.xfail(condition=((IS_MAC) and IS_CLANG_REPL), reason="Fails on OSX with Clang-REPL")
     def test_multi_x_inheritance(self):
         """Multiple cross-inheritance"""
 
@@ -575,7 +575,7 @@ namespace Zoo {
         assert not isinstance(i, int)
         assert isinstance(i, Integer1)
 
-    @mark.xfail(run=False, condition=(IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason= "Crashes on OS X Cling")
+    @mark.xfail(run=(not IS_MAC and IS_CLANG_REPL), condition=IS_MAC and (not IS_CLANG_REPL), reason= "Crashes on OS X Cling")
     def test03_STL_containers(self):
         """Instantiate STL containers with new class"""
 
@@ -852,7 +852,7 @@ class TestADVERTISED:
         assert list(arr) == [1, 42, 1, 42]
         cppyy.gbl.free(vp)
 
-    @mark.xfail(run=False, condition=(IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason= "Crashes on OS X Cling")
+    @mark.xfail(run=(not IS_MAC and IS_CLANG_REPL), condition=IS_MAC and (not IS_CLANG_REPL), reason= "Crashes on OS X Cling")
     def test04_ptr_ptr_python_owns(self):
         """Example of ptr-ptr use where python owns"""
 
@@ -994,7 +994,7 @@ class TestADVERTISED:
         assert n.p[2] == 0x3
         assert len(n.p) == 3
 
-    @mark.xfail(condition=IS_CLANG_REPL, run=False, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(condition=(IS_CLANG_REPL and IS_MAC), run=False, reason="Crashes with ClangRepl with 'toString not implemented'")
     def test09_custom_str(self):
         """Example of customized str"""
 
@@ -1167,7 +1167,6 @@ class TestTALKEXAMPLES:
         assert CC.passT(2**64-1) == 2**64-1
         assert 'unsigned long long' in CC.passT.__doc__
 
-    @mark.xfail(condition=IS_CLANG_REPL, run=False, reason="Crashes on Clang-REPL")
     def test_callbacks(self):
         """Function callback example"""
 
@@ -1273,7 +1272,7 @@ class TestTALKEXAMPLES:
         with raises(CC.MyException):
             CC.throw_error()
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test_unicode(self):
         """Unicode non-UTF-8 example"""
 
