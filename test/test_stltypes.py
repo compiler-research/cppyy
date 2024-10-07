@@ -582,7 +582,6 @@ class TestSTLVECTOR:
         assert vv[1][0] == 3
         assert vv[1][1] == 4
 
-    @mark.xfail
     def test15_vector_slicing(self):
         """Advanced test of vector slicing"""
 
@@ -609,7 +608,6 @@ class TestSTLVECTOR:
       # additional test from CPython's test suite
         getslice_cpython_test(vector[int])
 
-    @mark.xfail
     def test16_vector_construction(self):
         """Vector construction following CPython's sequence"""
 
@@ -810,7 +808,7 @@ class TestSTLSTRING:
         assert repr(std.string('ab\0c')) == repr(b'ab\0c')
         assert str(std.string('ab\0c'))  == str('ab\0c')
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(run=False, condition=IS_MAC, reason="Fails on OS X")
     def test04_array_of_strings(self):
         """Access to global arrays of strings"""
 
@@ -1347,7 +1345,6 @@ class TestSTLITERATOR:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test01_builtin_vector_iterators(self):
         """Test iterator comparison with operator== reflected"""
 
@@ -1715,7 +1712,6 @@ class TestSTLSET:
             assert i in s
             assert i in r
 
-    @mark.xfail
     def test02_set_iterators(self):
         """Access to set iterators and their comparisons"""
 
