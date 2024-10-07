@@ -664,7 +664,6 @@ class TestADVANCEDCPP:
         assert float(a)  == 4321.
         assert float(a)  == a.m_d
 
-    @mark.xfail
     def test19_comparator(self):
         """Check that the global operator!=/== is picked up"""
 
