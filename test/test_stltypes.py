@@ -810,7 +810,7 @@ class TestSTLSTRING:
         assert repr(std.string('ab\0c')) == repr(b'ab\0c')
         assert str(std.string('ab\0c'))  == str('ab\0c')
 
-    @mark.xfail(condition=not(IS_LINUX and not IS_CLANG_REPL), "Fails with Clang-REPL and OS X")
+    @mark.xfail(condition=not(IS_LINUX and not IS_CLANG_REPL), reason="Fails with Clang-REPL and OS X")
     def test04_array_of_strings(self):
         """Access to global arrays of strings"""
 
