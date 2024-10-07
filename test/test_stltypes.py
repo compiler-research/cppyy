@@ -808,7 +808,7 @@ class TestSTLSTRING:
         assert repr(std.string('ab\0c')) == repr(b'ab\0c')
         assert str(std.string('ab\0c'))  == str('ab\0c')
 
-    @mark.xfail(run=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(run=False, condition=(IS_MAC and not(IS_CLANG_REPL)), reason="Fails on OS X")
     def test04_array_of_strings(self):
         """Access to global arrays of strings"""
 
