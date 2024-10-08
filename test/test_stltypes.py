@@ -582,7 +582,7 @@ class TestSTLVECTOR:
         assert vv[1][0] == 3
         assert vv[1][1] == 4
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
     def test15_vector_slicing(self):
         """Advanced test of vector slicing"""
 
@@ -609,7 +609,7 @@ class TestSTLVECTOR:
       # additional test from CPython's test suite
         getslice_cpython_test(vector[int])
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
     def test16_vector_construction(self):
         """Vector construction following CPython's sequence"""
 
@@ -810,7 +810,7 @@ class TestSTLSTRING:
         assert repr(std.string('ab\0c')) == repr(b'ab\0c')
         assert str(std.string('ab\0c'))  == str('ab\0c')
 
-    @mark.xfail(condition=IS_MAC_X86 or IS_MAC_ARM, reason="Fails on OS X")
+    @mark.xfail(condition=not(IS_LINUX and not IS_CLANG_REPL), reason="Fails with Clang-REPL and OS X")
     def test04_array_of_strings(self):
         """Access to global arrays of strings"""
 
@@ -838,7 +838,7 @@ class TestSTLSTRING:
                 for k in range(2):
                     assert str_array_4[i][j][k] == vals[i*4+j*2+k]
 
-    @mark.xfail(run=False, reason="Crashes with ClangRepl with 'toString not implemented' and fails on OS X Cling")
+    @mark.xfail(condition=not(IS_LINUX and not IS_CLANG_REPL), reason="Fails with Clang-REPL and OS X")
     def test05_stlstring_and_unicode(self):
         """Mixing unicode and std::string"""
 
@@ -996,7 +996,7 @@ class TestSTLSTRING:
         assert s.rfind('c')  < 0
         assert s.rfind('c') == s.npos
 
-    @mark.xfail(run=False, reason="Crashes with ClangRepl with 'toString not implemented' and fails on OS X Cling")
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), run = False,  reason="Crashes on OS X Cling")
     def test10_string_in_repr_and_str_bytes(self):
         """Special cases for __str__/__repr__"""
 
@@ -1347,7 +1347,7 @@ class TestSTLITERATOR:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
     def test01_builtin_vector_iterators(self):
         """Test iterator comparison with operator== reflected"""
 
@@ -1578,7 +1578,6 @@ class TestSTLARRAY:
             assert gbl.ArrayTest.get_pa_px(a.data(), i) == 13*i
             assert gbl.ArrayTest.get_pa_py(a.data(), i) == 42*i
 
-    @mark.xfail(run=False, reason="Crashes")
     def test04_array_from_aggregate(self):
         """Initialize an array from an aggregate contructor"""
 
@@ -1715,7 +1714,7 @@ class TestSTLSET:
             assert i in s
             assert i in r
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails on OS X Cling")
     def test02_set_iterators(self):
         """Access to set iterators and their comparisons"""
 

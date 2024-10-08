@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
 
 IS_MAC = IS_MAC_X86 or IS_MAC_ARM
 
@@ -2055,7 +2055,7 @@ class TestDATATYPES:
             r2 = ns.make_R2()
             assert r2.s.x == 1
 
-    @mark.xfail(run=False, reason="Clang-Repl")
+    @mark.xfail(run=False, reason="Fails")
     def test41_complex_numpy_arrays(self):
         """Usage of complex numpy arrays"""
 
