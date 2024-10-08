@@ -838,7 +838,7 @@ class TestSTLSTRING:
                 for k in range(2):
                     assert str_array_4[i][j][k] == vals[i*4+j*2+k]
 
-    @mark.xfail(condition=not(IS_LINUX and not IS_CLANG_REPL), "Fails with Clang-REPL and OS X")
+    @mark.xfail(condition=not(IS_LINUX and not IS_CLANG_REPL), reason="Fails with Clang-REPL and OS X")
     def test05_stlstring_and_unicode(self):
         """Mixing unicode and std::string"""
 
