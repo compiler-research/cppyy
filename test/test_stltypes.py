@@ -1090,7 +1090,7 @@ class TestSTLLIST:
         for arg in a:
             pass
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OSX with cling")
     def test03_replacement_of_eq(self):
         """A global templated function should work as a method"""
 

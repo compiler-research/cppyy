@@ -1108,7 +1108,6 @@ class TestDATATYPES:
 
         assert not d2
 
-    @mark.xfail
     def test22_buffer_shapes(self):
         """Correctness of declared buffer shapes"""
 
@@ -1170,7 +1169,6 @@ class TestDATATYPES:
             for i in range(self.N):
                 assert arr[i] == l[i]
 
-    @mark.xfail
     def test24_voidp(self):
         """Test usage of void* data"""
 
@@ -1521,7 +1519,6 @@ class TestDATATYPES:
         d.execute = d.xyz
         assert d.do_execute() == "xyz"
 
-    @mark.xfail
     def test30_multi_dim_arrays_of_builtins(test):
         """Multi-dim arrays of builtins"""
 

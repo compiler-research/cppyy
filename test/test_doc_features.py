@@ -974,7 +974,6 @@ class TestADVERTISED:
             for j in range (NPIXELS):
                  assert image_array[j] == i*NPIXELS+j
 
-    @mark.xfail
     def test08_voidptr_array(self):
         """Example of access to array of void ptrs"""
 
