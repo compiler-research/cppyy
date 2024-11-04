@@ -1547,7 +1547,6 @@ class TestSTLARRAY:
         assert a[2].px == 6
         assert a[2].py == 7
 
-    @mark.xfail(run=False, reason="Crashes")
     def test03_array_of_pointer_to_pods(self):
         """Usage of std::array of pointer to PODs"""
 

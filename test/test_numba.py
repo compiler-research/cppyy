@@ -95,7 +95,6 @@ class TestNUMBA:
 
         return fast_time < slow_time
 
-    @mark.xfail
     def test01_compiled_free_func(self):
         """Numba-JITing of a compiled free function"""
 
