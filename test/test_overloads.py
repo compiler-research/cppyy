@@ -38,7 +38,6 @@ class TestOVERLOADS:
         assert d_overload().get_int(ns_a_overload.a_overload()) ==  88
         assert d_overload().get_int(ns_b_overload.a_overload()) == -33
 
-    @mark.xfail
     def test02_class_based_overloads_explicit_resolution(self):
         """Test explicitly resolved function overloads"""
 

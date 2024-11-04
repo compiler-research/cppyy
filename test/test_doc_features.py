@@ -262,7 +262,7 @@ namespace Namespace {
 
         pass
 
-    @mark.xfail
+    @mark.xfail(run=not IS_MAC, reason="Seg Fault")
     def test_functions(self):
         import cppyy
 
@@ -741,7 +741,6 @@ class TestADVERTISED:
     def setup_class(cls):
         import cppyy
 
-    @mark.xfail
     def test01_reduction_of_overloads(self):
         """Reduce available overloads to 1"""
 
