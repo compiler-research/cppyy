@@ -740,4 +740,4 @@ class TestMULTIDIMARRAYS:
 
         for i, v in enumerate(("s1", "s23", "s456")):
             assert len(ns.str_array[i]) == 8
-            assert str(ns.str_array[i])[:len(v)] == v
+            assert list(ns.str_array[i])[:len(v)] == list(v)

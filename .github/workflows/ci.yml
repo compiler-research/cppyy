@@ -655,7 +655,10 @@ jobs:
         cd ..
         source .venv/bin/activate
         cd cppyy
-        # Install cppyy
+        # Install cppyy and dependencies
+        if [[ "${{ matrix.os }}" == ubuntu* ]]; then
+          pip install psutil
+        fi
         python -m pip install --upgrade . --no-deps
     - name: Run cppyy on Unix Systems
       if: ${{ (runner.os != 'windows') && (matrix.cppyy == 'On') }}
@@ -709,6 +712,7 @@ jobs:
         if [[ "${{ matrix.os }}" == macos-* ]]; then
             echo "Skipping Valgrind checks on OS X"
         else
+            pip uninstall -y psutil
             echo "Running valgrind on passing tests"
             CLANG_VERSION="${{ matrix.clang-runtime }}"
             SUPPRESSION_FILE="../etc/clang${CLANG_VERSION}-valgrind.supp"

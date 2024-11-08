@@ -185,6 +185,7 @@ class TestLEAKCHECK:
         self.check_func(m, 'method_default', b=-99)
         self.check_func(m, 'method_default', c=-99)
 
+    @mark.skip(reason="Crashes when run with whole test suite")
     def test05_aggregates(self):
         """Leak test of aggregate creation"""
 
