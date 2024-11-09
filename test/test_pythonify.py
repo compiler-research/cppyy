@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86
+from .support import setup_make, pylong, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("example01Dict"))
@@ -244,7 +244,7 @@ class TestPYTHONIFY:
 
         # TODO: need ReferenceError on touching pl_a
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails in OSX")
     def test10_default_arguments(self):
         """Test propagation of default function arguments"""
 

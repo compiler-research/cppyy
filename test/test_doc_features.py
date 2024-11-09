@@ -387,7 +387,7 @@ namespace Namespace {
 
         pass
 
-    @mark.xfail(run=not IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
+    @mark.xfail(condition=IS_MAC, run=not IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
     def test_x_inheritance(self):
         import cppyy
         from cppyy.gbl import Abstract, Concrete, call_abstract_method

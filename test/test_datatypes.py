@@ -1726,7 +1726,7 @@ class TestDATATYPES:
             assert type(f) == AoS.Foo
         assert type(bar.fArr[0]) == AoS.Foo
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails in OSX")
     def test34_object_pointers(self):
         """Read/write access to objects through pointers"""
 

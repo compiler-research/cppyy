@@ -789,7 +789,7 @@ class TestSTLSTRING:
             assert c.m_string == s
             assert c.get_string1() == s
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails in OSX")
     def test03_string_with_null_character(self):
         """Test that strings with NULL do not get truncated"""
 
