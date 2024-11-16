@@ -18,7 +18,7 @@ all : $(dicts)
 
 #cppflags=$(shell llvm-config --cxxflags) -O3 -fPIC -I$(shell python -c 'import sysconfig as sc; print(sc.get_config_var("INCLUDEPY"))') -Wno-register
 # FIXME: stltypes.cxx does not compile with clang!
-cppflags= -std=c++17 -O3 -fPIC -I$(shell python -c 'import sysconfig as sc; print(sc.get_config_var("INCLUDEPY"))') -Wno-register
+cppflags= -std=c++17 -O0 -g -fPIC -I$(shell python -c 'import sysconfig as sc; print(sc.get_config_var("INCLUDEPY"))') -Wno-register
 
 PLATFORM := $(shell uname -s)
 ifeq ($(PLATFORM),Darwin)

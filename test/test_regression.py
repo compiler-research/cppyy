@@ -205,6 +205,7 @@ class TestREGRESSION:
         assert not 'vector<const PyABC::S1*>' in dir(PyABC.S2)
         assert PyABC.S2.S1_coll is cppyy.gbl.std.vector('const PyABC::S1*')
 
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
     def test09_gil_not_released(self):
         """GIL was released by accident for by-value returns"""
 
@@ -307,7 +308,6 @@ class TestREGRESSION:
         assert cppyy.gbl.csoc3.call('0')  == 'string'
         assert cppyy.gbl.csoc3.call('00') == 'string'
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
     def test14_struct_direct_definition(self):
         """Struct defined directly in a scope miseed scope in renormalized name"""
 

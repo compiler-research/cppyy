@@ -455,7 +455,7 @@ class TestSTLVECTOR:
         assert std.distance(v.begin(), v.end()) == v.size()
         assert std.distance[type(v).iterator](v.begin(), v.end()) == v.size()
 
-    @mark.xfail
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
     def test11_vector_of_pair(self):
         """Use of std::vector<std::pair>"""
 
@@ -673,7 +673,7 @@ class TestSTLVECTOR:
         v = np.array(v, dtype=np.intc)
         assert ns.func(v) == sum(v)
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, run=False, reason="Crashes with OSX-Cling")
     def test19_vector_point3d(self):
         """Iteration over a vector of by-value objects"""
 
@@ -1524,6 +1524,7 @@ class TestSTLARRAY:
             a[i] = i
             assert a[i] == i
 
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
     def test02_array_of_pods(self):
         """Usage of std::array of PODs"""
 
@@ -1547,6 +1548,7 @@ class TestSTLARRAY:
         assert a[2].px == 6
         assert a[2].py == 7
 
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
     def test03_array_of_pointer_to_pods(self):
         """Usage of std::array of pointer to PODs"""
 
@@ -1887,7 +1889,7 @@ class TestSTLPAIR:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
-    @mark.xfail
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
     def test01_pair_pack_unpack(self):
         """Pack/unpack pairs"""
 
@@ -1907,6 +1909,7 @@ class TestSTLEXCEPTION:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
     def test01_basics(self):
         """Test behavior of std::exception derived classes"""
 

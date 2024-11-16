@@ -193,7 +193,7 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_CLANG_REPL, reason="fails with Cling")
     def test02_instance_data_write_access(self):
         """Test write access to instance public data and verify values"""
 

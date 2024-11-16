@@ -1,6 +1,6 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -371,7 +371,7 @@ class TestTEMPLATES:
         assert rttest_make_tlist2(RTTest_SomeStruct1())
         assert rttest_make_tlist2(RTTest_SomeNamespace.RTTest_SomeStruct2())
 
-    @mark.xfail
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
     def test15_rvalue_templates(self):
         """Use of a template with r-values; should accept builtin types"""
 
@@ -1155,7 +1155,7 @@ class TestTEMPLATES:
         assert ns.testptr
         assert cppyy.gbl.std.vector[ns.testptr]
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(condition=IS_MAC, run=IS_CLANG_REPL, reason="fails on OSX & crashes with cling")
     def test34_cstring_template_argument(self):
         """`const char*` use over std::string"""
 
