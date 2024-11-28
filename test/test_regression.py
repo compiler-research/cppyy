@@ -895,7 +895,6 @@ class TestREGRESSION:
         assert ns.TTest(True).fT == True
         assert type(ns.TTest(True).fT) == bool
 
-    @mark.xfail
     def test31_enum_in_dir(self):
         """Failed to pick up enum data"""
 

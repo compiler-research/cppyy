@@ -1830,7 +1830,7 @@ class TestSTLTUPLE:
 
         # TODO: should be easy enough to add iterators over std::tuple?
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="fails on OSX")
     def test02_tuple_size(self):
         """Usage of tuple_size helper class"""
 
