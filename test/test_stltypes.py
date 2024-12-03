@@ -199,7 +199,6 @@ class TestSTLVECTOR:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
-    @mark.xfail
     def test01_builtin_type_vector_types(self):
         """Test access to std::vector<int>/std::vector<double>"""
 
@@ -255,7 +254,7 @@ class TestSTLVECTOR:
             assert v.size() == self.N
             assert len(v) == self.N
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, run=not IS_MAC, reason="Crashes on OSX")
     def test02_user_type_vector_type(self):
         """Test access to an std::vector<just_a_class>"""
 
@@ -389,7 +388,7 @@ class TestSTLVECTOR:
         assert v2[-1] == v[-2]
         assert v2[self.N-4] == v[-2]
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), run=not(IS_MAC and not IS_CLANG_REPL), reason="Crashes on OSX")
     def test07_vector_bool(self):
         """Usability of std::vector<bool> which can be a specialization"""
 
@@ -1040,7 +1039,7 @@ class TestSTLLIST:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 13
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails with OSX-Cling")
     def test01_builtin_list_type(self):
         """Test access to a list<int>"""
 
@@ -1078,7 +1077,7 @@ class TestSTLLIST:
             for val in a:
                 assert ll[ll.index(val)] == val
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails with OSX-Cling")
     def test02_empty_list_type(self):
         """Test behavior of empty list<int>"""
 
@@ -1139,7 +1138,7 @@ class TestSTLLIST:
         v = cppyy.gbl.std.list(l)
         assert list(l) == l
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails with OSX")
     def test06_convert_list_of_strings(self):
         """Convert list of strings from C++ to Python types"""
 
@@ -1162,7 +1161,7 @@ class TestSTLMAP:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 13
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_MAC or not IS_CLANG_REPL, reason="Fails on Ubuntu and OSX-cling")
     def test01_builtin_map_type(self):
         """Test access to a map<int,int>"""
 
@@ -1414,7 +1413,7 @@ class TestSTLITERATOR:
             assert len(b) == 3
             assert sum(b) == 6
 
-    @mark.xfail
+    @mark.xfail(condition=not IS_MAC and IS_CLANG_REPL, run=False, reason="Crashes on Ubuntu cling-REPL")
     def test03_stllike_preinc(self):
         """STL-like class with preinc by-ref returns"""
 
@@ -1697,7 +1696,7 @@ class TestSTLSET:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails with OSX-Cling")
     def test01_set_iteration(self):
         """Iterate over a set"""
 

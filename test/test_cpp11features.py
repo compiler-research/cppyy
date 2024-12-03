@@ -196,7 +196,6 @@ class TestCPP11FEATURES:
         gc.collect()
         assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail
     def test06_nullptr(self):
         """Allow the programmer to pass NULL in certain cases"""
 

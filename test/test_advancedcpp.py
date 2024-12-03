@@ -836,7 +836,6 @@ class TestADVANCEDCPP:
         y = cppyy.gbl.PrintingNS.Y()
         assert str(y) == 'Y'
 
-    @mark.xfail
     def test26_using_directive(self):
         """Test using directive in namespaces"""
 

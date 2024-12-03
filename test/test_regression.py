@@ -684,7 +684,7 @@ class TestREGRESSION:
         CSE.your_enum = CSE.YourEnum.kFour
         assert CSE.your_enum == CSE.YourEnum.kFour
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails with OSX-Cling")
     def test25_const_iterator(self):
         """const_iterator failed to resolve the proper return type"""
 
