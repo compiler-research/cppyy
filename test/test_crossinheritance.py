@@ -477,7 +477,6 @@ class TestCROSSINHERITANCE:
         class MyPyDerived4(VD.MyClass4[int]):
             pass
 
-    @mark.xfail
     def test14_protected_access(self):
         """Derived classes should have access to protected members"""
 

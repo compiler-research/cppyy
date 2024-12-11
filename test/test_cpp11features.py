@@ -393,7 +393,6 @@ class TestCPP11FEATURES:
         f = FunctionNS.FNCreateTestStructFunc()
         assert f(t) == 27
 
-    @mark.xfail
     def test13_stdhash(self):
         """Use of std::hash"""
 
