@@ -1413,7 +1413,6 @@ class TestSTLITERATOR:
             assert len(b) == 3
             assert sum(b) == 6
 
-    @mark.xfail(condition=not IS_MAC and IS_CLANG_REPL, run=False, reason="Crashes on Ubuntu cling-REPL")
     def test03_stllike_preinc(self):
         """STL-like class with preinc by-ref returns"""
 

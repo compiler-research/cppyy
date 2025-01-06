@@ -232,7 +232,6 @@ class TestOPERATORS:
 
         assert (TOIClass() < 1)
 
-    @mark.xfail
     def test10_r_non_associative(self):
         """Use of radd/rmul with non-associative types"""
 
@@ -354,7 +353,6 @@ class TestOPERATORS:
         assert std.max_element(x.begin(), x.end())-x.begin() == 2
         assert (x.end() - 3).__deref__() == 1
 
-    @mark.xfail
     def test16_global_ordered_operators(self):
         """Globally defined ordered oeprators"""
 

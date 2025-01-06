@@ -613,7 +613,7 @@ namespace Zoo {
         i2 = Integer2(13)
         assert int(i2) == 13
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails on OSX Cling")
     def test06_add_operator(self):
         """Add operator+"""
 
