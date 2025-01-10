@@ -781,7 +781,6 @@ class TestADVANCEDCPP:
         assert d2.vcheck()  == 'A'
         assert d2.vcheck(1) == 'B'
 
-    @mark.xfail
     def test24_typedef_to_private_class(self):
         """Typedefs to private classes should not resolve"""
 
