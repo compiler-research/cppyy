@@ -791,7 +791,7 @@ class TestREGRESSION:
         null = cppyy.gbl.exception_as_shared_ptr.get_shared_null()
         assert not null
 
-    @mark.xfail(run=not (IS_CLANG_REPL and IS_MAC_ARM), reason="Dispatcher fix #53 introduces canonical types with std:: namespace that introduces OS X exceptions similar to test_stltypes")
+    @mark.xfail(run=False, condition=(not IS_CLANG_REPL and IS_MAC) or IS_MAC_ARM, reason="Dispatcher fix #53 introduces canonical types with std:: namespace that introduces OS X exceptions similar to test_stltypes")
     def test29_callback_pointer_values(self):
         """Make sure pointer comparisons in callbacks work as expected"""
 

@@ -506,7 +506,6 @@ class TestCROSSINHERITANCE:
         assert m.get_data()   == 42
         assert m.get_data_v() == 42
 
-    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test15_object_returns(self):
         """Return of C++ objects from overridden functions"""
 
@@ -1393,7 +1392,6 @@ class TestCROSSINHERITANCE:
         class PyDerived(ns.Base):
             pass
 
-    @mark.xfail
     def test31_object_rebind(self):
         """Usage of bind_object to cast with Python derived objects"""
 

@@ -186,7 +186,6 @@ namespace Namespace {
         assert cppyy.gbl.gUint == 0
         raises(ValueError, setattr, cppyy.gbl, 'gUint', -1)
 
-    @mark.xfail
     def test_casting(self):
         import cppyy
         from cppyy.gbl import Abstract, Concrete
@@ -635,7 +634,7 @@ namespace Math {
         k = i2 + i
         assert int(k) == i2.m_data + i.m_data
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="fails on OSX")
     def test07_run_zoo(self):
         """Bunch of zoo animals running around"""
 
@@ -1222,7 +1221,6 @@ class TestTALKEXAMPLES:
         assert CC.callT(ann_f2, 6, 7) == 3*6*7
         assert round(CC.callT(ann_f1, 2)-2*3.1415, 5) == 0.
 
-    @mark.xfail
     def test_autocast_and_identiy(self):
         """Auto-cast and identiy preservation example"""
 

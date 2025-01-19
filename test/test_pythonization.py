@@ -111,7 +111,7 @@ class TestClassPYTHONIZATION:
         assert len(y) == bsize
         assert list(y) == list(map(lambda x: x*yval, range(bsize)))
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="fails on OSX-Cling")
     def test03_type_pinning(self):
         """Verify pinnability of returns"""
 

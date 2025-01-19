@@ -525,7 +525,6 @@ class TestADVANCEDCPP:
         assert m.get_multi2_int() == 2
         assert m.get_my_own_int() == 3
 
-    @mark.xfail
     def test12_actual_type(self):
         """Test that a pointer to base return does an auto-downcast"""
 
@@ -571,7 +570,6 @@ class TestADVANCEDCPP:
         assert cppyy.addressof(b1) == cppyy.addressof(d)
         assert not (b1 is d)
 
-    @mark.xfail
     def test13_actual_type_virtual_multi(self):
         """Test auto-downcast in adverse inheritance situation"""
 
