@@ -85,6 +85,10 @@ sys.modules['cppyy.gbl'] = gbl
 sys.modules['cppyy.gbl.std'] = gbl.std
 
 
+#- force creation of std.exception -------------------------------------------------------
+_e = gbl.std.exception
+
+
 #- enable auto-loading -------------------------------------------------------
 try:    gbl.cling.runtime.gCling.EnableAutoLoading()
 except: pass
