@@ -389,7 +389,7 @@ def sizeof(tt):
         try:
             sz = ctypes.sizeof(tt)
         except TypeError:
-            sz = gbl.Cpp.Evaluate("sizeof(%s);" % (_get_name(tt),))
+            sz = gbl.Cpp.Evaluate("sizeof(%s)" % (_get_name(tt),))
         _sizes[tt] = sz
         return sz
 

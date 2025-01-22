@@ -306,7 +306,7 @@ class TestTEMPLATES:
         assert iavec[5] == 5
 
       # with variadic template
-        if cppyy.gbl.Cpp.Evaluate("__cplusplus;") > 201402:
+        if cppyy.gbl.Cpp.Evaluate("__cplusplus") > 201402:
             assert nsup.matryoshka[int, 3].type
             assert nsup.matryoshka[int, 3, 4].type
             assert nsup.make_vector[int , 3]
