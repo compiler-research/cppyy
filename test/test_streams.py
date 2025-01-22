@@ -1,6 +1,9 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, IS_MAC, IS_CLANG_REPL
+from .support import setup_make, IS_MAC, IS_CLANG_REPL, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("std_streamsDict"))

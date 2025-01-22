@@ -1,7 +1,10 @@
 import py, os, sys
 import math, time
 from pytest import mark, raises
-from .support import setup_make
+from .support import setup_make, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 try:
     import numba
