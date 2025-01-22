@@ -452,7 +452,7 @@ namespace Namespace {
         assert cppyy.gbl.call_abstract_method1(pc) == "first message"
         assert cppyy.gbl.call_abstract_method2(pc) == "second message"
 
-    @mark.xfail(run=not IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
+    @mark.xfail(run=False, condition=IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
     def test_exceptions(self):
         """Exception throwing and catching"""
 
@@ -1242,7 +1242,7 @@ class TestTALKEXAMPLES:
         assert type(b) == CC.Derived
         assert d is b
 
-    @mark.xfail(run=not IS_MAC_ARM, reason="Seg Faults")
+    @mark.xfail(condition=IS_MAC_ARM, run=False, reason="Seg Faults")
     def test_exceptions(self):
         """Exceptions example"""
 

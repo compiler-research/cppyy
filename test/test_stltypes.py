@@ -2030,7 +2030,7 @@ class TestSTLEXCEPTION:
         gc.collect()
         assert cppyy.gbl.GetMyErrorCount() == 0
 
-    @mark.xfail(run=not IS_MAC_ARM, reason="Seg Faults")
+    @mark.xfail(condition=(IS_MAC_X86 and not IS_CLANG_REPL) or IS_MAC_ARM, run=not IS_MAC_ARM, reason="Seg Faults")
     def test04_from_cpp(self):
         """Catch C++ exceptiosn from C++"""
 

@@ -722,7 +722,7 @@ class TestADVANCEDCPP:
         assert len(cppyy.gbl.gtestv1) == 1
         assert len(cppyy.gbl.gtestv2) == 1
 
-    @mark.xfail(run=not IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
+    @mark.xfail(run=False, condition=IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
     def test22_exceptions(self):
         """Catching of C++ exceptions"""
 

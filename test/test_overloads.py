@@ -205,7 +205,7 @@ class TestOVERLOADS:
         with raises(ValueError):
             cpp.BoolInt4.fff(2)
 
-    @mark.xfail(run=not IS_MAC_ARM, reason="Seg Faults")
+    @mark.xfail(run=not IS_MAC_ARM, condition=IS_MAC, reason="Seg Faults")
     def test10_overload_and_exceptions(self):
         """Prioritize reporting C++ exceptions from callee"""
 
