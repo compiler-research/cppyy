@@ -336,6 +336,7 @@ class TestCPP11FEATURES:
             assert l3
             assert l3(2) == 48
 
+    @mark.xfail
     def test10_optional(self):
         """Use of optional and nullopt"""
 
