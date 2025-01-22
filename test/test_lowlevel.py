@@ -1,6 +1,9 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLING, IS_MAC, IS_VALGRIND
+from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLING, IS_MAC, IS_VALGRIND, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))

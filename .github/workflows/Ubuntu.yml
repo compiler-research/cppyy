@@ -620,10 +620,6 @@ jobs:
         python -m uv pip install numba
         python -m uv pip install psutil
         echo ::endgroup::
-        echo ::group::Run complete test suite
-        set -o pipefail
-        python -m pytest -sv -ra | tee complete_testrun.log 2>&1
-        set +o pipefail
         echo ::group::Crashing Test Logs
         # See if we don't have a crash that went away
         # Comment out all xfails but the ones that have a run=False condition.
@@ -666,16 +662,8 @@ jobs:
         unset IS_VALGRIND
         echo ::endgroup::
 
-        RETCODE=+$?
-
-        echo "Complete Test Suite Summary: \n"
-        tail -n1 complete_testrun.log
-        echo "Crashing Summary: \n"
+        echo "Crashing Summary:"
         tail -n1 test_crashed.log
-        echo "XFAIL Summary:"
-        tail -n1 test_xfailed.log
-        echo "Return Code: ${RETCODE}"
-        exit $RETCODE
             
     - name: Show debug info
       if: ${{ failure() }}

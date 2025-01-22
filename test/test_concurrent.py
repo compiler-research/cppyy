@@ -1,6 +1,8 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import IS_MAC_ARM, IS_MAC_X86, IS_LINUX_ARM
+from .support import IS_MAC_ARM, IS_MAC_X86, IS_LINUX_ARM, monkey_patch
+
+mark.xfail = monkey_patch
 
 
 class TestCONCURRENT:

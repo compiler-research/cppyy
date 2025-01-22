@@ -75,3 +75,12 @@ IS_CLANG_DEBUG = (cppyy.gbl.Cpp.Evaluate("""#ifdef NDEBUG
                                             #endif\n""") == 1)
 IS_CLING = not IS_CLANG_REPL
 IS_VALGRIND = True if os.getenv("IS_VALGRIND") else False
+
+from pytest import mark
+
+proxy = mark.xfail
+def monkey_patch(*args, **kwargs):
+    if "run" in kwargs:
+        del kwargs["run"]
+
+    return proxy(*args, **kwargs)

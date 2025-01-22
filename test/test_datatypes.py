@@ -1,6 +1,8 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_CLING, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
+from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_CLING, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX, monkey_patch
+
+mark.xfail = monkey_patch
 
 IS_MAC = IS_MAC_X86 or IS_MAC_ARM
 
