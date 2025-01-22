@@ -1,6 +1,9 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_MAC, IS_MAC_ARM
+from .support import setup_make, ispypy, IS_WINDOWS, IS_MAC, IS_MAC_ARM, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("overloadsDict"))
