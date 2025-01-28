@@ -825,7 +825,7 @@ class TestCROSSINHERITANCE:
         assert a.m_2 == 42
         assert a.m_3 == 67
 
-    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes with Valgrind on Linux ARM, but passes in all platforms otherwise")
     def test21_multiple_inheritance_with_constructors(self):
         """Multiple inheritance with constructors"""
 
@@ -913,7 +913,7 @@ class TestCROSSINHERITANCE:
         assert a.m_2 ==  88
         assert a.m_3 == -11
 
-    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes with Valgrind on Linux ARM, but passes in all platforms otherwise")
     def test22_multiple_inheritance_with_defaults(self):
         """Multiple inheritance with defaults"""
 
@@ -1285,7 +1285,7 @@ class TestCROSSINHERITANCE:
             assert inst.fun1() == val1
             assert inst.fun2() == inst.fun1()
 
-    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes with Valgrind on Linux ARM, but passes in all platforms otherwise")
     def test29_cross_deep_multi(self):
         """Deep multi-inheritance hierarchy"""
 
@@ -1527,7 +1527,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert ns.Component.get_count() == 0
 
-    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes with Valgrind on Linux ARM, but passes in all platforms otherwise")
     def test32_by_value_arguments(self):
         """Override base function taking by-value arguments"""
 

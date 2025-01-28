@@ -1015,7 +1015,7 @@ class TestREGRESSION:
         v = cppyy.gbl.std.vector[int]()
         str(v)
 
-    @mark.xfail(run=IS_CLANG_REPL, reason="Crashes on Cling")
+    @mark.xfail(run=IS_CLANG_REPL, condition=IS_MAC or not IS_CLANG_REPL, reason="Crashes on Cling")
     def test35_filesytem(self):
         """Static path object used to crash on destruction"""
 
