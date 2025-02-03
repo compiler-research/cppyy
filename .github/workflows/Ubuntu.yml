@@ -668,6 +668,7 @@ jobs:
         python -m uv pip install pytest
         python -m uv pip install pytest-xdist
         python -m uv pip install numba
+        python -m uv pip install psutil
         echo ::endgroup::
         echo ::group::Run complete test suite
         set -o pipefail
