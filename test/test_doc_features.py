@@ -1,6 +1,9 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC, IS_MAC_X86, IS_MAC_ARM, IS_LINUX_ARM
+from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC, IS_MAC_X86, IS_MAC_ARM, IS_LINUX_ARM, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("doc_helperDict"))

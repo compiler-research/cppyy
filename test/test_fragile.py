@@ -1,6 +1,9 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_LINUX, IS_WINDOWS, IS_MAC_ARM, IS_CLANG_REPL, IS_MAC
+from .support import setup_make, ispypy, IS_LINUX, IS_WINDOWS, IS_MAC_ARM, IS_CLANG_REPL, IS_MAC, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 
 currpath = py.path.local(__file__).dirpath()

@@ -1,6 +1,9 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, maxvalue, IS_WINDOWS
+from .support import setup_make, pylong, maxvalue, IS_WINDOWS, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("operatorsDict"))
