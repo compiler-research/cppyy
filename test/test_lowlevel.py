@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC, IS_MAC_X86
+from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -484,7 +484,7 @@ class TestLOWLEVEL:
         assert cppyy.gbl.std.vector[cppyy.gbl.std.vector[int]].value_type == 'std::vector<int>'
         assert cppyy.gbl.std.vector['int[1]'].value_type == 'int[1]'
 
-    @mark.xfail(run=not (IS_MAC_X86 and not IS_CLANG_REPL), reason="Crashes on OSX-X86 Cling")
+    @mark.xfail
     def test15_templated_arrays_gmpxx(self):
         """Use of gmpxx array types in templates"""
 

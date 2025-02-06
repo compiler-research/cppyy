@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, ispypy, IS_CLANG_REPL, IS_MAC, IS_LINUX_ARM
+from .support import setup_make, ispypy, IS_CLANG_REPL, IS_LINUX_ARM
 
 
 currpath = py.path.local(__file__).dirpath()

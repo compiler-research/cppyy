@@ -1,26 +1,26 @@
 import py, os, sys
-import cppyy
 from pytest import mark, raises
-from .support import setup_make, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM
+from .support import setup_make, IS_CLANG_REPL, IS_MAC_X86
 
 inc_paths = [os.path.join(os.path.sep, 'usr', 'include'),
              os.path.join(os.path.sep, 'usr', 'local', 'include')]
 
-noeigen = not cppyy.gbl.Cpp.Evaluate("""
-    #if __has_include("eigen3/Eigen/Dense")
-        true
-    #else
-        false
-    #endif
-""")
+eigen_path = None
+for p in inc_paths:
+    p = os.path.join(p, 'eigen3')
+    if os.path.exists(p):
+        eigen_path = p
 
-@mark.skipif(noeigen == True, reason="Eigen not found")
+
+@mark.skipif(eigen_path is None, reason="Eigen not found")
 class TestEIGEN:
     def setup_class(cls):
         import cppyy, warnings
 
+        cppyy.add_include_path(eigen_path)
         with warnings.catch_warnings():
-            cppyy.include('eigen3/Eigen/Dense')
+            warnings.simplefilter('ignore')
+            cppyy.include('Eigen/Dense')
 
     @mark.xfail
     def test01_simple_matrix_and_vector(self):
@@ -148,16 +148,17 @@ class TestEIGEN:
         assert a.size() == 9
 
 
-@mark.skipif(noeigen == True, reason="Eigen not found")
-class TestEIGEN_REGRESSION:
+@mark.skipif(eigen_path is None, reason="Eigen not found")
+class TestEIGEN_REGRESSIOn:
     def setup_class(cls):
         import cppyy, warnings
 
+        cppyy.add_include_path(eigen_path)
         with warnings.catch_warnings():
             warnings.simplefilter('ignore')
-            cppyy.include('eigen3/Eigen/Dense')
+            cppyy.include('Eigen/Dense')
 
-    @mark.xfail(condition=((IS_MAC_ARM) or (IS_MAC_X86 and not IS_CLANG_REPL)), reason="Fails on OS X arm and osx 86 for cling")
+    @mark.xfail(condition=IS_MAC_X86 and (not IS_CLANG_REPL), reason="Errors out on OS X Cling")
     def test01_use_of_Map(self):
         """Use of Map (used to crash)"""
 

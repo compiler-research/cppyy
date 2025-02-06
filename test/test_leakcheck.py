@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import mark, skip
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_MAC
+from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -67,7 +67,6 @@ class TestLEAKCHECK:
         gc.collect()
         assert last == self.process.memory_info().rss
 
-    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test01_free_functions(self):
         """Leak test of free functions"""
 
@@ -93,7 +92,6 @@ class TestLEAKCHECK:
         self.check_func(ns, 'free_f_ret1')
         self.check_func(ns, 'free_f_ret1')
 
-    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test02_test_static_methods(self):
         """Leak test of static methods"""
 
@@ -120,7 +118,6 @@ class TestLEAKCHECK:
             self.check_func(m, 'static_method_ol', 42., tmpl_args='float')
             self.check_func(m, 'static_method_ret')
 
-    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test03_test_methods(self):
         """Leak test of methods"""
 
