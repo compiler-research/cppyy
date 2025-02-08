@@ -1,21 +1,22 @@
 import py, os, sys
+import cppyy
 from pytest import mark, raises, skip
 from .support import setup_make, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM
 
-noboost = False
-if not (os.path.exists(os.path.join(os.path.sep, 'usr', 'include', 'boost')) or \
-        os.path.exists(os.path.join(os.path.sep, 'usr', 'local', 'include', 'boost'))):
-    noboost = True
+noboost = not cppyy.gbl.Cpp.Evaluate("""
+    #if __has_include("boost/any.hpp")
+        true
+    #else
+        false
+    #endif
+""")
 
-
-@mark.skipif(noboost == True, reason="boost not found")
 class TestBOOSTANY:
     def setup_class(cls):
         import cppyy
 
         cppyy.include('boost/any.hpp')
 
-    @mark.skipif((IS_MAC_ARM or IS_MAC_X86), reason="Fails to include boost on OS X")
     def test01_any_class(self):
         """Availability of boost::any"""
 
@@ -67,8 +68,6 @@ class TestBOOSTANY:
         extract = boost.any_cast[std.vector[int]](val)
         assert len(extract) == 200
 
-
-@mark.skipif(((noboost == True) or IS_MAC_ARM or IS_MAC_X86), reason="boost not found")
 class TestBOOSTOPERATORS:
     def setup_class(cls):
         import cppyy
@@ -92,8 +91,6 @@ class TestBOOSTOPERATORS:
 
         assert cppyy.gbl.boost_test.Derived
 
-
-@mark.skipif(noboost == True, reason="boost not found")
 class TestBOOSTVARIANT:
     def setup_class(cls):
         import cppyy
@@ -135,7 +132,6 @@ class TestBOOSTVARIANT:
         assert type(boost.get['BV::C'](v[2])) == cpp.BV.C
 
 
-@mark.skipif(((noboost == True) or IS_MAC_ARM or IS_MAC_X86), reason="boost not found")
 class TestBOOSTERASURE:
     def setup_class(cls):
         import cppyy
