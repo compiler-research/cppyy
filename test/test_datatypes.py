@@ -21,7 +21,7 @@ class TestDATATYPES:
         cls.has_byte     = at_least_17
         cls.has_optional = at_least_17
 
-    @mark.xfail
+    @mark.xfail(run=False, reason="Crashes")
     def test01_instance_data_read_access(self):
         """Read access to instance public data and verify values"""
 
@@ -378,7 +378,6 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.xfail
     def test04_class_read_access(self):
         """Test read access to class public data and verify values"""
 
@@ -442,7 +441,6 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.xfail
     def test05_class_data_write_access(self):
         """Test write access to class public data and verify values"""
 
