@@ -261,7 +261,7 @@ namespace Namespace {
 
         pass
 
-    @mark.xfail(run=not IS_MAC, reason="Seg Fault")
+    @mark.xfail(run=False, condition=IS_MAC, reason="Seg Fault")
     def test_functions(self):
         import cppyy
 

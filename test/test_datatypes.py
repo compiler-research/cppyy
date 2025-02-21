@@ -21,7 +21,6 @@ class TestDATATYPES:
         cls.has_byte     = at_least_17
         cls.has_optional = at_least_17
 
-    @mark.xfail(run=False, reason="Crashes")
     def test01_instance_data_read_access(self):
         """Read access to instance public data and verify values"""
 
@@ -1333,7 +1332,7 @@ class TestDATATYPES:
         ns = cppyy.gbl.FuncPtrReturn
         assert ns.foo()() == "Hello, World!"
 
-    @mark.xfail(run=not(((IS_CLANG_REPL and IS_MAC) or (not IS_CLANG_REPL and IS_MAC))), reason="Crashes")
+    @mark.xfail(run=False, condition=(IS_CLANG_REPL and IS_MAC) or (not IS_CLANG_REPL and IS_MAC), reason="Crashes")
     def test27_callable_passing(self):
         """Passing callables through function pointers"""
 
@@ -1406,7 +1405,7 @@ class TestDATATYPES:
         gc.collect()
         raises(TypeError, c, 3, 3) # lambda gone out of scope
 
-    @mark.xfail(run=not IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
+    @mark.xfail(run=False, condition=IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
     def test28_callable_through_function_passing(self):
         """Passing callables through std::function"""
 
