@@ -23,7 +23,7 @@ class TestTEMPLATES:
         v1 = cppyy.gbl.std.vector[int]
         assert v1.__cpp_template__[int] is v1
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail
     def test01_template_member_functions(self):
         """Template member functions lookup and calls"""
 
@@ -34,8 +34,8 @@ class TestTEMPLATES:
         m = cppyy.gbl.MyTemplatedMethodClass()
 
       # implicit (called before other tests to check caching)
-        assert m.get_size(ctypes.c_int(1))          == m.get_int_size()+1
-        # assert 'get_size<int>' in dir(cppyy.gbl.MyTemplatedMethodClass)
+        assert m.get_size(1)          == m.get_int_size()+1
+        assert 'get_size<int>' in dir(cppyy.gbl.MyTemplatedMethodClass)
 
       # pre-instantiated
         assert m.get_size['char']()   == m.get_char_size()
@@ -48,9 +48,8 @@ class TestTEMPLATES:
             targ = long
         assert m.get_size[targ]()     == m.get_long_size()
         
-        #FIXME pass by ref and const ref do not work
-        # assert m.get_size(ctypes.c_double(3.14)) == m.get_size['double']()
-        # assert m.get_size(ctypes.c_double(3.14).value) == m.get_size['double']()+1
+        assert m.get_size(ctypes.c_double(3.14)) == m.get_size['double']()
+        assert m.get_size(ctypes.c_double(3.14).value) == m.get_size['double']()+1
 
       # auto-instantiation
         assert m.get_size[float]()    == m.get_float_size()
