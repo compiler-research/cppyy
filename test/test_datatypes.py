@@ -1269,7 +1269,7 @@ class TestDATATYPES:
         if self.has_byte:
             run(self, cppyy.gbl.sum_byte_data, buf, total)
 
-    @mark.xfail(run=not(((IS_CLANG_REPL and IS_MAC) or (not IS_CLANG_REPL and IS_MAC))), reason="Crashes")
+    @mark.xfail(run=not(IS_MAC), reason="Crashes on OS X")
     def test26_function_pointers(self):
         """Function pointer passing"""
 
@@ -1332,7 +1332,7 @@ class TestDATATYPES:
         ns = cppyy.gbl.FuncPtrReturn
         assert ns.foo()() == "Hello, World!"
 
-    @mark.xfail(run=False, condition=(IS_CLANG_REPL and IS_MAC) or (not IS_CLANG_REPL and IS_MAC), reason="Crashes")
+    @mark.xfail(run=False, condition=IS_MAC, reason="Crashes")
     def test27_callable_passing(self):
         """Passing callables through function pointers"""
 
@@ -2011,7 +2011,7 @@ class TestDATATYPES:
         assert b.name     == "aap"
         assert b.buf_type == ns.SHAPE
 
-    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes")
+    @mark.xfail
     def test40_more_aggregates(self):
         """More aggregate testings (used to fail/report errors)"""
 
@@ -2049,7 +2049,6 @@ class TestDATATYPES:
             r2 = ns.make_R2()
             assert r2.s.x == 1
 
-    @mark.xfail(run=False, reason="Fails")
     def test41_complex_numpy_arrays(self):
         """Usage of complex numpy arrays"""
 
@@ -2097,7 +2096,7 @@ class TestDATATYPES:
             Ccl = func(Acl, Bcl, 2)
             assert complex(Ccl) == pyCcl
 
-    @mark.xfail
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
     def test42_mixed_complex_arithmetic(self):
         """Mixin of Python and C++ std::complex in arithmetic"""
 

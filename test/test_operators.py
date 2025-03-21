@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, maxvalue, IS_WINDOWS
+from .support import setup_make, pylong, maxvalue, IS_WINDOWS, IS_MAC, IS_CLANG_REPL
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("operatorsDict"))
@@ -224,7 +224,6 @@ class TestOPERATORS:
             assert m[1]    == 74
             assert m(1,2)  == 74
 
-    @mark.xfail
     def test09_templated_operator(self):
         """Templated operator<()"""
 
@@ -296,7 +295,6 @@ class TestOPERATORS:
 
         assert v-w == 1-3 + 2-4
 
-    @mark.xfail
     def test12_unary_operators(self):
         """Unary operator-+~"""
 
@@ -339,7 +337,7 @@ class TestOPERATORS:
         b = ns.Bar()
         assert b[42] == 42
 
-    @mark.xfail
+    @mark.xfail(condition = (IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
     def test15_class_and_global_mix(self):
         """Iterator methods have both class and global overloads"""
 

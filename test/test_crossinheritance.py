@@ -130,7 +130,7 @@ class TestCROSSINHERITANCE:
         assert c4.m_int == 88
         assert CX.IBase2.call_get_value(c4) == 77
 
-    @mark.xfail(condition=IS_MAC_ARM, run=not IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
+    @mark.xfail(run=False, condition=IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
     def test04_arguments(self):
         """Test ability to override functions that take arguments"""
 
@@ -405,7 +405,6 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert CB.s_count == 0 + start_count
 
-    @mark.xfail(run=False, reason="Crashes")
     def test12_python_shared_ptr_memory(self):
         """Usage of Python derived objects with std::shared_ptr"""
 
@@ -1034,7 +1033,7 @@ class TestCROSSINHERITANCE:
         assert a.return_const().m_value == "abcdef"
         assert ns.callit(a).m_value     == "abcdef"
 
-    @mark.xfail
+    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL)
     def test24_non_copyable(self):
         """Inheriting from a non-copyable base class"""
 

@@ -47,7 +47,6 @@ class TestLOWLEVEL:
         assert len(ll.reinterpret_cast['int*'](0)) == 0
         raises(ReferenceError, ll.reinterpret_cast['int*'](0).__getitem__, 0)
 
-    @mark.xfail
     def test03_memory(self):
         """Memory allocation and free-ing"""
 
@@ -681,7 +680,6 @@ class TestMULTIDIMARRAYS:
                         assert arr[i][j][k] == val
                         assert arr[i, j, k] == val
 
-    @mark.xfail
     def test04_malloc(self):
         """Use of malloc to create multi-dim arrays"""
 

@@ -1063,7 +1063,6 @@ class TestREGRESSION:
 
         assert cppyy.sizeof(param) == ctypes.sizeof(param)
 
-    @mark.xfail
     def test37_array_of_pointers_argument(self):
         """Passing an array of pointers used to crash"""
 
@@ -1089,7 +1088,7 @@ class TestREGRESSION:
 
             assert cppyy.addressof(res) == cppyy.addressof(arr)
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(run = False, condition = (IS_MAC and not IS_CLANG_REPL), reason = "Crashes on OS X Cling")
     def test38_char16_arrays(self):
         """Access to fixed-size char16 arrays as data members"""
 

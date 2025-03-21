@@ -442,7 +442,7 @@ class TestSTLVECTOR:
 
         raises(TypeError, cppyy.gbl.std.vector["std::string"], "abc")
 
-    @mark.xfail
+    @mark.xfail(condition = (IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
     def test10_vector_std_distance(self):
         """Use of std::distance with vector"""
 

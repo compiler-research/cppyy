@@ -1018,7 +1018,7 @@ class TestADVERTISED:
 
         assert str(s) == "hi there!"
 
-    @mark.xfail
+    @mark.xfail(condition = IS_MAC, reason = "Fails on OS X")
     def test10_llvm_blog(self):
         """Test code posted in the LLVM blog posting"""
 
@@ -1092,6 +1092,7 @@ class TestTALKEXAMPLES:
 
         cppyy.gbl.talk_examples
 
+    # @mark.skip
     def test_template_instantiation(self):
         """Run-time template instantiation example"""
 

@@ -125,7 +125,7 @@ class TestTEMPLATES:
         assert type(ggsr(vector['int']([5])).m_retval) == int
         assert ggsr(vector['int']([5])).m_retval == 5
 
-    @mark.xfail
+    @mark.xfail(condition = IS_MAC, reason = "Fails on OS X")
     def test04_variadic_function(self):
         """Call a variadic function"""
 
@@ -251,7 +251,6 @@ class TestTEMPLATES:
         assert D().callme()  == 2
         assert D().callme(2) == 2
 
-    @mark.xfail
     def test11_templated_ctor(self):
         """Test templated constructors"""
 
@@ -317,7 +316,7 @@ class TestTEMPLATES:
         assert nsup.Foo
         assert nsup.Bar.Foo       # used to fail
 
-    @mark.xfail
+    @mark.xfail(condition = (IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
     def test13_using_templated_method(self):
         """Access to base class templated methods through 'using'"""
 
@@ -388,7 +387,7 @@ class TestTEMPLATES:
         assert is_valid(1.)
         assert not is_valid(0.)
 
-    @mark.xfail
+    @mark.xfail(condition = IS_MAC, reason = "Fails on OS X")
     def test16_variadic(self):
         """Range of variadic templates"""
 
@@ -477,7 +476,7 @@ class TestTEMPLATES:
         assert g3.get_size(ns.SomeClass()) == cppyy.sizeof(ns.SomeClass)
         assert g3.get_size(cppyy.nullptr, True) == -1
 
-    @mark.xfail
+    @mark.xfail(condition = (IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
     def test19_templated_operator_add(self):
         """Templated operator+ is ambiguous: either __pos__ or __add__"""
 
@@ -507,7 +506,6 @@ class TestTEMPLATES:
 
         assert round(q.X() - 6.3, 8) == 0.
 
-    @mark.xfail
     def test20_templated_ctor_with_defaults(self):
         """Templated constructor with defaults used to be ignored"""
 
@@ -616,7 +614,7 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.std.function['double(std::vector<double>)']
 
-    @mark.xfail(run=(IS_MAC_ARM or IS_MAC_X86) and IS_CLANG_REPL)
+    @mark.xfail(run=(IS_MAC and IS_CLANG_REPL))
     def test25_stdfunction_ref_and_ptr_args(self):
         """Use of std::function with reference or pointer args"""
 
@@ -683,7 +681,6 @@ class TestTEMPLATES:
         foo.fnc = ns.bar
         foo.fnc       # <- this access used to fail
 
-    @mark.xfail
     def test26_partial_templates(self):
         """Deduction of types with partial templates"""
 
@@ -745,7 +742,6 @@ class TestTEMPLATES:
         assert ns.bar2['double'](17) == 17
         assert ns.bar2['double','int'](17) == 17
 
-    @mark.xfail
     def test27_variadic_constructor(self):
         """Use of variadic template function as contructor"""
 
@@ -780,7 +776,7 @@ class TestTEMPLATES:
         a = ns.Atom(1567.0)
         assert a.m_m == 1567.0
 
-    @mark.xfail
+    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL)
     def test28_enum_in_constructor(self):
         """Use of enums in template function as constructor"""
 
@@ -1124,7 +1120,7 @@ class TestTEMPLATES:
                         run_n = getattr(cppyy.gbl, 'TNaRun_%d' % n)
                         getattr(run_n, t)
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(run=False, condition=not(IS_MAC and not IS_CLANG_REPL), reason="Crashes on OS X + Cling")
     def test33_using_template_argument(self):
         """`using` type as template argument"""
 

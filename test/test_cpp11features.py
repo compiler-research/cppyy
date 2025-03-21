@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, ispypy, IS_CLANG_REPL, IS_LINUX_ARM
+from .support import setup_make, ispypy, IS_CLANG_REPL, IS_LINUX_ARM, IS_MAC
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -44,7 +44,6 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail(run=False, reason="Crashes")
     def test02_smart_ptr_construction(self):
         """Shared/Unique pointer ctor is templated, requiring special care"""
 
@@ -72,7 +71,6 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail(run=False, reason="Crashes")
     def test03_smart_ptr_memory_handling(self):
         """Test shared/unique pointer memory ownership"""
 
@@ -103,7 +101,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail(run=False, reason="Crashes")
+    @mark.xfail
     def test04_shared_ptr_passing(self):
         """Ability to pass shared_ptr<Derived> through shared_ptr<Base>"""
 
@@ -409,7 +407,7 @@ class TestCPP11FEATURES:
             assert hash(sw)  == 17
             assert hash(sw)  == 17
 
-    @mark.xfail(run=False, reason="Crashes")
+    @mark.xfail
     def test14_shared_ptr_passing(self):
         """Ability to pass normal pointers through shared_ptr by value"""
 
@@ -435,7 +433,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail
+    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
     def test15_unique_ptr_template_deduction(self):
         """Argument type deduction with std::unique_ptr"""
 

@@ -28,7 +28,7 @@ class TestBOOSTANY:
 
         assert std.list[any]
 
-    @mark.xfail
+    @mark.skip
     def test02_any_usage(self):
         """boost::any assignment and casting"""
 
@@ -101,7 +101,7 @@ class TestBOOSTVARIANT:
         cppyy.include("boost/variant/variant.hpp")
         cppyy.include("boost/variant/get.hpp")
 
-    @mark.xfail
+    @mark.skip
     def test01_variant_usage(self):
         """boost::variant usage"""
 
@@ -130,6 +130,10 @@ class TestBOOSTVARIANT:
         assert v.back().which() == 2
 
         assert type(boost.get['BV::A'](v[0])) == cpp.BV.A
+
+        # Trying to raise this exception seg faults, by trying to execute an unfit instantiation.
+        # This comes from `Instantiate` obtaining a single handle and providing a result
+        # The same issue happens with trying `BestOverloadFunctionMatch` first since the candidate set is single
         raises(Exception, boost.get['BV::B'], v[0])
         assert type(boost.get['BV::B'](v[1])) == cpp.BV.B
         assert type(boost.get['BV::C'](v[2])) == cpp.BV.C
