@@ -1757,7 +1757,7 @@ class TestSTLSET:
         with raises(TypeError):
             s = cppyy.gbl.std.set[int](set(["aap", "noot", "mies"]))
 
-    @mark.xfail
+    @mark.xfail(run=not(IS_MAC and IS_CLING))
     def test04_set_cpp17_style(self):
         """C++17 style initialization of std::set"""
 

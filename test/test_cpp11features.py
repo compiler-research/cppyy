@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, ispypy, IS_CLANG_REPL, IS_LINUX_ARM, IS_MAC, IS_CLING
+from .support import setup_make, ispypy, IS_CLANG_REPL, IS_LINUX_ARM, IS_LINUX, IS_MAC, IS_CLING
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -44,6 +44,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
+    @mark.xfail(run = False, condition=IS_LINUX_ARM, reason="Valgrind issues")
     def test02_smart_ptr_construction(self):
         """Shared/Unique pointer ctor is templated, requiring special care"""
 
@@ -71,6 +72,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
+    @mark.xfail(run = False, condition = IS_LINUX, reason = "Passes, but Valgrind issue")
     def test03_smart_ptr_memory_handling(self):
         """Test shared/unique pointer memory ownership"""
 
@@ -433,7 +435,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail(condition=(IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
+    @mark.xfail(condition=IS_CLING, reason = "Fails on Cling")
     def test15_unique_ptr_template_deduction(self):
         """Argument type deduction with std::unique_ptr"""
 

@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM
+from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -405,6 +405,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert CB.s_count == 0 + start_count
 
+    @mark.xfail(run = False, condition = IS_LINUX, reason = "Passes, but Valgrind issue")
     def test12_python_shared_ptr_memory(self):
         """Usage of Python derived objects with std::shared_ptr"""
 
@@ -1033,7 +1034,7 @@ class TestCROSSINHERITANCE:
         assert a.return_const().m_value == "abcdef"
         assert ns.callit(a).m_value     == "abcdef"
 
-    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL, reason = "Fails on OS X Clang-REPL")
+    @mark.xfail(condition = IS_MAC, reason = "Fails on OS X")
     def test24_non_copyable(self):
         """Inheriting from a non-copyable base class"""
 

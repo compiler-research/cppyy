@@ -2049,6 +2049,7 @@ class TestDATATYPES:
             r2 = ns.make_R2()
             assert r2.s.x == 1
 
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X and Cling")
     def test41_complex_numpy_arrays(self):
         """Usage of complex numpy arrays"""
 

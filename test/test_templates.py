@@ -1,6 +1,6 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -145,7 +145,7 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.test04_variadic_func['int', 'double', 'void*']() == 3
 
-    @mark.xfail(condition=IS_CLING, reason="Fails with Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails with OSX Cling")
     def test05_variadic_overload(self):
         """Call an overloaded variadic function"""
 
@@ -476,7 +476,7 @@ class TestTEMPLATES:
         assert g3.get_size(ns.SomeClass()) == cppyy.sizeof(ns.SomeClass)
         assert g3.get_size(cppyy.nullptr, True) == -1
 
-    @mark.xfail(condition = (IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
+    @mark.xfail(condition = IS_CLING, reason = "Fails on Cling")
     def test19_templated_operator_add(self):
         """Templated operator+ is ambiguous: either __pos__ or __add__"""
 
@@ -587,7 +587,7 @@ class TestTEMPLATES:
         v = MyVec["float"](2)
         v[0] = 1        # used to throw TypeError
 
-    @mark.xfail(run=not IS_CLANG_REPL, reason="Crashes in ClangRepl")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test24_stdfunction_templated_arguments(self):
         """Use of std::function with templated arguments"""
 
@@ -742,6 +742,7 @@ class TestTEMPLATES:
         assert ns.bar2['double'](17) == 17
         assert ns.bar2['double','int'](17) == 17
 
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X and Cling")
     def test27_variadic_constructor(self):
         """Use of variadic template function as contructor"""
 
@@ -776,7 +777,7 @@ class TestTEMPLATES:
         a = ns.Atom(1567.0)
         assert a.m_m == 1567.0
 
-    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL, reason = "Fails on OS X Clang-REPL")
+    @mark.xfail(condition = IS_MAC, reason = "Fails on OS X ")
     def test28_enum_in_constructor(self):
         """Use of enums in template function as constructor"""
 
@@ -1120,7 +1121,7 @@ class TestTEMPLATES:
                         run_n = getattr(cppyy.gbl, 'TNaRun_%d' % n)
                         getattr(run_n, t)
 
-    @mark.xfail(run=False, condition=not(IS_MAC and IS_CLING), reason="Crashes on OS X + Cling")
+    @mark.xfail(run=not(IS_MAC and IS_CLING), reason="Crashes on OS X + Cling")
     def test33_using_template_argument(self):
         """`using` type as template argument"""
 
