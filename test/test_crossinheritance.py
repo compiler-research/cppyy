@@ -1033,7 +1033,7 @@ class TestCROSSINHERITANCE:
         assert a.return_const().m_value == "abcdef"
         assert ns.callit(a).m_value     == "abcdef"
 
-    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL)
+    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL, reason = "Fails on OS X Clang-REPL")
     def test24_non_copyable(self):
         """Inheriting from a non-copyable base class"""
 

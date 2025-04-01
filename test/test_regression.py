@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 
 class TestREGRESSION:
@@ -185,7 +185,7 @@ class TestREGRESSION:
 
         assert sys.getrefcount(x) == old_refcnt
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(run=not(IS_MAC and IS_CLING))
     def test08_typedef_identity(self):
         """Nested typedefs should retain identity"""
 
@@ -205,7 +205,7 @@ class TestREGRESSION:
         assert not 'vector<const PyABC::S1*>' in dir(PyABC.S2)
         assert PyABC.S2.S1_coll is cppyy.gbl.std.vector('const PyABC::S1*')
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test09_gil_not_released(self):
         """GIL was released by accident for by-value returns"""
 
@@ -228,7 +228,7 @@ class TestREGRESSION:
         cppyy.cppdef(code)
         cppyy.gbl.some_foo_calling_python()
 
-    @mark.skipif(not IS_CLANG_REPL, reason="Crashes on Cling")
+    @mark.xfail(run = False, condition = IS_CLING, reason="Crashes on Cling")
     def test10_enum_in_global_space(self):
         """Enum declared in search.h did not appear in global space"""
 
@@ -684,7 +684,7 @@ class TestREGRESSION:
         CSE.your_enum = CSE.YourEnum.kFour
         assert CSE.your_enum == CSE.YourEnum.kFour
 
-    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails with OSX-Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails with OSX-Cling")
     def test25_const_iterator(self):
         """const_iterator failed to resolve the proper return type"""
 
@@ -739,7 +739,7 @@ class TestREGRESSION:
         with raises(TypeError):
             io.BackendPlatformName = "aap"
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test27_exception_by_value(self):
         """Proper memory management of exception return by value"""
 
@@ -775,7 +775,7 @@ class TestREGRESSION:
         gc.collect()
         assert ns.count() == 0
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test28_exception_as_shared_ptr(self):
         """shared_ptr of an exception object null-checking"""
 
@@ -791,7 +791,7 @@ class TestREGRESSION:
         null = cppyy.gbl.exception_as_shared_ptr.get_shared_null()
         assert not null
 
-    @mark.xfail(run=False, condition=(not IS_CLANG_REPL and IS_MAC) or IS_MAC_ARM, reason="Dispatcher fix #53 introduces canonical types with std:: namespace that introduces OS X exceptions similar to test_stltypes")
+    @mark.xfail(run=False, condition=(IS_CLING and IS_MAC) or IS_MAC_ARM, reason="Dispatcher fix #53 introduces canonical types with std:: namespace that introduces OS X exceptions similar to test_stltypes")
     def test29_callback_pointer_values(self):
         """Make sure pointer comparisons in callbacks work as expected"""
 
@@ -1015,7 +1015,7 @@ class TestREGRESSION:
         v = cppyy.gbl.std.vector[int]()
         str(v)
 
-    @mark.xfail(run=IS_CLANG_REPL, condition=IS_MAC or not IS_CLANG_REPL, reason="Crashes on Cling")
+    @mark.xfail(run=IS_CLANG_REPL, condition=IS_MAC or IS_CLING, reason="Crashes on Cling")
     def test35_filesytem(self):
         """Static path object used to crash on destruction"""
 
@@ -1088,7 +1088,7 @@ class TestREGRESSION:
 
             assert cppyy.addressof(res) == cppyy.addressof(arr)
 
-    @mark.xfail(run = False, condition = (IS_MAC and not IS_CLANG_REPL), reason = "Crashes on OS X Cling")
+    @mark.xfail(run = False, condition = (IS_MAC and IS_CLING), reason = "Crashes on OS X Cling")
     def test38_char16_arrays(self):
         """Access to fixed-size char16 arrays as data members"""
 

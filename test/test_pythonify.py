@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86, IS_MAC
+from .support import setup_make, pylong, ispypy, IS_CLANG_REPL, IS_CLING, IS_MAC_ARM, IS_MAC_X86, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("example01Dict"))
@@ -379,7 +379,7 @@ class TestPYTHONIFY:
 
         assert example01.getCount() == 0
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition = IS_MAC and IS_CLING, reason = "Fails on OS X Cling")
     def test17_chaining(self):
         """Respective return values of temporaries should not go away"""
 
@@ -496,7 +496,7 @@ class TestPYTHONIFY:
         with raises(TypeError):
             c.callme(a=1, b=2)
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) or IS_MAC, reason="Fails on Cling and OSX")
+    @mark.xfail(condition=IS_MAC or IS_CLING, reason="Fails on Cling and OSX")
     def test19_keywords_and_defaults(self):
         """Use of keyword arguments mixed with defaults"""
 

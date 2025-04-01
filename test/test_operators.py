@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, maxvalue, IS_WINDOWS, IS_MAC, IS_CLANG_REPL
+from .support import setup_make, pylong, maxvalue, IS_WINDOWS, IS_MAC, IS_CLANG_REPL, IS_CLING
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("operatorsDict"))
@@ -337,7 +337,7 @@ class TestOPERATORS:
         b = ns.Bar()
         assert b[42] == 42
 
-    @mark.xfail(condition = (IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
+    @mark.xfail(condition = (IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test15_class_and_global_mix(self):
         """Iterator methods have both class and global overloads"""
 

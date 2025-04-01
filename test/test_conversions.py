@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make
+from .support import setup_make, IS_LINUX, IS_CLANG_REPL, IS_CLING, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("conversionsDict"))
@@ -87,7 +87,7 @@ class TestCONVERSIONS:
         gc.collect()
         assert CC.s_count == 0
 
-    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL)
+    @mark.xfail(run = not(IS_LINUX and IS_CLING), condition = ((IS_MAC and IS_CLANG_REPL) or (IS_LINUX and IS_CLING)), reason = "Fails on OS X + Clang-Repl, Crashes on Linux + Cling")
     def test04_implicit_conversion_from_tuple(self):
         """Allow implicit conversions from tuples as arguments {}-like"""
 

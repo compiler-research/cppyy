@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC, IS_MAC_X86, IS_MAC_ARM, IS_LINUX_ARM
+from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC, IS_MAC_X86, IS_MAC_ARM, IS_LINUX_ARM
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("doc_helperDict"))
@@ -9,7 +9,7 @@ def setup_module(mod):
     setup_make("doc_helper")
 
 
-@mark.skipif((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason="setup class fails with OS X cling")
+@mark.skipif(IS_MAC and IS_CLING, reason="setup class fails with OS X cling")
 class TestDOCFEATURES:
     def setup_class(cls):
         cls.test_dct = test_dct
@@ -485,7 +485,7 @@ namespace Namespace {
         assert caught == True
 
 
-@mark.skipif((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason="setup class fails with OS X cling")
+@mark.skipif(IS_MAC and IS_CLING, reason="setup class fails with OS X cling")
 class TestTUTORIALFEATURES:
     def setup_class(cls):
         import cppyy
@@ -574,7 +574,7 @@ namespace Zoo {
         assert not isinstance(i, int)
         assert isinstance(i, Integer1)
 
-    @mark.xfail(run=(not IS_MAC and IS_CLANG_REPL), condition=IS_MAC and (not IS_CLANG_REPL), reason= "Crashes on OS X Cling")
+    @mark.xfail(run=(not IS_MAC and IS_CLANG_REPL), condition=IS_MAC and IS_CLING, reason= "Crashes on OS X Cling")
     def test03_STL_containers(self):
         """Instantiate STL containers with new class"""
 
@@ -612,7 +612,7 @@ namespace Zoo {
         i2 = Integer2(13)
         assert int(i2) == 13
 
-    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails on OSX Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX Cling")
     def test06_add_operator(self):
         """Add operator+"""
 
@@ -735,7 +735,7 @@ namespace Zoo {
         assert n == 'thisisaC++stringing'
 
 
-@mark.skipif((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason="setup class fails with OS X cling")
+@mark.skipif(IS_MAC and IS_CLING, reason="setup class fails with OS X cling")
 class TestADVERTISED:
     def setup_class(cls):
         import cppyy
@@ -850,7 +850,7 @@ class TestADVERTISED:
         assert list(arr) == [1, 42, 1, 42]
         cppyy.gbl.free(vp)
 
-    @mark.xfail(run=(not IS_MAC and IS_CLANG_REPL), condition=IS_MAC and (not IS_CLANG_REPL), reason= "Crashes on OS X Cling")
+    @mark.xfail(run=(not IS_MAC and IS_CLANG_REPL), condition=IS_MAC and IS_CLING, reason= "Crashes on OS X Cling")
     def test04_ptr_ptr_python_owns(self):
         """Example of ptr-ptr use where python owns"""
 
@@ -1074,7 +1074,7 @@ class TestADVERTISED:
 
 # The series of tests below mostly exists already in other places, but these
 # were used as examples for the CaaS' cppyy presentation and are preserved here.
-@mark.skipif((IS_MAC_ARM or IS_MAC_X86) and (not IS_CLANG_REPL), reason="setup class fails with OS X cling")
+@mark.skipif(IS_MAC and IS_CLING, reason="setup class fails with OS X cling")
 class TestTALKEXAMPLES:
     def setup_class(cls):
         import cppyy

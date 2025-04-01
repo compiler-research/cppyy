@@ -1,6 +1,6 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -145,7 +145,7 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.test04_variadic_func['int', 'double', 'void*']() == 3
 
-    @mark.xfail(condition=not IS_CLANG_REPL, reason="Fails with Cling")
+    @mark.xfail(condition=IS_CLING, reason="Fails with Cling")
     def test05_variadic_overload(self):
         """Call an overloaded variadic function"""
 
@@ -238,7 +238,7 @@ class TestTEMPLATES:
 
         assert tc(5) == 5.
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test10_templated_hidding_methods(self):
         """Test that base class methods are not considered when hidden"""
 
@@ -316,7 +316,7 @@ class TestTEMPLATES:
         assert nsup.Foo
         assert nsup.Bar.Foo       # used to fail
 
-    @mark.xfail(condition = (IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
+    @mark.xfail(condition = (IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test13_using_templated_method(self):
         """Access to base class templated methods through 'using'"""
 
@@ -369,7 +369,7 @@ class TestTEMPLATES:
         assert rttest_make_tlist2(RTTest_SomeStruct1())
         assert rttest_make_tlist2(RTTest_SomeNamespace.RTTest_SomeStruct2())
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test15_rvalue_templates(self):
         """Use of a template with r-values; should accept builtin types"""
 
@@ -476,7 +476,7 @@ class TestTEMPLATES:
         assert g3.get_size(ns.SomeClass()) == cppyy.sizeof(ns.SomeClass)
         assert g3.get_size(cppyy.nullptr, True) == -1
 
-    @mark.xfail(condition = (IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
+    @mark.xfail(condition = (IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test19_templated_operator_add(self):
         """Templated operator+ is ambiguous: either __pos__ or __add__"""
 
@@ -522,7 +522,7 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.TemplatedCtor.C(0)
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test21_type_deduction_with_conversion(self):
         """Template instantiation with [] -> std::vector conversion"""
 
@@ -576,7 +576,7 @@ class TestTEMPLATES:
         for val in [2**64, -2**63-1]:
             raises(OverflowError, PassSomeInt, val)
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test23_overloaded_setitem(self):
         """Template with overloaded non-templated and templated setitem"""
 
@@ -776,7 +776,7 @@ class TestTEMPLATES:
         a = ns.Atom(1567.0)
         assert a.m_m == 1567.0
 
-    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL)
+    @mark.xfail(condition = IS_MAC and IS_CLANG_REPL, reason = "Fails on OS X Clang-REPL")
     def test28_enum_in_constructor(self):
         """Use of enums in template function as constructor"""
 
@@ -1120,7 +1120,7 @@ class TestTEMPLATES:
                         run_n = getattr(cppyy.gbl, 'TNaRun_%d' % n)
                         getattr(run_n, t)
 
-    @mark.xfail(run=False, condition=not(IS_MAC and not IS_CLANG_REPL), reason="Crashes on OS X + Cling")
+    @mark.xfail(run=False, condition=not(IS_MAC and IS_CLING), reason="Crashes on OS X + Cling")
     def test33_using_template_argument(self):
         """`using` type as template argument"""
 
@@ -1175,7 +1175,7 @@ class TestTEMPLATES:
         assert ns.stringify(ctypes.c_char_p(bytes("Noot", "ascii"))) == "Noot "
 
 
-@mark.skipif(((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL), reason="setup class fails with OS X cling")
+@mark.skipif((IS_MAC and IS_CLING), reason="setup class fails with OS X cling")
 class TestTEMPLATED_TYPEDEFS:
     def setup_class(cls):
         cls.test_dct = test_dct
@@ -1293,7 +1293,7 @@ class TestTEMPLATED_TYPEDEFS:
         assert cppyy.gbl.FailedTypeDeducer.B[int]().result()      == 5
 
 
-@mark.skipif(((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL), reason="setup class fails with OS X cling")
+@mark.skipif((IS_MAC and IS_CLING), reason="setup class fails with OS X cling")
 class TestTEMPLATE_TYPE_REDUCTION:
     def setup_class(cls):
         cls.test_dct = test_dct

@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import mark, raises
-from .support import setup_make, IS_CLANG_REPL, IS_MAC_X86
+from .support import setup_make, IS_CLANG_REPL, IS_CLING, IS_MAC_X86
 
 inc_paths = [os.path.join(os.path.sep, 'usr', 'include'),
              os.path.join(os.path.sep, 'usr', 'local', 'include')]
@@ -158,7 +158,7 @@ class TestEIGEN_REGRESSIOn:
             warnings.simplefilter('ignore')
             cppyy.include('Eigen/Dense')
 
-    @mark.xfail(condition=IS_MAC_X86 and (not IS_CLANG_REPL), reason="Errors out on OS X Cling")
+    @mark.xfail(condition=IS_MAC_X86 and IS_CLING, reason="Errors out on OS X Cling")
     def test01_use_of_Map(self):
         """Use of Map (used to crash)"""
 

@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -388,7 +388,7 @@ class TestSTLVECTOR:
         assert v2[-1] == v[-2]
         assert v2[self.N-4] == v[-2]
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), run=not(IS_MAC and not IS_CLANG_REPL), reason="Crashes on OSX")
+    @mark.xfail(run=False, condition=(IS_MAC and IS_CLING), reason="Crashes on OSX Cling")
     def test07_vector_bool(self):
         """Usability of std::vector<bool> which can be a specialization"""
 
@@ -407,7 +407,7 @@ class TestSTLVECTOR:
         assert len(vb[4:8]) == 4
         assert list(vb[4:8]) == [False]*3+[True]
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(run=not(IS_MAC and IS_CLING))
     def test08_vector_enum(self):
         """Usability of std::vector<> of some enums"""
 
@@ -442,7 +442,7 @@ class TestSTLVECTOR:
 
         raises(TypeError, cppyy.gbl.std.vector["std::string"], "abc")
 
-    @mark.xfail(condition = (IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
+    @mark.xfail(condition = (IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test10_vector_std_distance(self):
         """Use of std::distance with vector"""
 
@@ -454,7 +454,7 @@ class TestSTLVECTOR:
         assert std.distance(v.begin(), v.end()) == v.size()
         assert std.distance[type(v).iterator](v.begin(), v.end()) == v.size()
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test11_vector_of_pair(self):
         """Use of std::vector<std::pair>"""
 
@@ -498,7 +498,7 @@ class TestSTLVECTOR:
         ll4[1] = 'a'
         raises(TypeError, a.vector_pair, ll4)
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test12_vector_lifeline(self):
         """Check lifeline setting on vectors of objects"""
 
@@ -565,7 +565,7 @@ class TestSTLVECTOR:
             i += 1
         assert i == len(result)
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(run=not(IS_MAC and IS_CLING))
     def test14_vector_of_vector_of_(self):
         """Nested vectors"""
 
@@ -581,7 +581,7 @@ class TestSTLVECTOR:
         assert vv[1][0] == 3
         assert vv[1][1] == 4
 
-    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test15_vector_slicing(self):
         """Advanced test of vector slicing"""
 
@@ -608,7 +608,7 @@ class TestSTLVECTOR:
       # additional test from CPython's test suite
         getslice_cpython_test(vector[int])
 
-    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test16_vector_construction(self):
         """Vector construction following CPython's sequence"""
 
@@ -625,7 +625,7 @@ class TestSTLVECTOR:
         v = cppyy.gbl.std.vector(l)
         assert list(l) == l
 
-    @mark.xfail(run=not((IS_MAC_ARM or IS_MAC_X86) and not IS_CLANG_REPL))
+    @mark.xfail(run=not(IS_MAC and IS_CLING))
     def test18_array_interface(self):
         """Test usage of __array__ from numpy"""
 
@@ -672,7 +672,7 @@ class TestSTLVECTOR:
         v = np.array(v, dtype=np.intc)
         assert ns.func(v) == sum(v)
 
-    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, run=False, reason="Crashes with OSX-Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, run=False, reason="Crashes with OSX-Cling")
     def test19_vector_point3d(self):
         """Iteration over a vector of by-value objects"""
 
@@ -704,7 +704,7 @@ class TestSTLVECTOR:
 
         assert cppsum == pysum
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test20_vector_cstring(self):
         """Usage of a vector of const char*"""
 
@@ -1039,7 +1039,7 @@ class TestSTLLIST:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 13
 
-    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails with OSX-Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails with OSX-Cling")
     def test01_builtin_list_type(self):
         """Test access to a list<int>"""
 
@@ -1077,7 +1077,7 @@ class TestSTLLIST:
             for val in a:
                 assert ll[ll.index(val)] == val
 
-    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails with OSX-Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails with OSX-Cling")
     def test02_empty_list_type(self):
         """Test behavior of empty list<int>"""
 
@@ -1089,7 +1089,7 @@ class TestSTLLIST:
         for arg in a:
             pass
 
-    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OSX with cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX with cling")
     def test03_replacement_of_eq(self):
         """A global templated function should work as a method"""
 
@@ -1128,7 +1128,7 @@ class TestSTLLIST:
             assert a == i
             i += 1
 
-    @mark.xfail
+    @mark.xfail(run=not(IS_MAC and IS_CLING))
     def test05_list_cpp17_style(self):
         """C++17 style initialization of std::list"""
 
@@ -1161,7 +1161,7 @@ class TestSTLMAP:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 13
 
-    @mark.xfail(condition=not IS_MAC or not IS_CLANG_REPL, reason="Fails on Ubuntu and OSX-cling")
+    @mark.xfail(condition=not IS_MAC or IS_CLING, reason="Fails on Ubuntu and OSX-cling")
     def test01_builtin_map_type(self):
         """Test access to a map<int,int>"""
 
@@ -1217,7 +1217,7 @@ class TestSTLMAP:
 
         assert len(a) == self.N
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test03_empty_maptype(self):
         """Test behavior of empty map<int,int>"""
 
@@ -1346,7 +1346,7 @@ class TestSTLITERATOR:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail(condition=not IS_CLANG_REPL and IS_MAC, reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test01_builtin_vector_iterators(self):
         """Test iterator comparison with operator== reflected"""
 
@@ -1522,7 +1522,7 @@ class TestSTLARRAY:
             a[i] = i
             assert a[i] == i
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test02_array_of_pods(self):
         """Usage of std::array of PODs"""
 
@@ -1546,7 +1546,7 @@ class TestSTLARRAY:
         assert a[2].px == 6
         assert a[2].py == 7
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test03_array_of_pointer_to_pods(self):
         """Usage of std::array of pointer to PODs"""
 
@@ -1666,7 +1666,7 @@ class TestSTLDEQUE:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
-    @mark.xfail(condition=(not IS_CLANG_REPL) and (IS_MAC_ARM or IS_MAC_X86), reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test01_deque_byvalue_regression(self):
         """Return by value of a deque used to crash"""
 
@@ -1677,7 +1677,7 @@ class TestSTLDEQUE:
         assert x
         del x
 
-    @mark.xfail
+    @mark.xfail(run = not(IS_MAC and IS_CLING), reason="Crashes on OS X Cling")
     def test02_deque_cpp17_style(self):
         """C++17 style initialization of std::deque"""
 
@@ -1695,7 +1695,7 @@ class TestSTLSET:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
-    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails with OSX-Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails with OSX-Cling")
     def test01_set_iteration(self):
         """Iterate over a set"""
 
@@ -1713,7 +1713,7 @@ class TestSTLSET:
             assert i in s
             assert i in r
 
-    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails on OS X Cling")
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test02_set_iterators(self):
         """Access to set iterators and their comparisons"""
 
@@ -1887,7 +1887,7 @@ class TestSTLPAIR:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test01_pair_pack_unpack(self):
         """Pack/unpack pairs"""
 
@@ -1907,7 +1907,7 @@ class TestSTLEXCEPTION:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason="fails on OSX-Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test01_basics(self):
         """Test behavior of std::exception derived classes"""
 
@@ -2030,7 +2030,7 @@ class TestSTLEXCEPTION:
         gc.collect()
         assert cppyy.gbl.GetMyErrorCount() == 0
 
-    @mark.xfail(condition=(IS_MAC_X86 and not IS_CLANG_REPL) or IS_MAC_ARM, run=not IS_MAC_ARM, reason="Seg Faults")
+    @mark.xfail(condition=(IS_MAC_X86 and IS_CLING) or IS_MAC_ARM, run=not IS_MAC_ARM, reason="Seg Faults")
     def test04_from_cpp(self):
         """Catch C++ exceptiosn from C++"""
 

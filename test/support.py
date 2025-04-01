@@ -73,3 +73,4 @@ IS_CLANG_DEBUG = (cppyy.gbl.Cpp.Evaluate("""#ifdef NDEBUG
                                             #else
                                             true
                                             #endif\n""") == 1)
+IS_CLING = not IS_CLANG_REPL

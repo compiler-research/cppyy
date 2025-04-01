@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, ispypy, IS_CLANG_REPL, IS_LINUX_ARM, IS_MAC
+from .support import setup_make, ispypy, IS_CLANG_REPL, IS_LINUX_ARM, IS_MAC, IS_CLING
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -433,7 +433,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test15_unique_ptr_template_deduction(self):
         """Argument type deduction with std::unique_ptr"""
 

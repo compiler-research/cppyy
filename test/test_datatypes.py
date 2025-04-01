@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
+from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_CLING, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
 
 IS_MAC = IS_MAC_X86 or IS_MAC_ARM
 
@@ -1643,7 +1643,7 @@ class TestDATATYPES:
         assert type(p.data_c[0]) == float
         assert p.intensity == 5.
 
-    @mark.xfail(condition=not IS_CLANG_REPL, reason="Fails on Cling")
+    @mark.xfail(condition=IS_CLING, reason="Fails on Cling")
     def test32_anonymous_struct(self):
         """Anonymous struct creates an unnamed type"""
 
@@ -2096,7 +2096,7 @@ class TestDATATYPES:
             Ccl = func(Acl, Bcl, 2)
             assert complex(Ccl) == pyCcl
 
-    @mark.xfail(condition=(IS_MAC and not IS_CLANG_REPL), reason = "Fails on OS X Cling")
+    @mark.xfail(condition=(IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test42_mixed_complex_arithmetic(self):
         """Mixin of Python and C++ std::complex in arithmetic"""
 
