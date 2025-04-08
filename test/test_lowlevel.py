@@ -177,7 +177,7 @@ class TestLOWLEVEL:
           # char types
             if e == '_r':
                 c = ctypes.c_char(b'\0');  getattr(ctd, 'set_char'+e)(c);     assert c.value == b'a'
-                c = ctypes.c_wchar(u'\0'); getattr(ctd, 'set_wchar'+e)(c);    assert c.value == u'b'
+                c = ctypes.c_wchar('\0'); getattr(ctd, 'set_wchar'+e)(c);    assert c.value == 'b'
                 c = ctypes.c_byte(0);      getattr(ctd, 'set_schar'+e)(c);    assert c.value == ord('c')
             c = ctypes.c_ubyte(0);         getattr(ctd, 'set_uchar'+e)(c);    assert c.value == ord('d')
 

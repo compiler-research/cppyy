@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
 from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
@@ -13,8 +12,7 @@ def setup_module(mod):
 # after CPython's Lib/test/seq_tests.py
 def iterfunc(seqn):
     """Regular generator"""
-    for i in seqn:
-        yield i
+    yield from seqn
 
 class Sequence:
     """Sequence using __getitem__"""
@@ -43,8 +41,7 @@ class IterGen:
         self.seqn = seqn
         self.i = 0
     def __iter__(self):
-        for val in self.seqn:
-            yield val
+        yield from self.seqn
 
 class IterNextOnly:
     """Missing __getitem__ and __iter__"""
@@ -807,7 +804,7 @@ class TestSTLSTRING:
 
         assert std.string('ab\0c')       == 'ab\0c'
         assert repr(std.string('ab\0c')) == repr(b'ab\0c')
-        assert str(std.string('ab\0c'))  == str('ab\0c')
+        assert str(std.string('ab\0c'))  == 'ab\0c'
 
     @mark.xfail(condition=IS_MAC, run=False, reason="Fails on OS X")
     def test04_array_of_strings(self):
@@ -845,7 +842,7 @@ class TestSTLSTRING:
 
         uas = cppyy.gbl.UnicodeAndSTL
 
-        actlen = len(u'ℕ'.encode(encoding='UTF-8'))
+        actlen = len('ℕ'.encode(encoding='UTF-8'))
         assert uas.get_size('ℕ')    == actlen
         assert uas.get_size_cr('ℕ') == actlen
         assert uas.get_size_cc('ℕ') == actlen
@@ -864,7 +861,7 @@ class TestSTLSTRING:
             assert uas.get_string_w('ℕ').encode(encoding='UTF-8')   == 'ℕ'
             assert uas.get_string_wcr('ℕ').encode(encoding='UTF-8') == 'ℕ'
 
-        bval = u'ℕ'.encode(encoding='UTF-8')
+        bval = 'ℕ'.encode(encoding='UTF-8')
         actlen = len(bval)
         assert uas.get_size(bval)    == actlen
         assert uas.get_size_cr(bval) == actlen
@@ -919,7 +916,7 @@ class TestSTLSTRING:
         assert s1+s2 == "Hello, World!"
         assert s2+s1 == ", World!Hello"
 
-        s2 = u", World!"
+        s2 = ", World!"
         assert s1+s2 == "Hello, World!"
         assert s2+s1 == ", World!Hello"
 
@@ -950,10 +947,10 @@ class TestSTLSTRING:
         assert S.npos == S.size_type(-1)
 
       # -- method decode
-        s = S(u'\xe9')
-        assert s.decode('utf-8')           == u'\xe9'
-        assert s.decode('utf-8', "strict") == u'\xe9'
-        assert s.decode(encoding='utf-8')  == u'\xe9'
+        s = S('\xe9')
+        assert s.decode('utf-8')           == '\xe9'
+        assert s.decode('utf-8', "strict") == '\xe9'
+        assert s.decode(encoding='utf-8')  == '\xe9'
 
       # -- method split (only Python)
         assert S("a b c").split() == ['a', 'b', 'c']
@@ -1752,10 +1749,10 @@ class TestSTLSET:
         assert list(range(N)) == list(s)
 
         with raises(TypeError):
-            s = cppyy.gbl.std.set[int](set([1, "2"]))
+            s = cppyy.gbl.std.set[int]({1, "2"})
 
         with raises(TypeError):
-            s = cppyy.gbl.std.set[int](set(["aap", "noot", "mies"]))
+            s = cppyy.gbl.std.set[int]({"aap", "noot", "mies"})
 
     @mark.xfail(run=not(IS_MAC and IS_CLING))
     def test04_set_cpp17_style(self):

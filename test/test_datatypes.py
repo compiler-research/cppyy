@@ -39,11 +39,11 @@ class TestDATATYPES:
         assert c.m_schar == 'b'
         assert c.m_uchar == 'c'
         assert type(c.m_wchar) == pyunicode
-        assert c.m_wchar == u'D'
+        assert c.m_wchar == 'D'
         assert type(c.m_char16) == pyunicode
-        assert c.m_char16 == u'\u00df'
+        assert c.m_char16 == '\u00df'
         assert type(c.m_char32) == pyunicode
-        assert c.m_char32 == u'\u00df'
+        assert c.m_char32 == '\u00df'
 
         # reading integer types
         assert c.m_int8    == - 9; assert c.get_int8_cr()    == - 9; assert c.get_int8_r()    == - 9
@@ -216,10 +216,10 @@ class TestDATATYPES:
         # char types through functions
         c.set_char('c');   assert c.get_char()  == 'c'
         c.set_uchar('e');  assert c.get_uchar() == 'e'
-        c.set_wchar(u'F'); assert c.get_wchar() == u'F'
+        c.set_wchar('F'); assert c.get_wchar() == 'F'
         assert type(c.get_wchar()) == pyunicode
-        c.set_char16(u'\u00f2');     assert c.get_char16() == u'\u00f2'
-        c.set_char32(u'\U0001f31c'); assert c.get_char32() == u'\U0001f31c'
+        c.set_char16('\u00f2');     assert c.get_char16() == '\u00f2'
+        c.set_char32('\U0001f31c'); assert c.get_char32() == '\U0001f31c'
 
         # char types through data members
         c.m_char = 'b';    assert c.get_char()  ==     'b'
@@ -230,12 +230,12 @@ class TestDATATYPES:
         c.m_uchar = 42;    assert c.get_uchar() == chr(42)
         c.set_uchar('e');  assert c.m_uchar     ==     'e'
         c.set_uchar(43);   assert c.m_uchar     == chr(43)
-        c.m_wchar = u'G';  assert c.get_wchar() ==    u'G'
-        c.set_wchar(u'H'); assert c.m_wchar     ==    u'H'
-        c.m_char16 = u'\u00f3';  assert c.get_char16() == u'\u00f3'
-        c.set_char16(u'\u00f4'); assert c.m_char16     == u'\u00f4'
-        c.m_char32 = u'\U0001f31d';  assert c.get_char32() == u'\U0001f31d'
-        c.set_char32(u'\U0001f31e'); assert c.m_char32     == u'\U0001f31e'
+        c.m_wchar = 'G';  assert c.get_wchar() ==    'G'
+        c.set_wchar('H'); assert c.m_wchar     ==    'H'
+        c.m_char16 = '\u00f3';  assert c.get_char16() == '\u00f3'
+        c.set_char16('\u00f4'); assert c.m_char16     == '\u00f4'
+        c.m_char32 = '\U0001f31d';  assert c.get_char32() == '\U0001f31d'
+        c.set_char32('\U0001f31e'); assert c.m_char32     == '\U0001f31e'
 
         raises(ValueError, c.set_char,   "string")
         raises(ValueError, c.set_char,   500)
@@ -391,12 +391,12 @@ class TestDATATYPES:
         assert c.s_char                 == 'c'
         assert CppyyTestData.s_uchar    == 'u'
         assert c.s_uchar                == 'u'
-        assert CppyyTestData.s_wchar    == u'U'
-        assert c.s_wchar                == u'U'
-        assert CppyyTestData.s_char16   == u'\u6c29'
-        assert c.s_char16               == u'\u6c29'
-        assert CppyyTestData.s_char32   == u'\U0001f34b'
-        assert c.s_char32               == u'\U0001f34b'
+        assert CppyyTestData.s_wchar    == 'U'
+        assert c.s_wchar                == 'U'
+        assert CppyyTestData.s_char16   == '\u6c29'
+        assert c.s_char16               == '\u6c29'
+        assert CppyyTestData.s_char32   == '\U0001f34b'
+        assert c.s_char32               == '\U0001f34b'
 
         assert type(c.s_wchar)              == pyunicode
         assert type(CppyyTestData.s_wchar)  == pyunicode
@@ -460,18 +460,18 @@ class TestDATATYPES:
         assert CppyyTestData.s_uchar    == 'd'
         raises(ValueError, setattr, CppyyTestData, 's_uchar', -1)
         raises(ValueError, setattr, c,             's_uchar', -1)
-        CppyyTestData.s_wchar            = u'K'
-        assert c.s_wchar                == u'K'
-        c.s_wchar                        = u'L'
-        assert CppyyTestData.s_wchar    == u'L'
-        CppyyTestData.s_char16           = u'\u00df'
-        assert c.s_char16               == u'\u00df'
-        c.s_char16                       = u'\u00ef'
-        assert CppyyTestData.s_char16   == u'\u00ef'
-        CppyyTestData.s_char32           = u'\u00df'
-        assert c.s_char32               == u'\u00df'
-        c.s_char32                       = u'\u00ef'
-        assert CppyyTestData.s_char32   == u'\u00ef'
+        CppyyTestData.s_wchar            = 'K'
+        assert c.s_wchar                == 'K'
+        c.s_wchar                        = 'L'
+        assert CppyyTestData.s_wchar    == 'L'
+        CppyyTestData.s_char16           = '\u00df'
+        assert c.s_char16               == '\u00df'
+        c.s_char16                       = '\u00ef'
+        assert CppyyTestData.s_char16   == '\u00ef'
+        CppyyTestData.s_char32           = '\u00df'
+        assert c.s_char32               == '\u00df'
+        c.s_char32                       = '\u00ef'
+        assert CppyyTestData.s_char32   == '\u00ef'
 
         # integer types
         if self.has_byte:
@@ -600,8 +600,8 @@ class TestDATATYPES:
         gbl.g_some_global_string2 = "Python"
         assert gbl.get_some_global_string2() == "Python"
 
-        assert gbl.g_some_global_string16 == u'z\u00df\u6c34'
-        assert gbl.g_some_global_string32 == u'z\u00df\u6c34\U0001f34c'
+        assert gbl.g_some_global_string16 == 'z\u00df\u6c34'
+        assert gbl.g_some_global_string32 == 'z\u00df\u6c34\U0001f34c'
 
         NS = gbl.SomeStaticDataNS
         NS.s_some_static_string = "Python"
@@ -843,14 +843,14 @@ class TestDATATYPES:
         assert c.get_valid_string('aap') == 'aap'
         assert c.get_invalid_string() == ''
 
-        assert c.get_valid_wstring(u'aap') == u'aap'
-        assert c.get_invalid_wstring() == u''
+        assert c.get_valid_wstring('aap') == 'aap'
+        assert c.get_invalid_wstring() == ''
 
-        assert c.get_valid_string16(u'z\u00df\u6c34') == u'z\u00df\u6c34'
-        assert c.get_invalid_string16() == u''
+        assert c.get_valid_string16('z\u00df\u6c34') == 'z\u00df\u6c34'
+        assert c.get_invalid_string16() == ''
 
-        assert c.get_valid_string32(u'z\u00df\u6c34\U0001f34c') == u'z\u00df\u6c34\U0001f34c'
-        assert c.get_invalid_string32() == u''
+        assert c.get_valid_string32('z\u00df\u6c34\U0001f34c') == 'z\u00df\u6c34\U0001f34c'
+        assert c.get_invalid_string32() == ''
 
     def test14_copy_constructor(self):
         """Test copy constructor"""
@@ -1500,7 +1500,7 @@ class TestDATATYPES:
 
         class Derived(ns.Base):
             def __init__(self):
-                super(Derived, self).__init__()
+                super().__init__()
                 self.execute = self.xyz
 
             def xyz(self):

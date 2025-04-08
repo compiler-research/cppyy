@@ -54,7 +54,7 @@ if sys.hexversion < 0x3000000:
 
 
 ### template support ---------------------------------------------------------
-class Template(object):  # expected/used by ProxyWrappers.cxx in CPyCppyy
+class Template:  # expected/used by ProxyWrappers.cxx in CPyCppyy
     stl_sequence_types   = ['std::vector', 'std::list', 'std::set', 'std::deque']
     stl_unrolled_types   = ['std::pair']
     stl_fixed_size_types = ['std::array']
@@ -67,7 +67,7 @@ class Template(object):  # expected/used by ProxyWrappers.cxx in CPyCppyy
         self.__scope__    = scope
 
     def __repr__(self):
-        return "<cppyy.Template '%s' object at %s>" % (self.__name__, hex(id(self)))
+        return "<cppyy.Template '{}' object at {}>".format(self.__name__, hex(id(self)))
 
     def __getitem__(self, *args):
       # multi-argument to [] becomes a single tuple argument
@@ -177,7 +177,7 @@ def add_default_paths():
                 f = line.strip()
                 if (os.path.exists(f)):
                     libCppInterOp.AddSearchPath(f)
-    except IOError:
+    except OSError:
         pass
 add_default_paths()
 del add_default_paths
