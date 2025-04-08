@@ -1,5 +1,4 @@
-import py, os, sys
-from pytest import raises, mark
+import py
 from .support import setup_make
 
 currpath = py.path.local(__file__).dirpath()

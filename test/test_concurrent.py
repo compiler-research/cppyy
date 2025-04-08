@@ -1,5 +1,4 @@
-import py, os, sys
-from pytest import raises, skip, mark
+from pytest import skip, mark
 from .support import IS_MAC_ARM, IS_MAC_X86, IS_LINUX_ARM
 
 
@@ -59,7 +58,8 @@ class TestCONCURRENT:
 
         return
         import cppyy
-        import threading, time
+        import threading
+        import time
 
         cppyy.cppdef("""\
         namespace test12_timeout {

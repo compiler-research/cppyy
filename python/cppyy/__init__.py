@@ -51,9 +51,13 @@ __all__ = [
 
 from ._version import __version__
 
-import ctypes, os, sys, sysconfig, warnings
+import ctypes
+import os
+import sys
+import sysconfig
+import warnings
 
-if not 'CLING_STANDARD_PCH' in os.environ:
+if 'CLING_STANDARD_PCH' not in os.environ:
     def _set_pch():
         try:
             import cppyy_backend as cpb
@@ -177,7 +181,7 @@ class make_smartptr(object):
                 return py_make_smartptr(cls, self.ptrcls)
         except AttributeError:
             pass
-        if type(cls) == str and not cls in ('int', 'float'):
+        if type(cls) == str and cls not in ('int', 'float'):
             return py_make_smartptr(getattr(gbl, cls), self.ptrcls)
         return self.maker[cls]
 
@@ -206,7 +210,7 @@ def cppdef(src):
     with _stderr_capture() as err:
         errcode = gbl.Cpp.Declare(src)
     if not errcode == 0 or err.err:
-        if 'warning' in err.err.lower() and not 'error' in err.err.lower():
+        if 'warning' in err.err.lower() and 'error' not in err.err.lower():
             warnings.warn(err.err, SyntaxWarning)
             return True
         raise SyntaxError('Failed to parse the given C++ code%s' % err.err)
@@ -316,7 +320,8 @@ if not ispypy:
 
         apipath_extra = os.path.join(os.path.dirname(apipath), 'site', 'python'+ldversion)
         if not os.path.exists(os.path.join(apipath_extra, 'CPyCppyy')):
-            import glob, libcppyy
+            import glob
+            import libcppyy
             ape = os.path.dirname(libcppyy.__file__)
           # a "normal" structure finds the include directory up to 3 levels up,
           # ie. dropping lib/pythonx.y[md]/site-packages

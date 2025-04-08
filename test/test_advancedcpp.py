@@ -1,6 +1,6 @@
-import py, os, sys
+import py
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_WINDOWS, IS_MAC, IS_LINUX, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86
+from .support import setup_make, pylong, IS_WINDOWS, IS_MAC, ispypy, IS_CLANG_REPL, IS_MAC_ARM
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("advancedcppDict"))
@@ -192,8 +192,8 @@ class TestADVANCEDCPP:
         assert gbl.T1 is gbl.T1
         assert gbl.T2 is gbl.T2
         assert gbl.T3 is gbl.T3
-        assert not gbl.T1 is gbl.T2
-        assert not gbl.T2 is gbl.T3
+        assert gbl.T1 is not gbl.T2
+        assert gbl.T2 is not gbl.T3
 
         assert gbl.T1('int') is gbl.T1('int')
         assert gbl.T1(int)   is gbl.T1('int')
@@ -472,19 +472,19 @@ class TestADVANCEDCPP:
         assert o is o2
 
         o3 = cppyy.bind_object(addr, some_class_with_data)
-        assert not o is o3
+        assert o is not o3
 
         d1 = some_class_with_data()
         d2 = d1.gime_copy()
-        assert not d1 is d2
+        assert d1 is not d2
 
         dd1a = d1.gime_data()
         dd1b = d1.gime_data()
         assert dd1a is dd1b
 
         dd2 = d2.gime_data()
-        assert not dd1a is dd2
-        assert not dd1b is dd2
+        assert dd1a is not dd2
+        assert dd1b is not dd2
 
         d2.__destruct__()
         d1.__destruct__()
@@ -568,7 +568,7 @@ class TestADVANCEDCPP:
         b1 = cppyy.bind_object(voidp, base_class)
         assert isinstance(b1, base_class)
         assert cppyy.addressof(b1) == cppyy.addressof(d)
-        assert not (b1 is d)
+        assert b1 is not d
 
     def test13_actual_type_virtual_multi(self):
         """Test auto-downcast in adverse inheritance situation"""
@@ -754,7 +754,7 @@ class TestADVANCEDCPP:
         assert cppyy.gbl.UsingBase1().vcheck() == 'A'
 
         D1 = cppyy.gbl.UsingDerived1
-        assert not 'UsingBase1' in D1.__init__.__doc__
+        assert 'UsingBase1' not in D1.__init__.__doc__
 
         d1a = D1()
         assert d1a.m_int    == 13

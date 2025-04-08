@@ -1,6 +1,6 @@
-import py, os, sys
+import py
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, ispypy, IS_CLANG_REPL, IS_CLING, IS_MAC_ARM, IS_MAC_X86, IS_MAC
+from .support import setup_make, pylong, ispypy, IS_CLING, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("example01Dict"))
@@ -36,7 +36,7 @@ class TestPYTHONIFY:
     def test03_calling_static_functions(self):
         """Test calling of static methods"""
 
-        import cppyy, sys, math
+        import cppyy
         example01_class = cppyy.gbl.example01
         res = example01_class.staticAddOneToInt(1)
         assert res == 2
@@ -203,7 +203,8 @@ class TestPYTHONIFY:
     def test09_memory(self):
         """Test proper C++ destruction by the garbage collector"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
         example01_class = cppyy.gbl.example01
         payload_class = cppyy.gbl.payload
 
@@ -341,7 +342,8 @@ class TestPYTHONIFY:
     def test16_subclassing(self):
         """A sub-class on the python side should have that class as type"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
         gc.collect()
 
         example01 = cppyy.gbl.example01
@@ -518,7 +520,7 @@ class TestPYTHONIFY:
         } }""")
 
         def pyfoo(a=10, b=20, c=5, d=4):
-            return a-b//c*d;
+            return a-b//c*d
 
         ns = cppyy.gbl.KeyWordsAndDefaults
 

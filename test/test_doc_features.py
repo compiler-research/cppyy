@@ -1,6 +1,7 @@
-import py, os, sys
+import py
+import sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC, IS_MAC_X86, IS_MAC_ARM, IS_LINUX_ARM
+from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLING, IS_MAC, IS_MAC_ARM, IS_LINUX_ARM
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("doc_helperDict"))
@@ -163,7 +164,6 @@ namespace Namespace {
 """)
 
     def test_abstract_class(self):
-        import cppyy
         from cppyy.gbl import Abstract, Concrete
 
         raises(TypeError, Abstract)
@@ -172,7 +172,6 @@ namespace Namespace {
         assert isinstance(c, Abstract)
 
     def test_array(self):
-        import cppyy
         from cppyy.gbl import Concrete
         from array import array
 
@@ -200,7 +199,6 @@ namespace Namespace {
         assert type(e) == cppyy.gbl.Abstract
 
     def test_classes_and_structs(self):
-        import cppyy
         from cppyy.gbl import Concrete, Namespace
 
         assert Concrete != Namespace.Concrete
@@ -211,7 +209,6 @@ namespace Namespace {
         assert 'Namespace::Concrete::NestedClass' == type(n).__cpp_name__
 
     def test_data_members(self):
-        import cppyy
         from cppyy.gbl import Concrete
 
         c = Concrete()
@@ -219,7 +216,6 @@ namespace Namespace {
         raises(TypeError, setattr, c, 'm_const_int', 71)
 
     def test_default_arguments(self):
-        import cppyy
         from cppyy.gbl import Concrete
 
         c = Concrete()
@@ -231,7 +227,6 @@ namespace Namespace {
         assert c.m_int == 27
 
     def test_keyword_arguments(self):
-        import cppyy
         from cppyy.gbl import Concrete
 
         c = Concrete(n=17)
@@ -251,19 +246,16 @@ namespace Namespace {
 
     @mark.xfail
     def test_doc_strings(self):
-        import cppyy
         from cppyy.gbl import Concrete
         assert 'void Concrete::array_method(int* ad, int size)' in Concrete.array_method.__doc__
         assert 'void Concrete::array_method(double* ad, int size)' in Concrete.array_method.__doc__
 
     def test_enums(self):
-        import cppyy
 
         pass
 
     @mark.xfail(run=False, condition=IS_MAC, reason="Seg Fault")
     def test_functions(self):
-        import cppyy
 
         from cppyy.gbl import global_function, call_int_int_function, Namespace
         assert not(global_function == Namespace.global_function)
@@ -282,24 +274,20 @@ namespace Namespace {
         assert call_int_int_function(lambda x, y: x*y, 3, 7) == 21
 
     def test_inheritance(self):
-        import cppyy
 
         pass
 
     def test_memory(self):
-        import cppyy
         from cppyy.gbl import Concrete
 
         c = Concrete()
         assert c.__python_owns__ == True
 
     def test_methods(self):
-        import cppyy
 
         pass
 
     def test_namespaces(self):
-        import cppyy
 
         pass
 
@@ -310,28 +298,23 @@ namespace Namespace {
         assert not cppyy.nullptr
 
     def test_operator_conversions(self):
-        import cppyy
         from cppyy.gbl import Concrete
 
         assert str(Concrete()) == 'Hello operator const char*!'
 
     def test_operator_overloads(self):
-        import cppyy
 
         pass
 
     def test_pointers(self):
-        import cppyy
 
         pass
 
     def test_pyobject(self):
-        import cppyy
 
         pass
 
     def test_ref(self):
-        import cppyy
         from cppyy.gbl import Concrete
         from ctypes import c_uint
 
@@ -341,7 +324,6 @@ namespace Namespace {
         assert u.value == 42
 
     def test_static_data_members(self):
-        import cppyy
         from cppyy.gbl import Concrete
 
         assert Concrete.s_int == 321
@@ -349,12 +331,10 @@ namespace Namespace {
         assert Concrete.s_int == 123
 
     def test_static_methods(self):
-        import cppyy
 
         pass
 
     def test_strings(self):
-        import cppyy
 
         pass
 
@@ -366,23 +346,19 @@ namespace Namespace {
         assert type(cppyy.gbl.std.vector(int)()) == cppyy.gbl.std.vector(int)
 
     def test_templated_functions(self):
-        import cppyy
 
         pass
 
     def test_templated_methods(self):
-        import cppyy
 
         pass
 
     def test_typedefs(self):
-        import cppyy
         from cppyy.gbl import Concrete, Concrete_t
 
         assert Concrete is Concrete_t
 
     def test_unary_operators(sef):
-        import cppyy
 
         pass
 
@@ -479,7 +455,7 @@ namespace Namespace {
             caught = False
             try:
                 cppyy.gbl.DocHelper.throw_an_error(0)
-            except exc_type as e:
+            except exc_type:
                 caught = True
             assert caught == True
         assert caught == True
@@ -738,7 +714,7 @@ namespace Zoo {
 @mark.skipif(IS_MAC and IS_CLING, reason="setup class fails with OS X cling")
 class TestADVERTISED:
     def setup_class(cls):
-        import cppyy
+        pass
 
     def test01_reduction_of_overloads(self):
         """Reduce available overloads to 1"""
@@ -767,7 +743,8 @@ class TestADVERTISED:
     def test02_use_c_void_p(self):
         """Use of opaque handles and ctypes.c_void_p"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
       ### void pointer as opaque handle
         cppyy.cppdef("""namespace Advert02 {
@@ -802,7 +779,8 @@ class TestADVERTISED:
     def test03_use_of_ctypes_and_enum(self):
         """Use of (opaque) enum through ctypes.c_void_p"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         cppyy.cppdef("""namespace Advert03 {
         enum SomeEnum1 { AA = -1, BB = 42 };
@@ -890,7 +868,8 @@ class TestADVERTISED:
     def test05_ptr_ptr_with_array(self):
         """Example of ptr-ptr with array"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         cppyy.cppdef("""namespace Advert05 {
         struct SomeStruct { int i; };
@@ -916,7 +895,8 @@ class TestADVERTISED:
     def test06_c_char_p(self):
         """Example of ctypes.c_char_p usage"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         cppyy.cppdef("""namespace Advert06 {
         intptr_t createit(const char** out) {

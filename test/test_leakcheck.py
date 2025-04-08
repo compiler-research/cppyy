@@ -1,6 +1,8 @@
-import py, os, sys
+import py
+import os
+import sys
 from pytest import mark, skip
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL
+from .support import setup_make
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -17,7 +19,8 @@ except ImportError:
 @mark.skipif(nopsutil == True, reason="module psutil not installed")
 class TestLEAKCHECK:
     def setup_class(cls):
-        import cppyy, psutil
+        import cppyy
+        import psutil
 
         cls.test_dct = test_dct
         cls.memory = cppyy.load_reflection_info(cls.test_dct)

@@ -1,6 +1,6 @@
-import py, os, sys
+import py
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, maxvalue, IS_WINDOWS, IS_MAC, IS_CLANG_REPL, IS_CLING
+from .support import setup_make, pylong, maxvalue, IS_WINDOWS, IS_MAC, IS_CLING
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("operatorsDict"))
@@ -56,7 +56,7 @@ class TestOPERATORS:
         n /= number(2)
         assert n == number(100)
 
-        nn = -n;
+        nn = -n
         assert nn == number(-100)
 
     def test03_comparison_operators(self):
@@ -116,7 +116,7 @@ class TestOPERATORS:
     def test06_approximate_types(self):
         """Test converter operators of approximate types"""
 
-        import cppyy, sys
+        import cppyy
 
         gbl = cppyy.gbl
 
@@ -128,7 +128,7 @@ class TestOPERATORS:
         assert o.m_uint  == 2147483647 + 32
         assert pylong(o) == 2147483647 + 32
 
-        o = gbl.operator_unsigned_long();
+        o = gbl.operator_unsigned_long()
         o.m_ulong = maxvalue + 128
         assert o.m_ulong == maxvalue + 128
         assert pylong(o) == maxvalue + 128

@@ -1,4 +1,4 @@
-import py, pytest, os, sys, math, warnings
+import warnings
 from support import setup_make
 
 setup_make("runvectorDict.so")

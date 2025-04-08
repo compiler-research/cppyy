@@ -1,4 +1,7 @@
-import glob, os, sys, subprocess
+import glob
+import os
+import sys
+import subprocess
 
 USES_PYTHON_CAPI = set(('pythonizables',))
 
@@ -24,7 +27,7 @@ if fn in USES_PYTHON_CAPI:
 
 if os.path.exists(fn+'Dict.dll'):
     dct_time = os.stat(fn+'Dict.dll').st_mtime
-    if not '-f' in sys.argv:
+    if '-f' not in sys.argv:
         mustbuild = False
         for ext in ['.h', '.cxx', '.xml']:
             if os.stat(fn+ext).st_mtime > dct_time:
@@ -86,7 +89,6 @@ BUILDOBJ_CMD = BUILDOBJ_CMD_PART.format(fn=fn+'_rflx')
 if os.system(BUILDOBJ_CMD):
     sys.exit(1)
 
-import cppyy_backend
 CREATEDEF_CMD = "python bindexplib.py {fn} {fn}Dict".format(fn=fn)
 if os.system(CREATEDEF_CMD):
     sys.exit(1)

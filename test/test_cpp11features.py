@@ -1,6 +1,7 @@
-import py, os, sys
+import py
+import sys
 from pytest import raises, mark
-from .support import setup_make, ispypy, IS_CLANG_REPL, IS_LINUX_ARM, IS_LINUX, IS_MAC, IS_CLING
+from .support import setup_make, ispypy, IS_LINUX_ARM, IS_LINUX, IS_CLING
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -148,7 +149,7 @@ class TestCPP11FEATURES:
         """Ability to pass unique_ptr<Derived> through unique_ptr<Base>"""
 
         from cppyy.gbl import std, TestSmartPtr, DerivedTestSmartPtr
-        from cppyy.gbl import move_unique_ptr, move_unique_ptr_derived
+        from cppyy.gbl import move_unique_ptr_derived
         from cppyy.gbl import create_TestSmartPtr_by_value
         import gc
 
@@ -214,7 +215,8 @@ class TestCPP11FEATURES:
     def test07_move(self):
         """Move construction, assignment, and methods"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         def moveit(T):
             assert T.s_instance_counter == 0
@@ -361,7 +363,6 @@ class TestCPP11FEATURES:
     def test11_chrono(self):
         """Use of chrono and overloaded operator+"""
 
-        import cppyy
         from cppyy.gbl import std
 
         t = std.chrono.system_clock.now() - std.chrono.seconds(1)
@@ -388,7 +389,6 @@ class TestCPP11FEATURES:
         std::function<int(const FNTestStruct& t)> FNCreateTestStructFunc() { return [](const FNTestStruct& t) { return t.t; }; }
         }""")
 
-        from cppyy.gbl import FunctionNS2
 
         t = FunctionNS.FNTestStruct(27)
         f = FunctionNS.FNCreateTestStructFunc()
@@ -397,7 +397,6 @@ class TestCPP11FEATURES:
     def test13_stdhash(self):
         """Use of std::hash"""
 
-        import cppyy
         from cppyy.gbl import StructWithHash, StructWithoutHash
 
         for i in range(3):   # to test effect of caching
@@ -413,7 +412,7 @@ class TestCPP11FEATURES:
     def test14_shared_ptr_passing(self):
         """Ability to pass normal pointers through shared_ptr by value"""
 
-        from cppyy.gbl import std, TestSmartPtr, DerivedTestSmartPtr
+        from cppyy.gbl import TestSmartPtr, DerivedTestSmartPtr
         from cppyy.gbl import pass_shared_ptr
         import gc
 

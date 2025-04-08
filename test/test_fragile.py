@@ -1,4 +1,6 @@
-import py, os, sys
+import py
+import os
+import sys
 from pytest import raises, skip, mark
 from .support import setup_make, ispypy, IS_LINUX, IS_WINDOWS, IS_MAC_ARM, IS_CLANG_REPL, IS_MAC
 
@@ -258,7 +260,7 @@ class TestFRAGILE:
           S(int a, int c): _a{a}, _c{c} { }
           S(): _a{0}, _c{0} { }
           bool operator<(int i) { return i < (_a+_c); }
-        }; }""");
+        }; }""")
 
 
         assert 'S' in dir(cppyy.gbl.GG)
@@ -290,10 +292,9 @@ class TestFRAGILE:
 
         # TODO: namespaces aren't loaded (and thus not added to sys.modules)
         # with just the from ... import statement; actual use is needed
-        from cppyy.gbl import fragile
 
         def fail_import():
-            from cppyy.gbl import does_not_exist
+            pass
         raises(ImportError, fail_import)
 
         from cppyy.gbl.fragile import A, B, C, D
@@ -413,16 +414,16 @@ class TestFRAGILE:
         assert cppyy.addressof(handle) == 0x42
 
         raises(TypeError, cppyy.gbl.fragile.OpaqueType)
-        assert not 'OpaqueType' in cppyy.gbl.fragile.__dict__
+        assert 'OpaqueType' not in cppyy.gbl.fragile.__dict__
 
         handle = cppyy.gbl.fragile.OpaqueHandle_t()
         assert not handle
 
-        addr = cppyy.gbl.fragile.create_handle(handle);
+        addr = cppyy.gbl.fragile.create_handle(handle)
         assert addr
         assert not not handle
 
-        assert cppyy.gbl.fragile.destroy_handle(handle, addr);
+        assert cppyy.gbl.fragile.destroy_handle(handle, addr)
 
         # now define OpaqueType
         cppyy.cppdef("namespace fragile { class OpaqueType { public: int m_int; }; }")
@@ -436,7 +437,6 @@ class TestFRAGILE:
     def test17_interactive(self):
         """Test the usage of 'from cppyy.interactive import *'"""
 
-        import sys
 
         if 0x030b0000 <= sys.hexversion:
             skip('"from cppyy.interactive import *" is no longer supported')
@@ -444,7 +444,7 @@ class TestFRAGILE:
         oldsp = sys.path[:]
         sys.path.append('.')
         try:
-            import assert_interactive
+            pass
         finally:
             sys.path = oldsp
 
@@ -471,9 +471,9 @@ class TestFRAGILE:
 
         dd = dir(cppyy.gbl)
 
-        assert not 'TCanvasImp' in dd
-        assert not 'ESysConstants' in dd
-        assert not 'kDoRed' in dd
+        assert 'TCanvasImp' not in dd
+        assert 'ESysConstants' not in dd
+        assert 'kDoRed' not in dd
 
     @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test20_capture_output(self):
@@ -506,7 +506,8 @@ class TestFRAGILE:
     def test21_failing_cppcode(self):
         """Check error behavior of failing C++ code"""
 
-        import cppyy, string, re
+        import cppyy
+        import re
 
         allspace = re.compile(r'\s+')
         def get_errmsg(exc, allspace=allspace):
@@ -544,7 +545,7 @@ class TestFRAGILE:
         assert cppyy.gbl.interactive_b == 4
 
         with raises(SyntaxError):
-            cppyy.cppexec("doesnotexist");
+            cppyy.cppexec("doesnotexist")
 
     def test23_set_debug(self):
         """Setting of debugging facilities"""
@@ -565,9 +566,8 @@ class TestFRAGILE:
         """Check availability of ASAN with gcc"""
 
         import cppyy
-        import sys
 
-        if not 'linux' in sys.platform:
+        if 'linux' not in sys.platform:
             return
 
         cppyy.include('sanitizer/asan_interface.h')
@@ -576,7 +576,8 @@ class TestFRAGILE:
     def test25_cppdef_error_reporting(self):
         """Check error reporting of cppyy.cppdef"""
 
-        import cppyy, warnings
+        import cppyy
+        import warnings
 
         assert cppyy.gbl.fragile.add42(1) == 43     # brings in symbol from library
 
@@ -636,7 +637,6 @@ class TestSIGNALS:
         assert issubclass(cppyy.ll.IllegalInstruction,     cppyy.ll.FatalError)
         assert issubclass(cppyy.ll.AbortSignal,            cppyy.ll.FatalError)
 
-        import os
         os.putenv('CPPYY_CRASH_QUIET', '1')
 
         with raises((cppyy.ll.SegmentationViolation, cppyy.ll.IllegalInstruction)):

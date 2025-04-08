@@ -1,6 +1,7 @@
-import py, os, sys
+import py
+import sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC
+from .support import setup_make, IS_WINDOWS, ispypy, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -51,7 +52,6 @@ class TestLOWLEVEL:
         """Memory allocation and free-ing"""
 
         import cppyy
-        from cppyy import ll
 
       # regular C malloc/free
         mem = cppyy.gbl.malloc(16)
@@ -87,7 +87,8 @@ class TestLOWLEVEL:
     def test04_python_casts(self):
         """Casts to common Python pointer encapsulations"""
 
-        import cppyy, cppyy.ll
+        import cppyy
+        import cppyy.ll
 
         cppyy.cppdef("""namespace pycasts {
         struct SomeObject{};
@@ -109,7 +110,7 @@ class TestLOWLEVEL:
     def test05_array_as_ref(self):
         """Use arrays for pass-by-ref"""
 
-        import cppyy, sys
+        import cppyy
         from array import array
 
         ctd = cppyy.gbl.CppyyTestData()
@@ -164,7 +165,8 @@ class TestLOWLEVEL:
         # c_double          double                                      float
         # c_longdouble      long double                                 float
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         ctd = cppyy.gbl.CppyyTestData()
 
@@ -227,7 +229,7 @@ class TestLOWLEVEL:
         import cppyy.ll
 
       # boolean type
-        b = POINTER(ctypes.c_bool)();     ctd.set_bool_ppa(b);
+        b = POINTER(ctypes.c_bool)();     ctd.set_bool_ppa(b)
         assert b[0] == True; assert b[1] == False; assert b[2] == True
         cppyy.ll.array_delete(b)
 
@@ -288,7 +290,8 @@ class TestLOWLEVEL:
         # c_wchar_p         wchar_t* (NULL terminated)                  unicode or None
         # c_void_p          void*                                       int/long or None
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         ctd = cppyy.gbl.CppyyTestData()
 
@@ -309,7 +312,8 @@ class TestLOWLEVEL:
     def test08_ctypes_type_correctness(self):
         """If types don't match with ctypes, expect exceptions"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         ctd = cppyy.gbl.CppyyTestData()
 
@@ -317,7 +321,7 @@ class TestLOWLEVEL:
         if not IS_WINDOWS:
             meth_types.append('long')
 
-        i = ctypes.c_int(0);
+        i = ctypes.c_int(0)
         for ext in ['_r', '_p']:
             for meth in meth_types:
                 with raises(TypeError): getattr(ctd, 'set_'+meth+ext)(i)
@@ -340,7 +344,8 @@ class TestLOWLEVEL:
     def test10_array_of_const_char_star(self):
         """Test passting of const char*[]"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         def py2c(pyargs):
             cargsn = (ctypes.c_char_p * len(pyargs))(*pyargs)
@@ -371,7 +376,8 @@ class TestLOWLEVEL:
     def test11_array_of_const_char_ref(self):
         """Test passting of const char**&"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
         import cppyy.ll
 
       # IN parameter case

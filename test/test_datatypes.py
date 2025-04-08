@@ -1,6 +1,7 @@
-import py, os, sys
+import py
+import sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_CLING, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
+from .support import setup_make, pylong, pyunicode, IS_CLING, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 IS_MAC = IS_MAC_X86 or IS_MAC_ARM
 
@@ -341,7 +342,8 @@ class TestDATATYPES:
     def test03_array_passing(self):
         """Test passing of array arguments"""
 
-        import cppyy, array, sys
+        import cppyy
+        import array
         CppyyTestData = cppyy.gbl.CppyyTestData
 
         c = CppyyTestData()
@@ -380,7 +382,7 @@ class TestDATATYPES:
     def test04_class_read_access(self):
         """Test read access to class public data and verify values"""
 
-        import cppyy, sys
+        import cppyy
         CppyyTestData = cppyy.gbl.CppyyTestData
 
         c = CppyyTestData()
@@ -443,7 +445,7 @@ class TestDATATYPES:
     def test05_class_data_write_access(self):
         """Test write access to class public data and verify values"""
 
-        import cppyy, sys
+        import cppyy
         CppyyTestData = cppyy.gbl.CppyyTestData
 
         c = CppyyTestData()
@@ -528,7 +530,7 @@ class TestDATATYPES:
     def test06_range_access(self):
         """Test the ranges of integer types"""
 
-        import cppyy, sys
+        import cppyy
         CppyyTestData = cppyy.gbl.CppyyTestData
 
         c = CppyyTestData()
@@ -544,7 +546,7 @@ class TestDATATYPES:
     def test07_type_conversions(self):
         """Test conversions between builtin types"""
 
-        import cppyy, sys
+        import cppyy
         CppyyTestData = cppyy.gbl.CppyyTestData
 
         c = CppyyTestData()
@@ -1237,7 +1239,9 @@ class TestDATATYPES:
     def test25_byte_arrays(self):
         """Usage of unsigned char* as byte array and std::byte*"""
 
-        import array, cppyy, ctypes
+        import array
+        import cppyy
+        import ctypes
 
         buf = b'123456789'
         total = 0
@@ -1336,7 +1340,8 @@ class TestDATATYPES:
     def test27_callable_passing(self):
         """Passing callables through function pointers"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         fdd = cppyy.gbl.call_double_double
         fii = cppyy.gbl.call_int_int
@@ -1409,7 +1414,8 @@ class TestDATATYPES:
     def test28_callable_through_function_passing(self):
         """Passing callables through std::function"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         fdd = cppyy.gbl.call_double_double_sf
         fii = cppyy.gbl.call_int_int_sf
@@ -1482,7 +1488,8 @@ class TestDATATYPES:
     def test29_std_function_life_lines(self):
         """Life lines to std::function data members"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         cppyy.cppdef("""\
         namespace BoundMethod2StdFunction {
@@ -1519,7 +1526,8 @@ class TestDATATYPES:
     def test30_multi_dim_arrays_of_builtins(test):
         """Multi-dim arrays of builtins"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         cppyy.cppdef("""
         template<class T, int nlayers>
@@ -1794,11 +1802,11 @@ class TestDATATYPES:
             return true;
         } }""")
 
-        ns = cppyy.gbl.Pointer2D;
+        ns = cppyy.gbl.Pointer2D
 
         N, M = 2, 3
         m = ns.create_matrix(N, M)
-        g = ns.g_matrix;
+        g = ns.g_matrix
 
         for i in range(N):
             for j in range(M):
@@ -1852,11 +1860,11 @@ class TestDATATYPES:
             return true;
         } }""")
 
-        ns = cppyy.gbl.StructPointer2D;
+        ns = cppyy.gbl.StructPointer2D
 
         N, M = 2, 3
         m = ns.create_matrix(N, M)
-        g = ns.g_matrix;
+        g = ns.g_matrix
 
         assert (m.x, m.y) == (13, 7)
         assert (g.x, g.y) == (13, 7)
@@ -2163,7 +2171,8 @@ class TestDATATYPES:
     def test44_buffer_memory_handling(self):
         """cppyy side handled memory of LL buffers"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
         try:
             import numpy as np
         except ImportError:

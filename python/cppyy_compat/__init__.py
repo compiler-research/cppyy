@@ -2,10 +2,11 @@
 """
 
 def pypy58_57_compat():
-    import imp, os
+    import imp
+    import os
 
   # first load and move the builtin cppyy module
-    if not 'cppyy' in sys.modules:
+    if 'cppyy' not in sys.modules:
         try:
             olddir = os.getcwd()
             from cppyy_backend import loader
@@ -43,7 +44,8 @@ def pypy58_57_compat():
 # for pypy5.9 we may need to move to the location of the backend, if '.' happens
 # to be in LD_LIBRARY_PATH, but not the full directory
 def py59_compat():
-    import os, cppyy_backend
+    import os
+    import cppyy_backend
     olddir = os.getcwd()
     c = cppyy_backend.loader.load_cpp_backend()
     os.chdir(os.path.dirname(c._name))

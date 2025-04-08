@@ -1,13 +1,13 @@
-import py, os, sys
+import os
+import sys
 from pytest import raises, skip, mark
-from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLING, IS_MAC_ARM, IS_MAC
 
 
 class TestREGRESSION:
     helpout = []
 
     def setup_class(cls):
-        import cppyy
 
         def stringpager(text, cls=cls):
             cls.helpout.append(text)
@@ -19,7 +19,8 @@ class TestREGRESSION:
     def test01_kdcraw(self):
         """Doc strings for KDcrawIface (used to crash)."""
 
-        import cppyy, pydoc
+        import cppyy
+        import pydoc
 
         # TODO: run a find for these paths
         qtpath = "/usr/include/qt5"
@@ -52,9 +53,10 @@ class TestREGRESSION:
         if ispypy:
             skip('hangs (??) in pypy')
 
-        import cppyy, pydoc
+        import cppyy
+        import pydoc
 
-        assert not '__abstractmethods__' in dir(cppyy.gbl.cling.runtime.gCling)
+        assert '__abstractmethods__' not in dir(cppyy.gbl.cling.runtime.gCling)
         assert '__class__' in dir(cppyy.gbl.cling.runtime.gCling)
 
         self.__class__.helpout = []
@@ -66,12 +68,12 @@ class TestREGRESSION:
 
         cppyy.cppdef("namespace cppyy_regression_test { void iii() {}; }")
 
-        assert not 'iii' in cppyy.gbl.cppyy_regression_test.__dict__
-        assert not '__abstractmethods__' in dir(cppyy.gbl.cppyy_regression_test)
+        assert 'iii' not in cppyy.gbl.cppyy_regression_test.__dict__
+        assert '__abstractmethods__' not in dir(cppyy.gbl.cppyy_regression_test)
         assert '__class__' in dir(cppyy.gbl.cppyy_regression_test)
         assert 'iii' in dir(cppyy.gbl.cppyy_regression_test)
 
-        assert not 'iii' in cppyy.gbl.cppyy_regression_test.__dict__
+        assert 'iii' not in cppyy.gbl.cppyy_regression_test.__dict__
         assert cppyy.gbl.cppyy_regression_test.iii
         assert 'iii' in cppyy.gbl.cppyy_regression_test.__dict__
 
@@ -84,7 +86,8 @@ class TestREGRESSION:
     def test03_pyfunc_doc(self):
         """Help on a generated pyfunc used to crash."""
 
-        import cppyy, pydoc, sys
+        import cppyy
+        import pydoc
         import sysconfig as sc
 
         cppyy.add_include_path(sc.get_config_var("INCLUDEPY"))
@@ -104,7 +107,8 @@ class TestREGRESSION:
     def test04_avx(self):
         """Test usability of AVX by default."""
 
-        import cppyy, subprocess
+        import cppyy
+        import subprocess
 
         has_avx = False
         try:
@@ -143,7 +147,7 @@ class TestREGRESSION:
         };""")
 
         a = cppyy.gbl.AllDefault[int](24)
-        a.m_t = 21;
+        a.m_t = 21
         assert a.do_stuff() == 24
 
     def test06_default_float_or_unsigned_argument(self):
@@ -174,7 +178,8 @@ class TestREGRESSION:
     def test07_class_refcounting(self):
         """The memory regulator would leave an additional refcount on classes"""
 
-        import cppyy, gc, sys
+        import cppyy
+        import gc
 
         x = cppyy.gbl.std.vector['float']
         old_refcnt = sys.getrefcount(x)
@@ -202,7 +207,7 @@ class TestREGRESSION:
 
         assert PyABC.S2.S1_coll
         assert 'S1_coll' in dir(PyABC.S2)
-        assert not 'vector<const PyABC::S1*>' in dir(PyABC.S2)
+        assert 'vector<const PyABC::S1*>' not in dir(PyABC.S2)
         assert PyABC.S2.S1_coll is cppyy.gbl.std.vector('const PyABC::S1*')
 
     @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
@@ -496,7 +501,6 @@ class TestREGRESSION:
 
         import cppyy
 
-        import cppyy
 
         s = cppyy.gbl.std.string("text")
         d = {}
@@ -590,7 +594,8 @@ class TestREGRESSION:
     def test23_copy_constructor(self):
         """Copy construct an object into an empty (NULL) proxy"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         cppyy.cppdef("""\
         namespace regression_test22 {
@@ -743,7 +748,8 @@ class TestREGRESSION:
     def test27_exception_by_value(self):
         """Proper memory management of exception return by value"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         cppyy.cppdef("""\
         namespace ExceptionByValue {
@@ -1040,7 +1046,8 @@ class TestREGRESSION:
     def test36_ctypes_sizeof(self):
         """cppyy.sizeof forwards to ctypes.sizeof where necessary"""
 
-        import cppyy, ctypes
+        import cppyy
+        import ctypes
 
         cppyy.cppdef("""\
         namespace test36_ctypes_sizeof {
@@ -1161,7 +1168,7 @@ class TestREGRESSION:
         }; }""")
 
         cppyy.gbl.VectorOfPointers
-        from cppyy.gbl.VectorOfPointers import Base1, Derived1, Owner
+        from cppyy.gbl.VectorOfPointers import Base1, Owner
 
         o = Owner()
 
@@ -1198,8 +1205,7 @@ class TestREGRESSION:
         std::vector<const Base3*> vec3 { &d3 };
         }""")
 
-        from cppyy.gbl import std
-        from cppyy.gbl.VectorOfPointers import Base2, Derived2, Base3, Derived3, vec2, vec3
+        from cppyy.gbl.VectorOfPointers import Base2, Derived2, Derived3, vec2, vec3
 
         assert len(vec2)     == 1
         assert type(vec2[0]) == Base2

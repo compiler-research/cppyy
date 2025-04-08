@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
-import py, os, sys
+import py
+import sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -416,7 +417,7 @@ class TestSTLVECTOR:
         assert cppyy.gbl.VecTestEnum
         for tp in ['VecTestEnum', cppyy.gbl.VecTestEnum]:
             ve = cppyy.gbl.std.vector[tp]()
-            ve.push_back(cppyy.gbl.EVal1);
+            ve.push_back(cppyy.gbl.EVal1)
             assert ve[0] == 1
             ve[0] = cppyy.gbl.EVal2
             assert ve[0] == 3
@@ -424,7 +425,7 @@ class TestSTLVECTOR:
         assert cppyy.gbl.VecTestEnumNS.VecTestEnum
         for tp in ['VecTestEnumNS::VecTestEnum', cppyy.gbl.VecTestEnumNS.VecTestEnum]:
             ve = cppyy.gbl.std.vector['VecTestEnumNS::VecTestEnum']()
-            ve.push_back(cppyy.gbl.VecTestEnumNS.EVal1);
+            ve.push_back(cppyy.gbl.VecTestEnumNS.EVal1)
             assert ve[0] == 5
             ve[0] = cppyy.gbl.VecTestEnumNS.EVal2
             assert ve[0] == 42
@@ -446,7 +447,6 @@ class TestSTLVECTOR:
     def test10_vector_std_distance(self):
         """Use of std::distance with vector"""
 
-        import cppyy
         from cppyy.gbl import std
 
         v = std.vector[int]([1, 2, 3])
@@ -1081,7 +1081,6 @@ class TestSTLLIST:
     def test02_empty_list_type(self):
         """Test behavior of empty list<int>"""
 
-        import cppyy
         from cppyy.gbl import std
 
         a = std.list(int)()
@@ -1234,7 +1233,8 @@ class TestSTLMAP:
     def test04_unsignedvalue_typemap_types(self):
         """Test assignability of maps with unsigned value types"""
 
-        import cppyy, math, sys
+        import cppyy
+        import math
         std = cppyy.gbl.std
 
         for mtype in (std.map, std.unordered_map):
@@ -1350,7 +1350,6 @@ class TestSTLITERATOR:
     def test01_builtin_vector_iterators(self):
         """Test iterator comparison with operator== reflected"""
 
-        import cppyy
         from cppyy.gbl import std
 
         v = std.vector(int)()
@@ -1513,7 +1512,6 @@ class TestSTLARRAY:
     def test01_array_of_basic_types(self):
         """Usage of std::array of basic types"""
 
-        import cppyy
         from cppyy.gbl import std
 
         a = std.array[int, 4]()
@@ -1526,7 +1524,6 @@ class TestSTLARRAY:
     def test02_array_of_pods(self):
         """Usage of std::array of PODs"""
 
-        import cppyy
         from cppyy import gbl
         from cppyy.gbl import std
 
@@ -1550,7 +1547,6 @@ class TestSTLARRAY:
     def test03_array_of_pointer_to_pods(self):
         """Usage of std::array of pointer to PODs"""
 
-        import cppyy
         from cppyy import gbl
         from cppyy.gbl import std
 
@@ -1624,7 +1620,8 @@ class TestSTLSTRING_VIEW:
     def test02_string_view_from_unicode(self):
         """Life-time management of converted unicode strings"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         # view on (converted) unicode
         text = cppyy.gbl.std.string_view('''\
@@ -1778,12 +1775,12 @@ class TestSTLSET:
         S = cppyy.gbl.std.set[int](range(2**20))
 
         assert 1337 in S
-        assert not (2**30 in S)
+        assert 2**30 not in S
 
       # not a true test, but this'll take a noticable amount of time (>1min) if
       # there is a regression somehow
         for i in range(100):
-            assert not (2**30 in S)
+            assert 2**30 not in S
 
 
 class TestSTLTUPLE:
@@ -1842,7 +1839,7 @@ class TestSTLTUPLE:
     def test03_tuple_iter(self):
         """Pack/unpack tuples"""
 
-        import cppyy, ctypes
+        import cppyy
         std = cppyy.gbl.std
 
         t = std.make_tuple(1, '2', 5.)
@@ -1857,7 +1854,8 @@ class TestSTLTUPLE:
     def test04_tuple_lifeline(self):
         """Tuple memory management"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
         std = cppyy.gbl.std
 
         cppyy.cppdef("""\
@@ -1989,7 +1987,8 @@ class TestSTLEXCEPTION:
     def test03_memory(self):
         """Memory handling of C++ c// helper for exception base class testing"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         MyError   = cppyy.gbl.MyError
         YourError = cppyy.gbl.YourError
@@ -2037,7 +2036,8 @@ class TestSTLEXCEPTION:
         if ispypy:
             skip('currently terminates')
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         gc.collect()
         assert cppyy.gbl.GetMyErrorCount() == 0

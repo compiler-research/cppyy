@@ -1,6 +1,7 @@
-import py, os, sys
+import py
+import sys
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLING
+from .support import setup_make, IS_MAC, IS_CLING
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("pythonizablesDict"))
@@ -201,7 +202,8 @@ class TestClassPYTHONIZATION:
     def test07_creates_flag(self):
         """Effect of creates flag on return type"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         pz = cppyy.gbl.pyzables
         Countable = pz.Countable

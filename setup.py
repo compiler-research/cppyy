@@ -1,5 +1,8 @@
-import codecs, glob, os, sys, re
-from setuptools import setup, find_packages, Extension
+import codecs
+import os
+import sys
+import re
+from setuptools import setup, find_packages
 from distutils import log
 
 from setuptools.command.install import install as _install

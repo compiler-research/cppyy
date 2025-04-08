@@ -1,6 +1,6 @@
-import py, os, sys
+import os
 from pytest import mark, raises, skip
-from .support import setup_make, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM
+from .support import IS_MAC_X86, IS_MAC_ARM
 
 noboost = False
 if not (os.path.exists(os.path.join(os.path.sep, 'usr', 'include', 'boost')) or \

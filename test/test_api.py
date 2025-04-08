@@ -1,5 +1,4 @@
-import py, os, sys
-from pytest import raises, skip, mark
+from pytest import skip, mark
 from .support import ispypy, IS_MAC, IS_LINUX_ARM
 
 
@@ -188,7 +187,7 @@ class TestAPI:
         a4 = cppyy.gbl.CreateAPICheck4()
         assert a4
         assert type(a4) == cppyy.gbl.APICheck4
-        assert a4.wasExecutorCalled();
+        assert a4.wasExecutorCalled()
         del a4
 
         cppyy.gbl.unregister_a4()
@@ -196,4 +195,4 @@ class TestAPI:
         a4 = cppyy.gbl.CreateAPICheck4b()
         assert a4
         assert type(a4) == cppyy.gbl.APICheck4
-        assert not a4.wasExecutorCalled();
+        assert not a4.wasExecutorCalled()

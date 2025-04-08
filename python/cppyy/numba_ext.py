@@ -5,7 +5,6 @@ import cppyy
 import cppyy.types as cpp_types
 import cppyy.reflex as cpp_refl
 
-import numba
 import numba.extending as nb_ext
 import numba.core.cgutils as nb_cgu
 import numba.core.datamodel as nb_dm

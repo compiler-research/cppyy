@@ -1,6 +1,6 @@
-import py, os
+import py
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -806,7 +806,8 @@ class TestTEMPLATES:
     def test29_function_ptr_as_template_arg(self):
         """Function pointers as template arguments"""
 
-        import cppyy, sys
+        import cppyy
+        import sys
 
         # different templates used to prevent memoization caches resolving calls
         cppyy.cppdef("""\

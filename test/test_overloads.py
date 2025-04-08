@@ -1,4 +1,4 @@
-import py, os, sys
+import py
 from pytest import raises, skip, mark
 from .support import setup_make, ispypy, IS_WINDOWS, IS_MAC, IS_MAC_ARM
 
@@ -135,7 +135,8 @@ class TestOVERLOADS:
     def test07_mean_overloads(self):
         """Adapted test for array overloading"""
 
-        import cppyy, array
+        import cppyy
+        import array
         cmean = cppyy.gbl.calc_mean
 
         numbers = [8, 2, 4, 2, 4, 2, 4, 4, 1, 5, 6, 3, 7]
@@ -173,7 +174,7 @@ class TestOVERLOADS:
 
         cpp = cppyy.gbl
 
-        cppyy.cppdef("namespace BoolInt1 { int  fff(int i)  { return i; } }");
+        cppyy.cppdef("namespace BoolInt1 { int  fff(int i)  { return i; } }")
         cppyy.cppdef("namespace BoolInt1 { bool fff(bool i) { return i; } }")
 
         assert type(cpp.BoolInt1.fff(0)) == int
@@ -183,7 +184,7 @@ class TestOVERLOADS:
         assert type(cpp.BoolInt1.fff(True))  == bool
         assert type(cpp.BoolInt1.fff(False)) == bool
 
-        cppyy.cppdef("namespace BoolInt2 { int  fff(int i)  { return i; } }");
+        cppyy.cppdef("namespace BoolInt2 { int  fff(int i)  { return i; } }")
         cppyy.cppdef("namespace BoolInt2 { bool fff(bool i) { return i; } }")
 
         assert type(cpp.BoolInt2.fff(True))  == bool
@@ -193,7 +194,7 @@ class TestOVERLOADS:
         assert type(cpp.BoolInt2.fff(1)) == int
         assert type(cpp.BoolInt2.fff(2)) == int
 
-        cppyy.cppdef("namespace BoolInt3 { int  fff(int i)  { return i; } }");
+        cppyy.cppdef("namespace BoolInt3 { int  fff(int i)  { return i; } }")
 
         assert type(cpp.BoolInt3.fff(True))  == int
         assert type(cpp.BoolInt3.fff(False)) == int

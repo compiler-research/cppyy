@@ -1,6 +1,6 @@
-import py, os, sys
+import py
 from pytest import raises, mark
-from .support import setup_make, IS_LINUX, IS_CLANG_REPL, IS_CLING, IS_MAC
+from .support import setup_make, IS_LINUX, IS_CLING, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("conversionsDict"))
@@ -42,7 +42,8 @@ class TestCONVERSIONS:
     def test02_memory_handling_of_temporaries(self):
         """Verify that memory of temporaries is properly cleaned up"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
         CNS, CC = cppyy.gbl.CNS, cppyy.gbl.CNS.Counter
 
         assert CC.s_count == 0
@@ -63,7 +64,8 @@ class TestCONVERSIONS:
     def test03_error_handling(self):
         """Verify error handling"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
         CNS, CC = cppyy.gbl.CNS, cppyy.gbl.CNS.Counter
 
         N = 13

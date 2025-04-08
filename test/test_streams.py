@@ -1,6 +1,6 @@
-import py, os, sys
-from pytest import raises, mark
-from .support import setup_make, IS_MAC, IS_CLANG_REPL
+import py
+from pytest import mark
+from .support import setup_make, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("std_streamsDict"))
@@ -30,7 +30,7 @@ class TestSTDStreams:
 
         import cppyy
 
-        assert not (cppyy.gbl.std.cout is None)
+        assert cppyy.gbl.std.cout is not None
 
     @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test03_consistent_naming_if_char_traits(self):
@@ -44,7 +44,7 @@ class TestSTDStreams:
             o << "TEST STRING";
         } }""")
 
-        s = cppyy.gbl.std.ostringstream();
+        s = cppyy.gbl.std.ostringstream()
       # base class used to fail to match
         cppyy.gbl.stringstream_base.pass_through_base(s)
         assert s.str() == "TEST STRING"

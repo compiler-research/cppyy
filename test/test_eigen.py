@@ -1,6 +1,6 @@
-import py, os, sys
-from pytest import mark, raises
-from .support import setup_make, IS_CLANG_REPL, IS_CLING, IS_MAC_X86
+import os
+from pytest import mark
+from .support import IS_CLING, IS_MAC_X86
 
 inc_paths = [os.path.join(os.path.sep, 'usr', 'include'),
              os.path.join(os.path.sep, 'usr', 'local', 'include')]
@@ -15,7 +15,8 @@ for p in inc_paths:
 @mark.skipif(eigen_path is None, reason="Eigen not found")
 class TestEIGEN:
     def setup_class(cls):
-        import cppyy, warnings
+        import cppyy
+        import warnings
 
         cppyy.add_include_path(eigen_path)
         with warnings.catch_warnings():
@@ -118,7 +119,7 @@ class TestEIGEN:
         m = (m + MatrixXd.Constant(3, 3, 1.2)) * 50
 
         v = VectorXd(3)
-        (v << 1).__comma__(2).__comma__(3);
+        (v << 1).__comma__(2).__comma__(3)
 
         assert (m*v).size() == v.size()
 
@@ -151,7 +152,8 @@ class TestEIGEN:
 @mark.skipif(eigen_path is None, reason="Eigen not found")
 class TestEIGEN_REGRESSIOn:
     def setup_class(cls):
-        import cppyy, warnings
+        import cppyy
+        import warnings
 
         cppyy.add_include_path(eigen_path)
         with warnings.catch_warnings():
@@ -162,7 +164,6 @@ class TestEIGEN_REGRESSIOn:
     def test01_use_of_Map(self):
         """Use of Map (used to crash)"""
 
-        import cppyy
         from cppyy.gbl import Eigen
 
         assert Eigen.VectorXd

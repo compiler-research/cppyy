@@ -8,7 +8,9 @@ __all__ = ['data']
 
 
 def _backend_files():
-    import cppyy_backend, glob, os
+    import cppyy_backend
+    import glob
+    import os
 
     all_files = glob.glob(os.path.join(
         os.path.dirname(cppyy_backend.__file__), '*'))
@@ -19,7 +21,8 @@ def _backend_files():
     return [datafile(filename) for filename in all_files if os.path.isdir(filename)]
 
 def _api_files():
-    import cppyy, os
+    import cppyy
+    import os
 
     # FIXME: We should add an interface in InterOp.
     paths = str(cppyy.gbl.runtime.gCling.GetIncludePath()).split('-I')

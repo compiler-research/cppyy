@@ -1,7 +1,6 @@
 """ CPython-specific touch-ups
 """
 
-from . import _stdcpp_fix
 from cppyy_backend import loader
 
 __all__ = [
@@ -92,7 +91,7 @@ class Template(object):  # expected/used by ProxyWrappers.cxx in CPyCppyy
         self._instantiations[args] = pyclass
 
       # special case pythonization (builtin_map is not available from the C-API)
-        if 'push_back' in pyclass.__dict__ and not '__iadd__' in pyclass.__dict__:
+        if 'push_back' in pyclass.__dict__ and '__iadd__' not in pyclass.__dict__:
             if 'reserve' in pyclass.__dict__:
                 def iadd(self, ll):
                     self.reserve(len(ll))
@@ -196,7 +195,7 @@ def load_reflection_info(name):
     name = name + ".so"
     result = CppInterOp.LoadLibrary(name)
     if name.endswith("Dict.so"):
-        header = name[:-7] + ".h";
+        header = name[:-7] + ".h"
         CppInterOp.Declare('#include "' + header +'"')
 
     if result == False:

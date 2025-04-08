@@ -1,4 +1,5 @@
-import py, pytest, os, sys, math, warnings
+import sys
+import warnings
 from support import setup_make
 
 setup_make("functioncallsDict.so")
@@ -9,7 +10,6 @@ import cppyy
 cppyy.load_library("functioncalls")
 cppyy.load_library("functioncallsDict")
 
-import py_functioncalls
 
 all_configs = [('py', 'py_functioncalls'), ('cppyy', 'cppyy.gbl')]
 

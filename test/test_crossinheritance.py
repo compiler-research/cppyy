@@ -1,6 +1,7 @@
-import py, os, sys
+import py
+import os
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX
+from .support import setup_make, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -214,7 +215,6 @@ class TestCROSSINHERITANCE:
     def test07_templated_base(self):
         """Derive from a base class that is instantiated from a template"""
 
-        import cppyy
 
         from cppyy.gbl.CrossInheritance import TBase1, TDerived1, TBase1_I
 
@@ -299,7 +299,8 @@ class TestCROSSINHERITANCE:
     def test10_python_in_templates(self):
         """Usage of Python derived objects in std::vector"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         CB = cppyy.gbl.CrossInheritance.CountableBase
 
@@ -360,7 +361,7 @@ class TestCROSSINHERITANCE:
           return ptr->some_imp();
         } }""")
 
-        from cppyy.gbl import std, MakeSharedTest
+        from cppyy.gbl import std
         from cppyy.gbl.MakeSharedTest import Abstract, call_shared
 
         class PyDerived(Abstract):
@@ -383,7 +384,8 @@ class TestCROSSINHERITANCE:
     def test12a_counter_test(self):
         """Test countable base counting"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         std = cppyy.gbl.std
         CB  = cppyy.gbl.CrossInheritance.CountableBase
@@ -409,7 +411,8 @@ class TestCROSSINHERITANCE:
     def test12_python_shared_ptr_memory(self):
         """Usage of Python derived objects with std::shared_ptr"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         std = cppyy.gbl.std
         CB  = cppyy.gbl.CrossInheritance.CountableBase
@@ -436,7 +439,8 @@ class TestCROSSINHERITANCE:
     def test13_virtual_dtors_and_del(self):
         """Usage of virtual destructors and Python-side del."""
 
-        import cppyy, warnings
+        import cppyy
+        import warnings
 
         cppyy.cppdef("""namespace VirtualDtor {
         class MyClass1 {};    // no virtual dtor ...
@@ -489,7 +493,7 @@ class TestCROSSINHERITANCE:
 
         ns = cppyy.gbl.AccessProtected
 
-        assert not 'my_data' in ns.MyBase.__dict__
+        assert 'my_data' not in ns.MyBase.__dict__
         assert not hasattr(ns.MyBase(), 'my_data')
 
         class MyPyDerived(ns.MyBase):
@@ -1158,7 +1162,8 @@ class TestCROSSINHERITANCE:
     def test26_no_default_ctor(self):
         """Make sure no default ctor is created if not viable"""
 
-        import cppyy, warnings
+        import cppyy
+        import warnings
 
         cppyy.cppdef("""namespace no_default_ctor {
         struct NoDefCtor1 {
@@ -1405,7 +1410,8 @@ class TestCROSSINHERITANCE:
     def test31_object_rebind(self):
         """Usage of bind_object to cast with Python derived objects"""
 
-        import cppyy, gc
+        import cppyy
+        import gc
 
         ns = cppyy.gbl.CrossInheritance
         ns.build_component.__creates__ = True

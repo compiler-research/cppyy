@@ -1,5 +1,8 @@
 from __future__ import print_function
-import os, py, sys, subprocess
+import os
+import py
+import sys
+import subprocess
 
 currpath = py.path.local(__file__).dirpath()
 

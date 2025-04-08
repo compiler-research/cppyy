@@ -1,4 +1,9 @@
-import cppyy, gc, math, os, psutil, time
+import cppyy
+import gc
+import math
+import os
+import psutil
+import time
 
 NLARGE = 20000000
 

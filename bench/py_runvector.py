@@ -1,4 +1,5 @@
-import array, sys
+import array
+import sys
 
 N = 100000000 # 10^8
 

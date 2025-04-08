@@ -1,7 +1,6 @@
-import py, os, sys
-import math, time
+import math
+import time
 from pytest import mark, raises
-from .support import setup_make
 
 try:
     import numba
@@ -12,8 +11,7 @@ except ImportError:
 
 class TestREFLEX:
     def setup_class(cls):
-        import cppyy
-        import cppyy.reflex
+        pass
 
     def test01_instance_box_unbox(self):
         """Access to box/unbox methods"""
@@ -79,8 +77,7 @@ class TestREFLEX:
 @mark.skipif(has_numba == False, reason="numba not found")
 class TestNUMBA:
     def setup_class(cls):
-        import cppyy
-        import cppyy.numba_ext
+        pass
 
     def compare(self, go_slow, go_fast, N, *args):
         t0 = time.time()
@@ -293,8 +290,7 @@ class TestNUMBA:
 @mark.skipif(has_numba == False, reason="numba not found")
 class TestNUMBA_DOC:
     def setup_class(cls):
-        import cppyy
-        import cppyy.numba_ext
+        pass
 
     @mark.xfail
     def test01_templated_freefunction(self):

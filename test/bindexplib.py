@@ -1,13 +1,14 @@
 from __future__ import print_function
 
-import os, sys, subprocess
+import sys
+import subprocess
 
 target = sys.argv[1]
 output = sys.argv[2]
 
 def isokay(name):
  # filter standard symbols
-    return name[0] != '_' and not name in {'memcpy', 'memmove', 'memset'}
+    return name[0] != '_' and name not in {'memcpy', 'memmove', 'memset'}
 
 popen = subprocess.Popen(['dumpbin', '/SYMBOLS', target+'.obj'],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

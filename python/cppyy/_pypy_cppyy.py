@@ -1,9 +1,9 @@
 """ PyPy-specific touch-ups
 """
 
-from . import _stdcpp_fix
 
-import os, sys
+import os
+import sys
 from cppyy_backend import loader
 
 __all__ = [
@@ -46,7 +46,6 @@ del fixup_legacy
 
 
 #- exports -------------------------------------------------------------------
-import sys
 _thismodule = sys.modules[__name__]
 for name in __all__:
     try:
