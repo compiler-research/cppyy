@@ -22,7 +22,7 @@ class TestEIGEN:
             warnings.simplefilter('ignore')
             cppyy.include('Eigen/Dense')
 
-    @mark.xfail
+    @mark.xfail(run=IS_CLANG_REPL, reason="Crashes with Cling")
     def test01_simple_matrix_and_vector(self):
         """Basic creation of an Eigen::Matrix and Eigen::Vector"""
 
@@ -48,7 +48,7 @@ class TestEIGEN:
         v[1] = v(0) - 1
         assert v(1) == 3 and v[1] == 3
 
-    @mark.xfail
+    @mark.xfail(run=IS_CLANG_REPL, reason="Crashes with Cling")
     def test02_comma_insertion(self):
         """Comma insertion overload"""
 
@@ -133,7 +133,7 @@ class TestEIGEN:
 
         assert (m*v).size() == v.size()
 
-    @mark.xfail
+    @mark.xfail(run=IS_CLANG_REPL, reason="Crashes with Cling")
     def test04_resizing_through_assignment(self):
         """Resize on assignment"""
 

@@ -62,7 +62,6 @@ class TestTEMPLATES:
         assert 'get_size<MyTMCTypedef_t>' in dir(cppyy.gbl.MyTemplatedMethodClass)
         assert m.get_size['MyTemplatedMethodClass']() == m.get_self_size()
 
-    @mark.xfail
     def test02_non_type_template_args(self):
         """Use of non-types as template arguments"""
 
@@ -73,7 +72,7 @@ class TestTEMPLATES:
         assert cppyy.gbl.nt_templ_args[1]()   == 1
         assert cppyy.gbl.nt_templ_args[256]() == 256
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails on OSX-Cling")
     def test03_templated_function(self):
         """Templated global and static functions lookup and calls"""
 
@@ -914,7 +913,7 @@ class TestTEMPLATES:
 
         ns.Templated()       # used to crash
 
-    @mark.xfail
+    @mark.xfail(run=IS_CLANG_REPL, reason="Crashed with Cling")
     def test31_ltlt_in_template_name(self):
         """Verify lookup of template names with << in the name"""
 

@@ -1793,7 +1793,7 @@ class TestSTLTUPLE:
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test01_tuple_creation_and_access(self):
         """Create tuples and access their elements"""
 
@@ -1838,7 +1838,7 @@ class TestSTLTUPLE:
         t = std.make_tuple("aap", 42, 5.)
         assert std.tuple_size(type(t)).value == 3
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test03_tuple_iter(self):
         """Pack/unpack tuples"""
 
@@ -1853,7 +1853,7 @@ class TestSTLTUPLE:
         assert b == '2'
         assert c == 5.
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails on OSX-Cling")
     def test04_tuple_lifeline(self):
         """Tuple memory management"""
 
