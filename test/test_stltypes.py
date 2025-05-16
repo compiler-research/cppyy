@@ -565,7 +565,7 @@ class TestSTLVECTOR:
             i += 1
         assert i == len(result)
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING))
+    @mark.xfail(run=not(IS_MAC and IS_CLING), condition=(IS_MAC and IS_CLING) or IS_MAC_X86, reason="Fails on OSX-Cling and OSX-X86 with clang-repl")
     def test14_vector_of_vector_of_(self):
         """Nested vectors"""
 
@@ -1114,7 +1114,7 @@ class TestSTLLIST:
 
         icls.__eq__ = oldeq
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX-Cling")
     def test04_iter_of_iter(self):
         """Iteration using iter()"""
 
@@ -1128,7 +1128,7 @@ class TestSTLLIST:
             assert a == i
             i += 1
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING))
+    @mark.xfail(run=False, condition=IS_MAC and IS_CLING, reason="Crashes on OSX-Cling")
     def test05_list_cpp17_style(self):
         """C++17 style initialization of std::list"""
 
@@ -1677,7 +1677,7 @@ class TestSTLDEQUE:
         assert x
         del x
 
-    @mark.xfail(run = not(IS_MAC and IS_CLING), reason="Crashes on OS X Cling")
+    @mark.xfail(run=False, condition=IS_MAC and IS_CLING, reason="Crashes on OS X Cling")
     def test02_deque_cpp17_style(self):
         """C++17 style initialization of std::deque"""
 
@@ -1737,7 +1737,7 @@ class TestSTLSET:
         assert s.rbegin() != s.rend()
         assert s.rbegin().__preinc__() == s.rend()
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX-Cling")
     def test03_initialize_from_set(self):
         """Test std::set initializion from Python set"""
 
@@ -1757,7 +1757,7 @@ class TestSTLSET:
         with raises(TypeError):
             s = cppyy.gbl.std.set[int](set(["aap", "noot", "mies"]))
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING))
+    @mark.xfail(run=False, condition=IS_MAC and IS_CLING, reason="Crashes with OSX-Cling")
     def test04_set_cpp17_style(self):
         """C++17 style initialization of std::set"""
 
@@ -1767,7 +1767,7 @@ class TestSTLSET:
         v = cppyy.gbl.std.set(l)
         assert list(l) == l
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX-Cling")
     def test05_contains(self):
         """Contains check should not iterate and compare"""
 

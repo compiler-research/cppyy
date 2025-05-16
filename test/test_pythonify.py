@@ -397,7 +397,7 @@ class TestPYTHONIFY:
 
         assert cppyy.gbl.Lifeline.gime(42).get()[0].get()[0].get()[0].get()[0].x == 42
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX-Cling")
     def test18_keywords(self):
         """Use of keyword arguments"""
 

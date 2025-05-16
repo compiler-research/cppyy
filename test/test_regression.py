@@ -538,7 +538,7 @@ class TestREGRESSION:
         l = [e for e in cppyy.gbl.get_some_temporary_vector()]
         assert l == ['x', 'y', 'z']
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test22_initializer_list_and_temporary(self):
         """Conversion rules when selecting intializer_list v.s. temporary"""
 
@@ -1213,7 +1213,7 @@ class TestREGRESSION:
         assert type(list(vec2)[0]) == Base2
         assert len([d for d in vec3 if isinstance(d, Derived3)]) == 1
 
-    @mark.xfail
+    @mark.xfail(run=False, condition=not IS_CLANG_REPL, reason="Crashes with Cling")
     def test40_explicit_initializer_list(self):
         """Construct and pass an explicit initializer list"""
 

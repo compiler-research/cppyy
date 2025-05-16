@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX
+from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX, IS_CLING
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -1560,7 +1560,7 @@ class TestCROSSINHERITANCE:
 
         assert p.func(d) == 42 + 2 * d.value
 
-    @mark.xfail
+    @mark.xfail(condition=IS_CLING, reason="Fails on Cling")
     def test33_direct_base_methods(self):
         """Call base class methods directly"""
 
