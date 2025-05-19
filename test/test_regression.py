@@ -1005,7 +1005,7 @@ class TestREGRESSION:
         pt_type = cppyy.gbl.property_types.ReferenceWavefunction['double']
         assert cppyy.gbl.std.get[0](cppyy.gbl.property_types.run_as[pt_type]()) ==  20.
 
-    @mark.xfail(condition=IS_CLANG_REPL, run=False, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(run=False, reason="Crashes on ClangRepl with 'toString not implemented', and on Cling")
     def test34_print_empty_collection(self):
         """Print empty collection through Cling"""
 

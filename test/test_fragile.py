@@ -532,7 +532,11 @@ class TestFRAGILE:
         err = get_errmsg(cppdef_exc)
         assert "FailedtoparsethegivenC++code" in err
         assert "error:" in err
-        assert "expectedunqualified-id" in err
+
+        # On older cling versions this error used to contain "expectedunqualified-id"
+        # With Cling based on LLVM 18 and Clang-REPL based on LLVM 20, this is consistently
+        # an invalid digit error
+        assert "invaliddigit" in err
         assert "1aap=42;" in err
 
     def test22_cppexec(self):
@@ -572,7 +576,7 @@ class TestFRAGILE:
 
         cppyy.include('sanitizer/asan_interface.h')
 
-    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
+    @mark.xfail
     def test25_cppdef_error_reporting(self):
         """Check error reporting of cppyy.cppdef"""
 

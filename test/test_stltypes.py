@@ -1620,7 +1620,7 @@ class TestSTLSTRING_VIEW:
         assert countit(v)    == 4
         assert countit_cr(v) == 4
 
-    @mark.xfail(run=not IS_CLANG_DEBUG, reason="Crashes with ClangRepl with 'toString not implemented'")
+    @mark.xfail(run=not (IS_CLANG_DEBUG or IS_CLING), reason="Crashes on ClangRepl with 'toString not implemented', and on Cling")
     def test02_string_view_from_unicode(self):
         """Life-time management of converted unicode strings"""
 

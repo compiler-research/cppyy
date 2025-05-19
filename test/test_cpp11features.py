@@ -435,7 +435,6 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail(condition=IS_CLING, reason = "Fails on Cling")
     def test15_unique_ptr_template_deduction(self):
         """Argument type deduction with std::unique_ptr"""
 
@@ -455,7 +454,7 @@ class TestCPP11FEATURES:
         with raises(ValueError):  # not an RValue
             cppyy.gbl.UniqueTempl.returnptr[int](uptr_in)
 
-    @mark.xfail
+    @mark.xfail(run = not IS_CLING, reason = "Does not crash on Cling, but the failure causes subsequent tests to fail")
     def test16_unique_ptr_moves(self):
         """std::unique_ptr requires moves"""
 

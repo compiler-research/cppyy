@@ -496,7 +496,7 @@ class TestPYTHONIFY:
         with raises(TypeError):
             c.callme(a=1, b=2)
 
-    @mark.xfail(condition=IS_MAC or IS_CLING, reason="Fails on Cling and OSX")
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test19_keywords_and_defaults(self):
         """Use of keyword arguments mixed with defaults"""
 
