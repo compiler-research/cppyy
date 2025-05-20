@@ -46,7 +46,7 @@ def argc():
 # import low-level python converters
 for _name in ['addressof', 'as_cobject', 'as_capsule', 'as_ctypes']:
     try:
-        exec('%s = cppyy._backend.%s' % (_name, _name))
+        exec('{} = cppyy._backend.{}'.format(_name, _name))
         __all__.append(_name)
     except AttributeError:
         pass
@@ -81,7 +81,7 @@ cppyy.cppdef("""namespace __cppyy_internal {
 
 
 # helper for sizing arrays
-class ArraySizer(object):
+class ArraySizer:
     def __init__(self, func):
         self.func = func
     def __getitem__(self, t):

@@ -1,4 +1,3 @@
-from __future__ import print_function
 import os, py, sys, subprocess
 
 currpath = py.path.local(__file__).dirpath()
@@ -13,7 +12,7 @@ def setup_make(targetname):
                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     stdout, _ = popen.communicate()
     if popen.returncode:
-        raise OSError("'make' failed:\n%s" % (stdout,))
+        raise OSError("'make' failed:\n{}".format(stdout))
 
 if sys.hexversion >= 0x3000000:
     pylong = int

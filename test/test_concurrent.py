@@ -281,7 +281,7 @@ class TestCONCURRENT:
 
         cppyy.gbl.CPPOverloadReuse.Simulation2.do_something.__release_gil__ = True
 
-        class State(object):
+        class State:
             lock = threading.Lock()
             c1, c2, c3 = 0, 0, 0
 

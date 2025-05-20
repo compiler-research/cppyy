@@ -112,7 +112,7 @@ class CppFunctionNumbaType(nb_types.Callable):
     requires_gil = False
 
     def __init__(self, func, is_method=False):
-        super(CppFunctionNumbaType, self).__init__('CppFunction(%s)' % str(func))
+        super().__init__('CppFunction(%s)' % str(func))
 
         self.sig = None
         self._func = func
@@ -195,7 +195,7 @@ class CppFunctionModel(nb_dm.models.PrimitiveModel):
       # the function pointer of this overload can not be exactly typed, but
       # only the storage size is relevant, so simply use a void*
         be_type = ir.PointerType(dmm.lookup(nb_types.void).get_value_type())
-        super(CppFunctionModel, self).__init__(dmm, fe_type, be_type)
+        super().__init__(dmm, fe_type, be_type)
 
 @nb_iutils.lower_constant(CppFunctionNumbaType)
 def constant_function_pointer(context, builder, ty, pyval):
@@ -207,7 +207,7 @@ def constant_function_pointer(context, builder, ty, pyval):
 #
 # C++ method / data member -> Numba
 #
-class CppDataMemberInfo(object):
+class CppDataMemberInfo:
     __slots__ = ['f_name', 'f_offset', 'f_nbtype', 'f_irtype']
 
     def __init__(self, name, offset, cpptype):
@@ -222,7 +222,7 @@ class CppDataMemberInfo(object):
 #
 class CppClassNumbaType(CppFunctionNumbaType):
     def __init__(self, scope, qualifier):
-        super(CppClassNumbaType, self).__init__(scope.__init__)
+        super().__init__(scope.__init__)
         self.name = 'CppClass(%s)' % scope.__cpp_name__    # overrides value in Type
         self._scope     = scope
         self._qualifier = qualifier
@@ -234,7 +234,7 @@ class CppClassNumbaType(CppFunctionNumbaType):
         return self._qualifier
 
     def get_call_type(self, context, args, kwds):
-        sig = super(CppClassNumbaType, self).get_call_type(context, args, kwds)
+        sig = super().get_call_type(context, args, kwds)
         self.sig = sig
         return sig
 
@@ -428,7 +428,7 @@ def typeof_scope(val, c, q = Qualified.default):
 
               # TODO: this doesn't work for real PODs, b/c those are unpacked into their elements and
               # passed through registers
-                return ir.PointerType(super(ImplClassModel, self).get_value_type())
+                return ir.PointerType(super().get_value_type())
 
           # argument: representation used for function argument. Needs to be builtin type,
           #           but unlike other Numba composites, C++ proxies are not flattened.

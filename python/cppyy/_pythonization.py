@@ -59,20 +59,20 @@ def set_ownership_policy(match_class, match_method, python_owns_result):
 # NB: Ideally, we'd use the version commented out below, but for now, we
 #     make do with the hackier version here.
 def rename_attribute(match_class, orig_attribute, new_attribute, keep_orig=False):
-    class attribute_pythonizor(object):
-        class getter(object):
+    class attribute_pythonizor:
+        class getter:
             def __init__(self, attr):
                 self.attr = attr
             def __call__(self, obj):
                 return getattr(obj, self.attr)
 
-        class setter(object):
+        class setter:
             def __init__(self, attr):
                 self.attr = attr
             def __call__(self, obj, value):
                 return setattr(obj, self.attr, value)
 
-        class deleter(object):
+        class deleter:
             def __init__(self, attr):
                 self.attr = attr
             def __call__(self, obj):
@@ -123,7 +123,7 @@ def rename_attribute(match_class, orig_attribute, new_attribute, keep_orig=False
 # Shared with PyPy:
 
 def add_overload(match_class, match_method, overload):
-    class method_pythonizor(object):
+    class method_pythonizor:
         def __init__(self, match_class, match_method, overload):
             import re
             self.match_class = re.compile(match_class)
@@ -146,7 +146,7 @@ def add_overload(match_class, match_method, overload):
 
 
 def compose_method(match_class, match_method, g):
-    class composition_pythonizor(object):
+    class composition_pythonizor:
         def __init__(self, match_class, match_method, g):
             import re
             self.match_class = re.compile(match_class)
@@ -174,7 +174,7 @@ def compose_method(match_class, match_method, g):
 
 
 def set_method_property(match_class, match_method, prop, value):
-    class method_pythonizor(object):
+    class method_pythonizor:
         def __init__(self, match_class, match_method, prop, value):
             import re
             self.match_class = re.compile(match_class)
@@ -196,7 +196,7 @@ def set_method_property(match_class, match_method, prop, value):
 
 
 def make_property(match_class, match_get, match_set=None, match_del=None, prop_name=None):
-    class property_pythonizor(object):
+    class property_pythonizor:
         def __init__(self, match_class, match_get, match_set, match_del, prop_name):
             import re
             self.match_class = re.compile(match_class)
@@ -230,7 +230,7 @@ def make_property(match_class, match_get, match_set=None, match_del=None, prop_n
             self.prop_name = prop_name
 
         def make_get_del_proxy(self, getter):
-            class proxy(object):
+            class proxy:
                 def __init__(self, getter):
                     self.getter = getter
 
@@ -239,7 +239,7 @@ def make_property(match_class, match_get, match_set=None, match_del=None, prop_n
             return proxy(getter)
 
         def make_set_proxy(self, setter):
-            class proxy(object):
+            class proxy:
                 def __init__(self, setter):
                     self.setter = setter
 

@@ -8,7 +8,7 @@ except ImportError:
 
 
 #- fake namespace for interactive lazy lookups -------------------------------
-class InteractiveLazy(object):
+class InteractiveLazy:
     def __init__(self, hook_okay):
         self._hook_okay = hook_okay
 

@@ -15,7 +15,7 @@ def pypy58_57_compat():
             os.chdir(os.path.dirname(c._name))
             imp.init_builtin('cppyy')
         except ImportError:
-            raise EnvironmentError('"%s" missing in LD_LIBRARY_PATH' %\
+            raise OSError('"%s" missing in LD_LIBRARY_PATH' %\
                                    os.path.dirname(c._name))
         finally:
             os.chdir(olddir)
@@ -52,7 +52,7 @@ def py59_compat():
         actual_name = __name__; __name__ = ''
         import _cppyy as _backend
     except ImportError:
-        raise EnvironmentError('"%s" missing in LD_LIBRARY_PATH' % os.path.dirname(c._name))
+        raise OSError('"%s" missing in LD_LIBRARY_PATH' % os.path.dirname(c._name))
     finally:
         __name__ = actual_name
         os.chdir(olddir)

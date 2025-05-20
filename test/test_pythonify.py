@@ -64,7 +64,7 @@ class TestPYTHONIFY:
 
         res = example01_class.staticStrcpy("aap")     # TODO: this leaks
         assert res == "aap"
-        res = example01_class.staticStrcpy(u"aap")    # TODO: id.
+        res = example01_class.staticStrcpy("aap")    # TODO: id.
         assert res == "aap"
         raises(TypeError, example01_class.staticStrcpy, 1.)    # TODO: id.
 

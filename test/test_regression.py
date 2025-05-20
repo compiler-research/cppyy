@@ -108,7 +108,7 @@ class TestREGRESSION:
 
         has_avx = False
         try:
-            f = open('/proc/cpuinfo', 'r')
+            f = open('/proc/cpuinfo')
             for line in f.readlines():
                 if 'avx' in line:
                     has_avx = True
@@ -1113,13 +1113,13 @@ class TestREGRESSION:
         ns = cppyy.gbl.Char16Fixed
 
         ai = ns.AxisInformation()
-        for s in [u'hello', u'hellow']:
+        for s in ['hello', 'hellow']:
             ai.name = s
             len(ai.name) == 6
             assert ai.name[:len(s)] == s
 
         with warnings.catch_warnings(record=True) as w:
-            ai.name = u'hellowd'
+            ai.name = 'hellowd'
             assert 'too long' in str(w[-1].message)
 
         # vector of objects
@@ -1127,21 +1127,21 @@ class TestREGRESSION:
         ns.fillem(va.data(), N)
         for ai in va:
             assert len(ai.name) == 6
-            assert ai.name[:5] == u'hello'
+            assert ai.name[:5] == 'hello'
 
         # array of objects
         aa = cppyy.gbl.std.array[ns.AxisInformation, N]()
         ns.fillem(aa.data(), N)
         for ai in aa:
             assert len(ai.name) == 6
-            assert ai.name[:5] == u'hello'
+            assert ai.name[:5] == 'hello'
 
         # low-level array of objects
         aa = cppyy.ll.array_new[ns.AxisInformation](N)
         ns.fillem(aa, N)
         for ai in aa:
             assert len(ai.name) == 6
-            assert ai.name[:5] == u'hello'
+            assert ai.name[:5] == 'hello'
         cppyy.ll.array_delete(aa)
 
     @mark.xfail(run=False, reason="Crashes with Clang-Repl with assert in CodeGen::CodeGenFunction::EmitAggExpr")
