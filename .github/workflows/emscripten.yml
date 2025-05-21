@@ -281,6 +281,7 @@ jobs:
           git clone https://github.com/root-project/cling.git
           cd ./cling 
           git checkout tags/v${{ matrix.cling-version }}
+          git apply -v ${{ github.workspace }}/CppInterOp/patches/llvm/cling1.2-LookupHelper.patch
           cd ..
           git clone --depth=1 -b cling-llvm${{ matrix.clang-runtime }} https://github.com/root-project/llvm-project.git
         else # repl
@@ -365,6 +366,7 @@ jobs:
           git clone https://github.com/root-project/cling.git
           cd ./cling 
           git checkout tags/v${{ matrix.cling-version }}
+          git apply -v ${{ github.workspace }}/CppInterOp/patches/llvm/cling1.2-LookupHelper.patch
           cd ..
           git clone --depth=1 -b cling-llvm${{ matrix.clang-runtime }} https://github.com/root-project/llvm-project.git
           $env:PWD_DIR= $PWD.Path
@@ -397,9 +399,8 @@ jobs:
                 -DLLVM_ENABLE_LIBXML2=OFF                          `
                 ..\llvm
           cmake --build . --config Release --target clang --parallel ${{ env.ncpus }}
-          cmake --build . --config Release --target cling --parallel ${{ env.ncpus }}
-          # Now build gtest.a and gtest_main for CppInterOp to run its tests.
-          cmake --build . --config Release --target gtest_main --parallel ${{ env.ncpus }}
+          cmake --build . --config Release --target LLVMOrcDebugging --parallel ${{ env.ncpus }}
+          cmake --build . --config Release --target clingInterpreter --parallel ${{ env.ncpus }}
         }
         else
         {
