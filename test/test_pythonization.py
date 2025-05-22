@@ -126,7 +126,7 @@ class TestClassPYTHONIZATION:
         assert type(result) == cppyy.gbl.pyzables.MyDerived
 
 
-    @mark.xfail
+    @mark.xfail(condition=IS_CLING, reason="Fails on Cling")
     def test04_transparency(self):
         """Transparent use of smart pointers"""
 
@@ -141,7 +141,7 @@ class TestClassPYTHONIZATION:
         assert mine.__smartptr__().get().m_check == 0xcdcdcdcd
         assert mine.say_hi() == "Hi!"
 
-    @mark.xfail
+    @mark.xfail(condition=IS_CLING, reason="Fails on Cling")
     def test05_converters(self):
         """Smart pointer argument passing"""
 
@@ -167,7 +167,7 @@ class TestClassPYTHONIZATION:
         # cppyy.gbl.mine = mine
         pz.renew_mine()
 
-    @mark.xfail
+    @mark.xfail(condition=IS_CLING, reason="Fails on Cling")
     def test06_executors(self):
         """Smart pointer return types"""
 

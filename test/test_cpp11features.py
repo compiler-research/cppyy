@@ -103,7 +103,6 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail
     def test04_shared_ptr_passing(self):
         """Ability to pass shared_ptr<Derived> through shared_ptr<Base>"""
 
@@ -143,7 +142,6 @@ class TestCPP11FEATURES:
         gc.collect()
         assert TestSmartPtr.s_counter == 0
 
-    @mark.xfail
     def test05_unique_ptr_passing(self):
         """Ability to pass unique_ptr<Derived> through unique_ptr<Base>"""
 
@@ -357,7 +355,6 @@ class TestCPP11FEATURES:
             c = cppyy.gbl.std.nullopt
             assert cppyy.gbl.callopt(c)
 
-    @mark.xfail
     def test11_chrono(self):
         """Use of chrono and overloaded operator+"""
 

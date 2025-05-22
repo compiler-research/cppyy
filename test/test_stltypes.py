@@ -531,7 +531,7 @@ class TestSTLVECTOR:
         for val in l:
             assert hasattr(val, '__lifeline')
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX-Cling")
     def test13_vector_smartptr_iteration(self):
         """Iteration over smart pointers"""
 
@@ -565,7 +565,7 @@ class TestSTLVECTOR:
             i += 1
         assert i == len(result)
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING), condition=(IS_MAC and IS_CLING) or IS_MAC_X86, reason="Fails on OSX-Cling and OSX-X86 with clang-repl")
+    @mark.xfail(run=not(IS_MAC and IS_CLING), condition=(IS_MAC and IS_CLING), reason="Fails on OSX-Cling")
     def test14_vector_of_vector_of_(self):
         """Nested vectors"""
 
