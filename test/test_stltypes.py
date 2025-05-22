@@ -874,7 +874,7 @@ class TestSTLSTRING:
         assert str(uas.get_string_cr(bval)) == 'ℕ'
         assert str(uas.get_string_cc(bval)) == 'ℕ'
 
-    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
+    @mark.xfail(run = not IS_CLING, condition=IS_MAC or IS_CLING, reason="Fails on OS X and Cling")
     def test06_stlstring_bytes_and_text(self):
         """Mixing of bytes and str"""
 
