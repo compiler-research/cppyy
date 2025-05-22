@@ -698,11 +698,17 @@ jobs:
     
         echo "Running valgrind on passing tests"
         CLANG_VERSION="${{ matrix.clang-runtime }}"
+
+        if [[ "${{ matrix.cling }}" == "On" ]]; then
+          CLANG_INTERPRETER="cling"
+        else
+          CLANG_INTERPRETER="clang"
+        fi
         
         if [[ "${{ matrix.os }}" == *"arm"* ]]; then
-          SUPPRESSION_FILE="../etc/clang${CLANG_VERSION}-valgrind_arm.supp"
+          SUPPRESSION_FILE="../etc/${CLANG_INTERPRETER}${CLANG_VERSION}-valgrind_arm.supp"
         else
-          SUPPRESSION_FILE="../etc/clang${CLANG_VERSION}-valgrind.supp"
+          SUPPRESSION_FILE="../etc/${CLANG_INTERPRETER}${CLANG_VERSION}-valgrind.supp"
         fi
 
         valgrind --show-error-list=yes --error-exitcode=1 --track-origins=yes --gen-suppressions=all --suppressions="${SUPPRESSION_FILE}" --suppressions=../etc/valgrind-cppyy-cling.supp python -m pytest -m "not xfail" -sv -ra --ignore=test_leakcheck.py

@@ -1,0 +1,6 @@
+{
+    Mismatched free() / delete / delete []
+    Memcheck:Free
+    fun:free
+    obj:*
+}
