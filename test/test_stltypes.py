@@ -1452,7 +1452,6 @@ class TestSTLITERATOR:
         assert next(it).value == 1
         assert next(it).value == 2
 
-    @mark.xfail
     def test04_stllike_confusing_name(self):
         """Having "iterator" in the container name used to fail"""
 
@@ -1599,7 +1598,7 @@ class TestSTLSTRING_VIEW:
         import cppyy
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test01_string_through_string_view(self):
         """Usage of std::string_view as formal argument"""
 

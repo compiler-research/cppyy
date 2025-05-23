@@ -103,6 +103,7 @@ class TestCPP11FEATURES:
             gc.collect()
             assert TestSmartPtr.s_counter == 0
 
+    @mark.xfail(run=False, reason="Crashes on Valgrind")
     def test04_shared_ptr_passing(self):
         """Ability to pass shared_ptr<Derived> through shared_ptr<Base>"""
 

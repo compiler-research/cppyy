@@ -49,7 +49,6 @@ class TestSTDStreams:
         cppyy.gbl.stringstream_base.pass_through_base(s)
         assert s.str() == "TEST STRING"
 
-    @mark.xfail
     def test04_naming_of_ostringstream(self):
         """Naming consistency of ostringstream"""
 
@@ -58,7 +57,7 @@ class TestSTDStreams:
         # Check if the object created is equal in all three cases
         cl0 = cppyy.gbl.std.ostringstream
         cl1 = cppyy.gbl.std.basic_ostringstream['char']
-        cl1 = cppyy.gbl.std.basic_ostringstream['char', cppyy.gbl.std.char_traits['char'] , cppyy.gbl.std.allocator['char']]
+        cl2 = cppyy.gbl.std.basic_ostringstream['char', cppyy.gbl.std.char_traits['char'] , cppyy.gbl.std.allocator['char']]
 
         assert cl0 == cl1
         assert cl1 == cl2
