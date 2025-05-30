@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLING
+from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_LINUX_ARM, IS_VALGRIND
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("pythonizablesDict"))
@@ -137,6 +137,7 @@ class TestClassPYTHONIZATION:
         assert mine.__smartptr__().get().m_check == 0xcdcdcdcd
         assert mine.say_hi() == "Hi!"
 
+    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM and IS_CLANG_REPL, reason="Crashes on Valgind Clang-Repl-ARM")
     def test05_converters(self):
         """Smart pointer argument passing"""
 
@@ -162,6 +163,7 @@ class TestClassPYTHONIZATION:
         # cppyy.gbl.mine = mine
         pz.renew_mine()
 
+    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM and IS_CLANG_REPL, reason="Fails with Valgrind with Clang-Repl ARM")
     def test06_executors(self):
         """Smart pointer return types"""
 

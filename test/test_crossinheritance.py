@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX, IS_CLING
+from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX, IS_CLING, IS_VALGRIND
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -405,7 +405,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert CB.s_count == 0 + start_count
 
-    @mark.xfail(run = False, condition = IS_LINUX, reason = "Passes, but Valgrind issue")
+    @mark.xfail(run=False, condition=IS_VALGRIND, reason = "Valgrind issue")
     def test12_python_shared_ptr_memory(self):
         """Usage of Python derived objects with std::shared_ptr"""
 
@@ -825,7 +825,7 @@ class TestCROSSINHERITANCE:
         assert a.m_2 == 42
         assert a.m_3 == 67
 
-    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes with Valgrind on Linux ARM, but passes in all platforms otherwise")
+    @mark.xfail(run=False, condition=IS_LINUX_ARM and IS_VALGRIND, reason="Crashes with Valgrind on Linux ARM")
     def test21_multiple_inheritance_with_constructors(self):
         """Multiple inheritance with constructors"""
 
@@ -913,7 +913,7 @@ class TestCROSSINHERITANCE:
         assert a.m_2 ==  88
         assert a.m_3 == -11
 
-    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes with Valgrind on Linux ARM, but passes in all platforms otherwise")
+    @mark.xfail(run=False, condition=IS_LINUX_ARM and IS_VALGRIND, reason="Crashes with Valgrind on Linux ARM")
     def test22_multiple_inheritance_with_defaults(self):
         """Multiple inheritance with defaults"""
 
@@ -1285,7 +1285,7 @@ class TestCROSSINHERITANCE:
             assert inst.fun1() == val1
             assert inst.fun2() == inst.fun1()
 
-    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes with Valgrind on Linux ARM, but passes in all platforms otherwise")
+    @mark.xfail(run=False, condition=IS_LINUX_ARM and IS_VALGRIND, reason="Crashes with Valgrind on Linux ARM")
     def test29_cross_deep_multi(self):
         """Deep multi-inheritance hierarchy"""
 
@@ -1527,7 +1527,7 @@ class TestCROSSINHERITANCE:
         gc.collect()
         assert ns.Component.get_count() == 0
 
-    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes with Valgrind on Linux ARM, but passes in all platforms otherwise")
+    @mark.xfail(run=False, condition=IS_LINUX_ARM and IS_VALGRIND, reason="Crashes with Valgrind on Linux ARM")
     def test32_by_value_arguments(self):
         """Override base function taking by-value arguments"""
 

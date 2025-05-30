@@ -74,3 +74,4 @@ IS_CLANG_DEBUG = (cppyy.gbl.Cpp.Evaluate("""#ifdef NDEBUG
                                             true
                                             #endif\n""") == 1)
 IS_CLING = not IS_CLANG_REPL
+IS_VALGRIND = True if os.getenv("IS_VALGRIND") else False

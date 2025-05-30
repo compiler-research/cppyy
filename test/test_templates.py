@@ -1,6 +1,6 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX_ARM, IS_VALGRIND
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -579,6 +579,7 @@ class TestTEMPLATES:
         v = MyVec["float"](2)
         v[0] = 1        # used to throw TypeError
 
+    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM and IS_CLING, reason="Crashes on Valgind Cling-ARM")
     def test24_stdfunction_templated_arguments(self):
         """Use of std::function with templated arguments"""
 

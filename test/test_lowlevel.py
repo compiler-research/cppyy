@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_MAC
+from .support import setup_make, pylong, pyunicode, IS_WINDOWS, ispypy, IS_CLING, IS_MAC, IS_VALGRIND
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -135,7 +135,7 @@ class TestLOWLEVEL:
         f = array('f', [0]);     ctd.set_float_r(f);  assert f[0] ==  5.
         f = array('d', [0]);     ctd.set_double_r(f); assert f[0] == -5.
 
-    @mark.xfail(run=False, reason="Valgrind detects memory leak with invalid delete[] operator, crashes on Cling") 
+    @mark.xfail(run=False, condition=IS_VALGRIND or IS_CLING, reason="Valgrind detects memory leak with invalid delete[] operator, crashes on Cling") 
     def test06_ctypes_as_ref_and_ptr(self):
         """Use ctypes for pass-by-ref/ptr"""
 

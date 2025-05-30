@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_VALGRIND, IS_LINUX_ARM
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -528,6 +528,7 @@ class TestSTLVECTOR:
         for val in l:
             assert hasattr(val, '__lifeline')
 
+    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM and IS_CLANG_REPL, reason="Fails with Valgrind with Clang-Repl ARM")
     def test13_vector_smartptr_iteration(self):
         """Iteration over smart pointers"""
 
@@ -698,7 +699,7 @@ class TestSTLVECTOR:
 
         assert cppsum == pysum
 
-    @mark.xfail(condition=(IS_MAC or IS_CLING), reason="Fails on OS X and Cling")
+    @mark.xfail(condition=IS_CLING, reason="Fails on Cling")
     def test20_vector_cstring(self):
         """Usage of a vector of const char*"""
 
