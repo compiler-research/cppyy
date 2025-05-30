@@ -1,6 +1,6 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX_ARM, IS_VALGRIND
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -72,7 +72,6 @@ class TestTEMPLATES:
         assert cppyy.gbl.nt_templ_args[1]()   == 1
         assert cppyy.gbl.nt_templ_args[256]() == 256
 
-    @mark.xfail(condition=IS_MAC and not IS_CLANG_REPL, reason="Fails on OSX-Cling")
     def test03_templated_function(self):
         """Templated global and static functions lookup and calls"""
 
@@ -144,7 +143,6 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.test04_variadic_func['int', 'double', 'void*']() == 3
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails with OSX Cling")
     def test05_variadic_overload(self):
         """Call an overloaded variadic function"""
 
@@ -237,7 +235,6 @@ class TestTEMPLATES:
 
         assert tc(5) == 5.
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test10_templated_hidding_methods(self):
         """Test that base class methods are not considered when hidden"""
 
@@ -315,7 +312,6 @@ class TestTEMPLATES:
         assert nsup.Foo
         assert nsup.Bar.Foo       # used to fail
 
-    @mark.xfail(condition = (IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test13_using_templated_method(self):
         """Access to base class templated methods through 'using'"""
 
@@ -368,7 +364,6 @@ class TestTEMPLATES:
         assert rttest_make_tlist2(RTTest_SomeStruct1())
         assert rttest_make_tlist2(RTTest_SomeNamespace.RTTest_SomeStruct2())
 
-    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test15_rvalue_templates(self):
         """Use of a template with r-values; should accept builtin types"""
 
@@ -521,7 +516,6 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.TemplatedCtor.C(0)
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test21_type_deduction_with_conversion(self):
         """Template instantiation with [] -> std::vector conversion"""
 
@@ -575,7 +569,6 @@ class TestTEMPLATES:
         for val in [2**64, -2**63-1]:
             raises(OverflowError, PassSomeInt, val)
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test23_overloaded_setitem(self):
         """Template with overloaded non-templated and templated setitem"""
 
@@ -586,7 +579,7 @@ class TestTEMPLATES:
         v = MyVec["float"](2)
         v[0] = 1        # used to throw TypeError
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
+    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM and IS_CLING, reason="Crashes on Valgind Cling-ARM")
     def test24_stdfunction_templated_arguments(self):
         """Use of std::function with templated arguments"""
 
@@ -741,7 +734,6 @@ class TestTEMPLATES:
         assert ns.bar2['double'](17) == 17
         assert ns.bar2['double','int'](17) == 17
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X and Cling")
     def test27_variadic_constructor(self):
         """Use of variadic template function as contructor"""
 

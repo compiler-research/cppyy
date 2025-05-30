@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_WINDOWS, IS_MAC, IS_LINUX, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86
+from .support import setup_make, pylong, IS_WINDOWS, IS_MAC, IS_LINUX, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86, IS_VALGRIND
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("advancedcppDict"))
@@ -688,7 +688,7 @@ class TestADVANCEDCPP:
         assert cppyy.gbl.overload_one_way().gime() == 1
         assert cppyy.gbl.overload_the_other_way().gime() == "aap"
 
-    @mark.xfail(run=False, condition = (IS_CLANG_REPL or IS_LINUX), reason="Fails on both Cling and Clang-Repl, Valgrind issue on Clang-Repl")
+    @mark.xfail(run=not IS_VALGRIND, condition = (IS_CLANG_REPL or IS_LINUX), reason="Fails on both Cling and Clang-Repl, Valgrind issue on Clang-Repl")
     def test21_access_to_global_variables(self):
         """Access global_variables_and_pointers"""
 

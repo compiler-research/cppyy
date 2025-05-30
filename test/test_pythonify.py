@@ -379,7 +379,6 @@ class TestPYTHONIFY:
 
         assert example01.getCount() == 0
 
-    @mark.xfail(condition = IS_MAC and IS_CLING, reason = "Fails on OS X Cling")
     def test17_chaining(self):
         """Respective return values of temporaries should not go away"""
 
@@ -397,7 +396,6 @@ class TestPYTHONIFY:
 
         assert cppyy.gbl.Lifeline.gime(42).get()[0].get()[0].get()[0].get()[0].x == 42
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX-Cling")
     def test18_keywords(self):
         """Use of keyword arguments"""
 
