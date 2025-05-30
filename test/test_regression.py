@@ -205,7 +205,6 @@ class TestREGRESSION:
         assert not 'vector<const PyABC::S1*>' in dir(PyABC.S2)
         assert PyABC.S2.S1_coll is cppyy.gbl.std.vector('const PyABC::S1*')
 
-    @mark.xfail(condition=(IS_MAC and IS_CLING), reason="fails on OSX-Cling")
     def test09_gil_not_released(self):
         """GIL was released by accident for by-value returns"""
 
@@ -475,7 +474,7 @@ class TestREGRESSION:
 
         assert a != b             # derived class' C++ operator!= called
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test18_operator_plus_overloads(self):
         """operator+(string, string) should return a string"""
 
@@ -684,7 +683,6 @@ class TestREGRESSION:
         CSE.your_enum = CSE.YourEnum.kFour
         assert CSE.your_enum == CSE.YourEnum.kFour
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails with OSX-Cling")
     def test25_const_iterator(self):
         """const_iterator failed to resolve the proper return type"""
 
@@ -739,7 +737,6 @@ class TestREGRESSION:
         with raises(TypeError):
             io.BackendPlatformName = "aap"
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test27_exception_by_value(self):
         """Proper memory management of exception return by value"""
 
@@ -775,7 +772,6 @@ class TestREGRESSION:
         gc.collect()
         assert ns.count() == 0
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X Cling")
     def test28_exception_as_shared_ptr(self):
         """shared_ptr of an exception object null-checking"""
 

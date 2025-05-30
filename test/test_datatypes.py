@@ -2048,7 +2048,6 @@ class TestDATATYPES:
             r2 = ns.make_R2()
             assert r2.s.x == 1
 
-    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OS X and Cling")
     def test41_complex_numpy_arrays(self):
         """Usage of complex numpy arrays"""
 
@@ -2096,7 +2095,6 @@ class TestDATATYPES:
             Ccl = func(Acl, Bcl, 2)
             assert complex(Ccl) == pyCcl
 
-    @mark.xfail(condition=(IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test42_mixed_complex_arithmetic(self):
         """Mixin of Python and C++ std::complex in arithmetic"""
 
@@ -2202,7 +2200,6 @@ class TestDATATYPES:
             assert buf1.data1[i] == 1.*i
             assert buf1.data2[i] == 2.*i
 
-    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test45_const_ref_data(self):
         """Proper indirection for addressing const-ref data"""
 

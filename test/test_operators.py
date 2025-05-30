@@ -262,7 +262,6 @@ class TestOPERATORS:
         with raises(NotImplementedError):
             v = m*2
 
-    @mark.xfail
     def test11_overloaded_operators(self):
         """Overloaded operator*/+-"""
 
@@ -337,7 +336,6 @@ class TestOPERATORS:
         b = ns.Bar()
         assert b[42] == 42
 
-    @mark.xfail(condition = (IS_MAC and IS_CLING), reason = "Fails on OS X Cling")
     def test15_class_and_global_mix(self):
         """Iterator methods have both class and global overloads"""
 
