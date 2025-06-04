@@ -407,7 +407,7 @@ class TestSTLVECTOR:
         assert len(vb[4:8]) == 4
         assert list(vb[4:8]) == [False]*3+[True]
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING))
+    @mark.xfail(run=False, condition=IS_MAC and IS_CLING, reason="Crashes on OSX-Cling")
     def test08_vector_enum(self):
         """Usability of std::vector<> of some enums"""
 

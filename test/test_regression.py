@@ -381,7 +381,6 @@ class TestREGRESSION:
         sizeit = cppyy.gbl.vec_vs_init.sizeit
         assert sizeit(list(range(10))) == 10
 
-    @mark.xfail
     def test16_iterable_enum(self):
         """Use template to iterate over an enum"""
       # from: https://stackoverflow.com/questions/52459530/pybind11-emulate-python-enum-behaviour
@@ -950,7 +949,6 @@ class TestREGRESSION:
             assert o.x == Foo.BAZ
             assert o.y == 1
 
-    @mark.xfail
     def test33_explicit_template_in_namespace(self):
         """Lookup of explicit template in namespace"""
 
@@ -1140,7 +1138,7 @@ class TestREGRESSION:
             assert ai.name[:5] == u'hello'
         cppyy.ll.array_delete(aa)
 
-    @mark.xfail(run=False, reason="Crashes with Clang-Repl with assert in CodeGen::CodeGenFunction::EmitAggExpr")
+    @mark.xfail(condition=IS_CLING or IS_MAC, reason="Fails on Cling and OSX")
     def test39_vector_of_pointers_conversion(self):
         """vector<T*>'s const T*& used to be T**, now T*"""
 

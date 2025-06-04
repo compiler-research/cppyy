@@ -483,7 +483,6 @@ class TestLOWLEVEL:
         assert cppyy.gbl.std.vector[cppyy.gbl.std.vector[int]].value_type == 'std::vector<int>'
         assert cppyy.gbl.std.vector['int[1]'].value_type == 'int[1]'
 
-    @mark.xfail
     def test15_templated_arrays_gmpxx(self):
         """Use of gmpxx array types in templates"""
 
