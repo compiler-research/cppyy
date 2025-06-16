@@ -84,7 +84,7 @@
 # Ubuntu 22.04
 
 {
-   LLVM 18 suppressions : Clang CodeGenModule
+   LLVM 18 suppressions : Clang CodeGenModule through Parse
    Memcheck:Cond
    fun:_ZN5clang7CodeGen13CodeGenModule38SetLLVMFunctionAttributesForDefinitionEPKNS_4DeclEPN4llvm8FunctionE
    fun:_ZN5clang7CodeGen13CodeGenModule18codegenCXXStructorENS_10GlobalDeclE
@@ -98,6 +98,23 @@
    fun:_ZN5clang17IncrementalParser23ParseOrWrapTopLevelDeclEv
    fun:_ZN5clang17IncrementalParser5ParseEN4llvm9StringRefE
    fun:_ZN5clang11Interpreter5ParseEN4llvm9StringRefE
+}
+
+{
+   LLVM 18 suppressions : Clang CodeGenModule through ParseAndExecute
+   Memcheck:Cond
+   fun:_ZN5clang7CodeGen13CodeGenModule38SetLLVMFunctionAttributesForDefinitionEPKNS_4DeclEPN4llvm8FunctionE
+   fun:_ZN5clang7CodeGen13CodeGenModule18codegenCXXStructorENS_10GlobalDeclE
+   fun:_ZN12_GLOBAL__N_113ItaniumCXXABI15emitCXXStructorEN5clang10GlobalDeclE
+   fun:_ZN5clang7CodeGen13CodeGenModule20EmitGlobalDefinitionENS_10GlobalDeclEPN4llvm11GlobalValueE
+   fun:_ZN5clang7CodeGen13CodeGenModule12EmitDeferredEv
+   fun:_ZN5clang7CodeGen13CodeGenModule7ReleaseEv
+   fun:_ZN12_GLOBAL__N_117CodeGeneratorImpl21HandleTranslationUnitERN5clang10ASTContextE
+   fun:_ZN5clang15BackendConsumer21HandleTranslationUnitERNS_10ASTContextE
+   fun:_ZN5clang17IncrementalParser23ParseOrWrapTopLevelDeclEv
+   fun:_ZN5clang17IncrementalParser5ParseEN4llvm9StringRefE
+   fun:_ZN5clang11Interpreter5ParseEN4llvm9StringRefE
+   fun:_ZN5clang11Interpreter15ParseAndExecuteEN4llvm9StringRefEPNS_5ValueE
 }
 
 {
