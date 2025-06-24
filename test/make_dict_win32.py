@@ -1,6 +1,6 @@
 import glob, os, sys, subprocess
 
-USES_PYTHON_CAPI = set(('pythonizables',))
+USES_PYTHON_CAPI = {'pythonizables'}
 
 fn = sys.argv[1]
 
@@ -15,7 +15,7 @@ else:
     if fn[-4:] == '.cxx': fn = fn[:-4]
     elif fn[-2:] == '.h': fn = fn[:-2]
     if not os.path.exists(fn+'.h'):
-        print("file %s.h does not exist" % (fn,))
+        print("file {}.h does not exist".format(fn))
         sys.exit(1)
 
 uses_python_capi = False

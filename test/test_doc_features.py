@@ -413,7 +413,7 @@ namespace Namespace {
 
         class PyConcrete3(Abstract):
             def __init__(self):
-                super(PyConcrete3, self).__init__()
+                super().__init__()
 
             def abstract_method(self):
                 return "Hello, Python World! (3)"
@@ -426,7 +426,7 @@ namespace Namespace {
 
         class PyConcrete4(Concrete):
             def __init__(self):
-                super(PyConcrete4, self).__init__()
+                super().__init__()
 
             def abstract_method(self):
                 return "Hello, Python World! (4)"
@@ -1136,7 +1136,7 @@ class TestTALKEXAMPLES:
 
         class PyMyClass(CC.MyClass):
             def __init__(self, data, extra):
-                super(PyMyClass, self).__init__(data)
+                super().__init__(data)
                 self.extra = extra
 
             def add(self, i):
@@ -1295,8 +1295,8 @@ class TestTALKEXAMPLES:
             return to_str(chars);
         }}""")
 
-        assert CC.gbk_chinese() == u'\u4e2d\u6587'.encode('gbk')
+        assert CC.gbk_chinese() == '\u4e2d\u6587'.encode('gbk')
         if 0x3000000 <= sys.hexversion:
-            assert CC.utf8_chinese() == u'\u4e2d\u6587'
+            assert CC.utf8_chinese() == '\u4e2d\u6587'
         else:
             assert CC.utf8_chinese() == b'\xe4\xb8\xad\xe6\x96\x87'

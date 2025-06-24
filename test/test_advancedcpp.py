@@ -623,9 +623,9 @@ class TestADVANCEDCPP:
         f = cppyy.gbl.my_templated_function
 
         assert f('c') == 'c'
-        assert type(f('c')) == type('c')
+        assert type(f('c')) == str
         assert f(3.) == 3.
-        assert type(f(4.)) == type(4.)
+        assert type(f(4.)) == float
 
     def test17_assign_to_return_byref(self):
         """Test assignment to an instance returned by reference"""

@@ -152,7 +152,7 @@ if not ispypy:
 
 # std::make_shared/unique create needless templates: rely on Python's introspection
 # instead. This also allows Python derived classes to be handled correctly.
-class py_make_smartptr(object):
+class py_make_smartptr:
     __slots__ = ['cls', 'ptrcls']
     def __init__(self, cls, ptrcls):
         self.cls    = cls
@@ -164,7 +164,7 @@ class py_make_smartptr(object):
             obj = self.cls(*args)
         return self.ptrcls[self.cls](obj)   # C++ takes ownership
 
-class make_smartptr(object):
+class make_smartptr:
     __slots__ = ['ptrcls', 'maker']
     def __init__(self, ptrcls, maker):
         self.ptrcls = ptrcls
@@ -187,7 +187,7 @@ del make_smartptr
 
 
 #--- interface to Cling ------------------------------------------------------
-class _stderr_capture(object):
+class _stderr_capture:
     def __init__(self):
        self._capture = not gbl.Cpp.IsDebugOutputEnabled()
        self.err = ""
@@ -240,7 +240,7 @@ def load_library(name):
         CppInterOp = gbl.Cpp
         result = CppInterOp.LoadLibrary(name)
     if result == False:
-        raise RuntimeError('Could not load library "%s": %s' % (name, err.err))
+        raise RuntimeError('Could not load library "{}": {}'.format(name, err.err))
 
     return True
 
@@ -249,7 +249,7 @@ def include(header):
     with _stderr_capture() as err:
         errcode = gbl.Cpp.Declare('#include "%s"' % header)
     if not errcode == 0:
-        raise ImportError('Failed to load header file "%s"%s' % (header, err.err))
+        raise ImportError('Failed to load header file "{}"{}'.format(header, err.err))
     return True
 
 def c_include(header):
@@ -259,7 +259,7 @@ def c_include(header):
 #include "%s"
 }""" % header)
     if not errcode == 0:
-        raise ImportError('Failed to load header file "%s"%s' % (header, err.err))
+        raise ImportError('Failed to load header file "{}"{}'.format(header, err.err))
     return True
 
 def add_include_path(path):
@@ -389,7 +389,7 @@ def sizeof(tt):
         try:
             sz = ctypes.sizeof(tt)
         except TypeError:
-            sz = gbl.Cpp.Evaluate("sizeof(%s)" % (_get_name(tt),))
+            sz = gbl.Cpp.Evaluate("sizeof({})".format(_get_name(tt)))
         _sizes[tt] = sz
         return sz
 

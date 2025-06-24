@@ -6,13 +6,13 @@ def empty_call():
     pass
 
 #- group: empty-inst ---------------------------------------------------------
-class EmptyCall(object):
+class EmptyCall:
     def empty_call(self):
         pass
 
 
 #- group: builtin-args-free --------------------------------------------------
-class Value(object):
+class Value:
     def __init__(self):
         self.m_int = 42
 
@@ -26,7 +26,7 @@ def take_a_struct(val):
     pass
 
 #- group: builtin-args-inst --------------------------------------------------
-class TakeAValue(object):
+class TakeAValue:
     def take_an_int(self, val):
         pass
 
@@ -45,12 +45,12 @@ def do_work(val):
     return math.atan(val)
 
 #- group: do_work-inst -------------------------------------------------------
-class DoWork(object):
+class DoWork:
     def do_work(self, val):
         return math.atan(val)
 
 
 #- group: overload-inst ------------------------------------------------------
-class OverloadedCall(object):
+class OverloadedCall:
     def add_it(self, *args):
         return 3.1415 + sum(args)

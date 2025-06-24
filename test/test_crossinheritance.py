@@ -82,7 +82,7 @@ class TestCROSSINHERITANCE:
 
         class C1PyBase2(CX.IBase2):
             def __init__(self):
-                super(C1PyBase2, self).__init__()
+                super().__init__()
 
             def get_value(self):
                 return 99
@@ -96,11 +96,11 @@ class TestCROSSINHERITANCE:
 
         class C3PyBase2(CX.CBase2):
             def __init__(self):
-                super(C3PyBase2, self).__init__()
+                super().__init__()
 
         class C4PyBase2(CX.CBase2):
             def __init__(self):
-                super(C4PyBase2, self).__init__()
+                super().__init__()
 
             def get_value(self):
                 return 13
@@ -121,7 +121,7 @@ class TestCROSSINHERITANCE:
         # now with abstract constructor that takes an argument
         class C4PyBase2(CX.IBase3):
             def __init__(self, intval):
-                super(C4PyBase2, self).__init__(intval)
+                super().__init__(intval)
 
             def get_value(self):
                 return 77
@@ -196,14 +196,14 @@ class TestCROSSINHERITANCE:
 
         class C1PyBase4(CX.IBase4):
             def __init__(self):
-                super(C1PyBase4, self).__init__()
+                super().__init__()
 
             def get_value(self):
                 return 17
 
         class C2PyBase4(CX.CBase4):
             def __init__(self):
-                super(C2PyBase4, self).__init__()
+                super().__init__()
 
         c1, c2 = C1PyBase4(), C2PyBase4()
 
@@ -365,7 +365,7 @@ class TestCROSSINHERITANCE:
 
         class PyDerived(Abstract):
             def __init__(self, val):
-                super(PyDerived, self).__init__()
+                super().__init__()
                 self.val = val
             def some_imp(self):
                 return self.val
@@ -500,7 +500,7 @@ class TestCROSSINHERITANCE:
 
         class MyPyDerived(ns.MyBase):
             def __init__(self):
-                super(MyPyDerived, self).__init__()
+                super().__init__()
                 assert self.my_data == 101
                 self.py_data = 13
                 self.my_data = 42
@@ -690,7 +690,7 @@ class TestCROSSINHERITANCE:
 
         class PyDerived1(ns.Base):
             def __init__(self):
-                super(PyDerived1, self).__init__()
+                super().__init__()
                 self._name = "PyDerived1"
 
             def whoami(self):
@@ -698,7 +698,7 @@ class TestCROSSINHERITANCE:
 
         class PyDerived2(PyDerived1):
             def __init__(self):
-                super(PyDerived2, self).__init__()
+                super().__init__()
                 self._message = "Hello, World!"
 
             def message(self):
@@ -872,7 +872,7 @@ class TestCROSSINHERITANCE:
 
         class MyPyDerived(cppyy.multi(ns.MyClass1, ns.MyClass2)):
             def __init__(self, val1, val2):
-                super(MyPyDerived, self).__init__((val1,), (val2,))
+                super().__init__((val1,), (val2,))
 
             def x(self):
                 return 16
@@ -891,7 +891,7 @@ class TestCROSSINHERITANCE:
 
         class MyPyDerived2(cppyy.multi(ns.MyClass1, ns.MyClass2, ns.MyClass3)):
             def __init__(self, val1, val2, val3):
-                super(MyPyDerived2, self).__init__((val1,), (val2,), (val3,))
+                super().__init__((val1,), (val2,), (val3,))
 
             def x(self):
                 return 16
@@ -961,13 +961,13 @@ class TestCROSSINHERITANCE:
                 a2 = val2 is not None and (val2,) or ()
                 a3 = val3 is not None and (val3,) or ()
                 if nArgs == 3:
-                    super(MyPyDerived, self).__init__(a1, a2, a3)
+                    super().__init__(a1, a2, a3)
                 elif nArgs == 0:
-                    super(MyPyDerived, self).__init__()
+                    super().__init__()
                 elif nArgs == 1:
-                    super(MyPyDerived, self).__init__(a1)
+                    super().__init__(a1)
                 elif nArgs == 2:
-                    super(MyPyDerived, self).__init__(a1, a2)
+                    super().__init__(a1, a2)
 
             def x(self):
                 return 16
@@ -1104,7 +1104,7 @@ class TestCROSSINHERITANCE:
      # used to fail with compilation error
         class DerivedNoCopyNoMove(NoCopyNoMove):
             def __init__(self):
-                super(DerivedNoCopyNoMove, self).__init__(self)
+                super().__init__(self)
               # TODO: chicken-and-egg situation here, 'this' from 'self' is
               # nullptr until the constructor has been called, so it can't
               # be passed as an argument to the same constructor
@@ -1150,7 +1150,7 @@ class TestCROSSINHERITANCE:
 
         class DerivedMulti(cppyy.multi(Movable, Copyable, SomeClass)):
             def __init__(self):
-                super(DerivedMulti, self).__init__()
+                super().__init__()
 
         d = DerivedMulti()
         assert d
@@ -1184,7 +1184,7 @@ class TestCROSSINHERITANCE:
         for kls in (ns.NoDefCtor1, ns.NoDefCtor2, ns.NoDefCtor3):
             class PyDerived(kls):
                 def __init__(self):
-                    super(PyDerived, self).__init__()
+                    super().__init__()
 
             with raises(TypeError):
                 PyDerived()
@@ -1192,7 +1192,7 @@ class TestCROSSINHERITANCE:
             with warnings.catch_warnings(record=True) as w:
                 class PyDerived(cppyy.multi(kls, ns.Simple)):
                     def __init__(self):
-                        super(PyDerived, self).__init__()
+                        super().__init__()
 
             with raises(TypeError):
                 PyDerived()
@@ -1200,7 +1200,7 @@ class TestCROSSINHERITANCE:
             with warnings.catch_warnings(record=True) as w:
                 class PyDerived(cppyy.multi(ns.Simple, kls)):
                     def __init__(self):
-                        super(PyDerived, self).__init__()
+                        super().__init__()
 
             with raises(TypeError):
                 PyDerived()
@@ -1269,7 +1269,7 @@ class TestCROSSINHERITANCE:
 
         class B(A):
             def __init__ (self, name = 'b'):
-                super(B, self).__init__(name)
+                super().__init__(name)
 
             def fun1(self):
                 return  1
@@ -1353,7 +1353,7 @@ class TestCROSSINHERITANCE:
         assert ns.calc_a(g) == 20
         assert ns.calc_b(g) == 45
 
-        class H(object):
+        class H:
             def calc_a(self):
                 return 66
 
@@ -1482,7 +1482,7 @@ class TestCROSSINHERITANCE:
         ns.ComponentWithValue.__init__.__creates__ = True
         class PyComponentWithInit(ns.ComponentWithValue):
             def __init__(self, cppvalue):
-                super(PyComponentWithInit, self).__init__(cppvalue)
+                super().__init__(cppvalue)
                 self.m_pyvalue = 11
 
             def getValue(self):
