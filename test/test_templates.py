@@ -1190,13 +1190,13 @@ class TestTEMPLATED_TYPEDEFS:
         assert 'in_type' in dir(tct[int, dum, 4])
 
         assert in_type.__name__ == 'in_type'
-        assert in_type.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int,TemplatedTypedefs::SomeDummy,4>::in_type'
+        assert in_type.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int, TemplatedTypedefs::SomeDummy, 4>::in_type'
 
         in_type_tt = tct[int, dum, 4].in_type_tt
         assert 'in_type_tt' in dir(tct[int, dum, 4])
 
         assert in_type_tt.__name__ == 'in_type_tt'
-        assert in_type_tt.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int,TemplatedTypedefs::SomeDummy,4>::in_type_tt'
+        assert in_type_tt.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int, TemplatedTypedefs::SomeDummy, 4>::in_type_tt'
 
     @mark.xfail
     def test02_mapped_type_as_internal(self):

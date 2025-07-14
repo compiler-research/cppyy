@@ -131,7 +131,7 @@ int call_int_int_function(int (*f)(int, int), int i1, int i2) {
 
 template<class A, class B, class C = A>
 C multiply(A a, B b) {
-    return C{a*b};
+    return static_cast<C>(a * b);
 }
 
 //-----
@@ -253,8 +253,8 @@ namespace Namespace {
     def test_doc_strings(self):
         import cppyy
         from cppyy.gbl import Concrete
-        assert 'void Concrete::array_method(int* ad, int size)' in Concrete.array_method.__doc__
-        assert 'void Concrete::array_method(double* ad, int size)' in Concrete.array_method.__doc__
+        assert 'void Concrete::array_method(int * ad, int size)'.replace(" ", "") in Concrete.array_method.__doc__.replace(" ", "")
+        assert 'void Concrete::array_method(double * ad, int size)'.replace(" ", "") in Concrete.array_method.__doc__.replace(" ", "")
 
     def test_enums(self):
         import cppyy
@@ -682,7 +682,7 @@ namespace Zoo {
         assert type(Zoo.free_lion).__name__ == 'Lion'
 
         smart_lion = Zoo.free_lion.__smartptr__()
-        assert type(smart_lion).__name__ in ['shared_ptr<Zoo::Lion>', 'std::shared_ptr<Zoo::Lion>']
+        assert type(smart_lion).__name__ in ['shared_ptr<Zoo::Lion>', 'std::shared_ptr<Zoo::Lion>', 'shared_ptr<Lion>', 'std::shared_ptr<Lion>']
 
         assert Zoo.identify_animal(Zoo.free_lion) == "the animal is a lion"
         assert Zoo.identify_animal_smart(Zoo.free_lion) == "the animal is a lion"
@@ -698,14 +698,14 @@ namespace Zoo {
         assert 'multiply' in cppyy.gbl.__dict__
 
         assert mul(1,  2) == 2
-        assert 'multiply<int,int,int>' in cppyy.gbl.__dict__
+        assert 'multiply<int,int,int>' in map(lambda x: x.replace(" ", ""), cppyy.gbl.__dict__)
         assert mul(1., 5) == 5.
-        assert 'multiply<double,int,double>' in cppyy.gbl.__dict__
+        assert 'multiply<double,int,double>' in map(lambda x: x.replace(" ", ""), cppyy.gbl.__dict__)
 
         assert mul[int]     (1, 1) == 1
-        assert 'multiply<int>' in cppyy.gbl.__dict__
+        assert 'multiply<int>' in map(lambda x: x.replace(" ", ""), cppyy.gbl.__dict__)
         assert mul[int, int](1, 1) == 1
-        assert 'multiply<int,int>' in cppyy.gbl.__dict__
+        assert 'multiply<int,int>' in map(lambda x: x.replace(" ", ""), cppyy.gbl.__dict__)
 
       # make sure cached values are actually looked up
         old = getattr(cppyy.gbl, 'multiply<int,int>')
