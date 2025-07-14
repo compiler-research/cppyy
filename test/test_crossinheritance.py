@@ -1720,7 +1720,7 @@ class TestCROSSINHERITANCE:
         del o1
         assert Derived.was_py_deleted  == True
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test37_deep_tree(self):
         """Find overridable methods deep in the tree"""
 

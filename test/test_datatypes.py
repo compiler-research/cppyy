@@ -192,7 +192,6 @@ class TestDATATYPES:
 
         c.__destruct__()
 
-    @mark.xfail
     def test02_instance_data_write_access(self):
         """Test write access to instance public data and verify values"""
 
@@ -1270,7 +1269,7 @@ class TestDATATYPES:
         if self.has_byte:
             run(self, cppyy.gbl.sum_byte_data, buf, total)
 
-    @mark.xfail(run=not(IS_MAC), reason="Crashes on OS X")
+    @mark.xfail(run=False, condition=IS_MAC, reason="Crashes on OSX")
     def test26_function_pointers(self):
         """Function pointer passing"""
 
@@ -2224,7 +2223,6 @@ class TestDATATYPES:
         b = ns.B()
         assert b.body1.name == b.body2.name
 
-    @mark.xfail
     def test46_small_int_enums(self):
         """Proper typing of small int enums"""
 
@@ -2279,7 +2277,6 @@ class TestDATATYPES:
         assert ns.func_int8()  == -1
         assert ns.func_uint8() == 255
 
-    @mark.xfail
     def test47_hidden_name_enum(self):
         """Usage of hidden name enum"""
 
@@ -2315,7 +2312,6 @@ class TestDATATYPES:
         }""")
         #ns.bar(ns.Foo.FOO)
 
-    @mark.xfail
     def test48_bool_typemap(self):
         """Test mapping of bool type typedefs"""
 
