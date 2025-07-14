@@ -45,7 +45,6 @@ class TestREGRESSION:
         assert 'KDcraw' in helptext
         assert 'CPPInstance' in helptext
 
-    @mark.xfail
     def test02_dir(self):
         """For the same reasons as test01_kdcraw, this used to crash."""
 
@@ -194,7 +193,7 @@ class TestREGRESSION:
 
         assert sys.getrefcount(x) == old_refcnt
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING))
+    @mark.xfail(run=False, condition=IS_MAC and IS_CLING, reason="Crahes on OSX-Cling")
     def test08_typedef_identity(self):
         """Nested typedefs should retain identity"""
 
@@ -357,7 +356,7 @@ class TestREGRESSION:
         f = sds.Foo()
         assert f.bar.x == 5
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test15_vector_vs_initializer_list(self):
         """Prefer vector in template and initializer_list in formal arguments"""
 
