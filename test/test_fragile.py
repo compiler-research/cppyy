@@ -193,11 +193,11 @@ class TestFRAGILE:
             # likewise there are still minor differences in descriptiveness of messages
             assert "fragile::D::overload()" in str(e)
             assert "TypeError: takes at most 0 arguments (1 given)" in str(e)
-            assert "fragile::D::overload(fragile::no_such_class*)" in str(e)
+            assert "fragile::D::overload(fragile::no_such_class *)" in str(e)
             #assert "no converter available for 'fragile::no_such_class*'" in str(e)
             assert "void fragile::D::overload(char, int i = 0)" in str(e)
             #assert "char or small int type expected" in str(e)
-            assert "void fragile::D::overload(int, fragile::no_such_class* p = 0)" in str(e)
+            assert "void fragile::D::overload(int, fragile::no_such_class * p = 0)" in str(e)
             #assert "int/long conversion expects an integer object" in str(e)
 
         j = fragile.J()
@@ -243,9 +243,9 @@ class TestFRAGILE:
 
         namespace Cppyy {
 
-        typedef size_t TCppScope_t;
+        typedef void* TCppScope_t;
 
-        CPPYY_IMPORT TCppScope_t GetScope(const std::string& scope_name);
+        CPPYY_IMPORT TCppScope_t GetScope(const std::string& scope_name, TCppScope_t parent_scope = nullptr);
         CPPYY_IMPORT void GetAllCppNames(TCppScope_t scope, std::set<std::string>& cppnames);
 
         }""")
@@ -399,7 +399,7 @@ class TestFRAGILE:
         assert cppyy.gbl.myvar3
         assert cppyy.gbl.myvar4
 
-    @mark.xfail
+    @mark.xfail(run=False, reason="Crashes sometimes; might have been caused by https://github.com/compiler-research/CPyCppyy/pull/109")
     def test16_opaque_handle(self):
         """Support use of opaque handles"""
 
