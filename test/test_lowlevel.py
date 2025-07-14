@@ -473,7 +473,6 @@ class TestLOWLEVEL:
         a[0] = 5
         assert b[0] == 5
 
-    @mark.xfail
     def test14_templated_arrays(self):
         """Use of arrays in template types"""
 
@@ -536,7 +535,6 @@ class TestMULTIDIMARRAYS:
     def _data_m(self, lbl):
         return [('m_'+tp.replace(' ', '_')+lbl, tp) for tp in self.numeric_builtin_types]
 
-    @mark.xfail
     def test01_2D_arrays(self):
         """Access and use of 2D data members"""
 
@@ -579,7 +577,6 @@ class TestMULTIDIMARRAYS:
                     assert arr[i][j] == val
                     assert arr[i, j] == val
 
-    @mark.xfail
     def test02_assign_2D_arrays(self):
         """Direct assignment of 2D arrays"""
 
@@ -632,7 +629,6 @@ class TestMULTIDIMARRAYS:
             arr[2][3] = 10
             assert arr[2][3] == 10
 
-    @mark.xfail
     def test03_3D_arrays(self):
         """Access and use of 3D data members"""
 

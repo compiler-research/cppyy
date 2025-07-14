@@ -15,7 +15,7 @@ class TestClassPYTHONIZATION:
         import cppyy
         cls.pyzables = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test00_api(self):
         """Test basic semantics of the pythonization API"""
 

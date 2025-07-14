@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC, IS_MAC_X86, IS_MAC_ARM, IS_LINUX_ARM
+from .support import setup_make, ispypy, IS_WINDOWS, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC, IS_MAC_X86, IS_MAC_ARM, IS_LINUX_ARM, IS_VALGRIND
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("doc_helperDict"))
@@ -249,7 +249,6 @@ namespace Namespace {
         c = Concrete(**kwds)
         assert c.m_int == 18
 
-    @mark.xfail
     def test_doc_strings(self):
         import cppyy
         from cppyy.gbl import Concrete
@@ -661,7 +660,7 @@ namespace Math {
         assert Zoo.identify_animal(mouse) == "the animal is a mouse"
         assert Zoo.identify_animal(lion) == "the animal is a lion"
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test08_shared_ptr(self):
         """Shared pointer transparency"""
 
@@ -687,7 +686,6 @@ namespace Zoo {
         assert Zoo.identify_animal(Zoo.free_lion) == "the animal is a lion"
         assert Zoo.identify_animal_smart(Zoo.free_lion) == "the animal is a lion"
 
-    @mark.xfail
     def test09_templated_function(self):
         """Templated free function"""
 
@@ -722,7 +720,7 @@ namespace Zoo {
 
         assert mul['double, double, double'](1., 5) == 5.
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test10_stl_algorithm(self):
         """STL algorithm on std::string"""
 
@@ -763,7 +761,6 @@ class TestADVERTISED:
         assert Advert01.A(1)
         raises(TypeError, Advert01.A, 1.)
 
-    @mark.xfail
     def test02_use_c_void_p(self):
         """Use of opaque handles and ctypes.c_void_p"""
 
@@ -798,7 +795,6 @@ class TestADVERTISED:
         Advert02.Picam_OpenFirstCamera(cam)
         assert Advert02.Picam_CloseCamera(cam)
 
-    @mark.xfail
     def test03_use_of_ctypes_and_enum(self):
         """Use of (opaque) enum through ctypes.c_void_p"""
 
@@ -1193,7 +1189,7 @@ class TestTALKEXAMPLES:
         assert CC.callPtr(lambda i: 5*i, 4) == 20
         assert CC.callFun(lambda i: 6*i, 4) == 24
 
-    @mark.xfail
+    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM, reason="Crashes on Valgrind-ARM")
     def test_templated_callback(self):
         """Templated callback example"""
 

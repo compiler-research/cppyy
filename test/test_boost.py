@@ -28,7 +28,7 @@ class TestBOOSTANY:
 
         assert std.list[any]
 
-    @mark.skip
+    @mark.xfail(run=False)
     def test02_any_usage(self):
         """boost::any assignment and casting"""
 
@@ -101,7 +101,7 @@ class TestBOOSTVARIANT:
         cppyy.include("boost/variant/variant.hpp")
         cppyy.include("boost/variant/get.hpp")
 
-    @mark.skip
+    @mark.xfail(run=False)
     def test01_variant_usage(self):
         """boost::variant usage"""
 
