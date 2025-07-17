@@ -1,6 +1,9 @@
 import py, os, sys
 from pytest import mark, skip
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL
+from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -185,7 +188,6 @@ class TestLEAKCHECK:
         self.check_func(m, 'method_default', b=-99)
         self.check_func(m, 'method_default', c=-99)
 
-    @mark.skip(reason="Crashes when run with whole test suite")
     def test05_aggregates(self):
         """Leak test of aggregate creation"""
 

@@ -1,6 +1,9 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX_ARM, IS_VALGRIND
+from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX_ARM, IS_VALGRIND, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -23,7 +26,6 @@ class TestTEMPLATES:
         v1 = cppyy.gbl.std.vector[int]
         assert v1.__cpp_template__[int] is v1
 
-    @mark.xfail
     def test01_template_member_functions(self):
         """Template member functions lookup and calls"""
 
@@ -153,7 +155,7 @@ class TestTEMPLATES:
         assert cppyy.gbl.isSomeInt()           == False
         assert cppyy.gbl.isSomeInt(1, 2, 3)    == False
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test06_variadic_sfinae(self):
         """Attribute testing through SFINAE"""
 
@@ -170,7 +172,6 @@ class TestTEMPLATES:
         assert call_has_var1(move(Obj1())) == True
         assert call_has_var1(move(Obj2())) == False
 
-    @mark.xfail
     def test07_type_deduction(self):
         """Traits/type deduction"""
 
@@ -225,7 +226,6 @@ class TestTEMPLATES:
       # assert b2.ref_value == 42
         assert b2.m_value   == 42
 
-    @mark.xfail
     def test09_templated_callable(self):
         """Test that templated operator() translates to __call__"""
 
@@ -435,7 +435,7 @@ class TestTEMPLATES:
         b.b_T['int'](1, 1., 'a')
         assert get_tn(ns).find("int(some_variadic::B::*)(int&&,double&&,std::") == 0
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test17_empty_body(self):
         """Use of templated function with empty body"""
 
@@ -447,7 +447,6 @@ class TestTEMPLATES:
         assert f_T[int]() is None
         assert cppyy.gbl.T_WithEmptyBody.side_effect == "side effect"
 
-    @mark.xfail
     def test18_greedy_overloads(self):
         """void*/void** should not pre-empt template instantiations"""
 
@@ -606,7 +605,7 @@ class TestTEMPLATES:
 
         assert cppyy.gbl.std.function['double(std::vector<double>)']
 
-    @mark.xfail(run=(IS_MAC and IS_CLANG_REPL))
+    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM, reason="Crashes on Valgrind-ARM")
     def test25_stdfunction_ref_and_ptr_args(self):
         """Use of std::function with reference or pointer args"""
 
@@ -793,7 +792,7 @@ class TestTEMPLATES:
         assert ns.FS('i', ns.ST.TI.I32, ns.FS.R.EQ, 10)
 
 
-    @mark.xfail
+    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM, reason="Crashes on Valgrind-ARM")
     def test29_function_ptr_as_template_arg(self):
         """Function pointers as template arguments"""
 
@@ -905,7 +904,7 @@ class TestTEMPLATES:
 
         ns.Templated()       # used to crash
 
-    @mark.xfail(run=IS_CLANG_REPL, reason="Crashed with Cling")
+    @mark.xfail(run=False, condition=IS_CLING, reason="Crashed with Cling")
     def test31_ltlt_in_template_name(self):
         """Verify lookup of template names with << in the name"""
 
@@ -1190,15 +1189,14 @@ class TestTEMPLATED_TYPEDEFS:
         assert 'in_type' in dir(tct[int, dum, 4])
 
         assert in_type.__name__ == 'in_type'
-        assert in_type.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int,TemplatedTypedefs::SomeDummy,4>::in_type'
+        assert in_type.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int, TemplatedTypedefs::SomeDummy, 4>::in_type' # XXX: may need to custom printing instead of depending on clang (for default template args)
 
         in_type_tt = tct[int, dum, 4].in_type_tt
         assert 'in_type_tt' in dir(tct[int, dum, 4])
 
         assert in_type_tt.__name__ == 'in_type_tt'
-        assert in_type_tt.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int,TemplatedTypedefs::SomeDummy,4>::in_type_tt'
+        assert in_type_tt.__cpp_name__ == 'TemplatedTypedefs::DerivedWithUsing<int, TemplatedTypedefs::SomeDummy, 4>::in_type_tt'
 
-    @mark.xfail
     def test02_mapped_type_as_internal(self):
         """Test that mapped types can be used as builtin"""
 
@@ -1242,7 +1240,6 @@ class TestTEMPLATED_TYPEDEFS:
         assert tct['long double', dum, 4] is tct[in_type, dum, 4]
         assert tct['double', dum, 4] is not tct[in_type, dum, 4]
 
-    @mark.xfail
     def test04_type_deduction(self):
         """Usage of type reducer"""
 
@@ -1258,7 +1255,6 @@ class TestTEMPLATED_TYPEDEFS:
         three = w.whatis(3)
         assert three == 3
 
-    @mark.xfail
     def test05_type_deduction_and_extern(self):
         """Usage of type reducer with extern template"""
 

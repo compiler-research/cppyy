@@ -1,7 +1,8 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, monkey_patch
 
+mark.xfail = monkey_patch
 
 class TestREGRESSION:
     helpout = []
@@ -45,7 +46,6 @@ class TestREGRESSION:
         assert 'KDcraw' in helptext
         assert 'CPPInstance' in helptext
 
-    @mark.xfail
     def test02_dir(self):
         """For the same reasons as test01_kdcraw, this used to crash."""
 
@@ -54,15 +54,24 @@ class TestREGRESSION:
 
         import cppyy, pydoc
 
-        assert not '__abstractmethods__' in dir(cppyy.gbl.cling.runtime.gCling)
-        assert '__class__' in dir(cppyy.gbl.cling.runtime.gCling)
+        cppyy.cppdef("""
+            namespace docs {
+            struct MyDocs {
+                void fn() {}
+            } s;
+            MyDocs *ptrDocs = &s;
+            }
+        """)
+
+        assert not '__abstractmethods__' in dir(cppyy.gbl.docs.ptrDocs)
+        assert '__class__' in dir(cppyy.gbl.docs.ptrDocs)
 
         self.__class__.helpout = []
-        pydoc.doc(cppyy.gbl.cling.runtime.gCling)
+        pydoc.doc(cppyy.gbl.docs.ptrDocs)
         helptext = ''.join(self.__class__.helpout)
-        assert 'TInterpreter' in helptext
+        assert 'MyDocs' in helptext
         assert 'CPPInstance' in helptext
-        assert 'AddIncludePath' in helptext
+        assert 'fn' in helptext
 
         cppyy.cppdef("namespace cppyy_regression_test { void iii() {}; }")
 
@@ -185,7 +194,7 @@ class TestREGRESSION:
 
         assert sys.getrefcount(x) == old_refcnt
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING))
+    @mark.xfail(run=False, condition=IS_MAC and IS_CLING, reason="Crahes on OSX-Cling")
     def test08_typedef_identity(self):
         """Nested typedefs should retain identity"""
 
@@ -348,7 +357,7 @@ class TestREGRESSION:
         f = sds.Foo()
         assert f.bar.x == 5
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test15_vector_vs_initializer_list(self):
         """Prefer vector in template and initializer_list in formal arguments"""
 

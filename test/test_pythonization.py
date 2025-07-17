@@ -1,6 +1,8 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_LINUX_ARM, IS_VALGRIND
+from .support import setup_make, pylong, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_LINUX_ARM, IS_VALGRIND, monkey_patch
+
+mark.xfail = monkey_patch
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("pythonizablesDict"))
@@ -15,7 +17,7 @@ class TestClassPYTHONIZATION:
         import cppyy
         cls.pyzables = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test00_api(self):
         """Test basic semantics of the pythonization API"""
 
@@ -55,13 +57,24 @@ class TestClassPYTHONIZATION:
 
         assert cppyy.gbl.pyzables.SomeDummy2.test == 3
 
+        cppyy.cppdef("""
+            namespace pyzables {
+                class TObjString {
+                public:
+                    std::string s;
+                    TObjString(std::string ss) : s(ss) {}
+                    size_t Sizeof() { return s.size() + 1; }
+                };
+            }
+        """)
+
         def root_pythonizor(klass, name):
-            if name == 'CppyyLegacy::TObjString':
+            if name == 'pyzables::TObjString':
                 klass.__len__ = klass.Sizeof
 
         cppyy.py.add_pythonization(root_pythonizor)
 
-        assert len(cppyy.gbl.CppyyLegacy.TObjString("aap")) == 4     # include '\0'
+        assert len(cppyy.gbl.pyzables.TObjString("aap")) == 4     # include '\0'
 
     def test01_size_mapping(self):
         """Use composites to map GetSize() onto buffer returns"""

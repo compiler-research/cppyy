@@ -1,6 +1,9 @@
 import py, os, sys
 from pytest import mark, raises, skip
-from .support import setup_make, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM
+from .support import setup_make, IS_CLANG_REPL, IS_MAC_X86, IS_MAC_ARM, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 noboost = False
 if not (os.path.exists(os.path.join(os.path.sep, 'usr', 'include', 'boost')) or \
@@ -28,7 +31,7 @@ class TestBOOSTANY:
 
         assert std.list[any]
 
-    @mark.skip
+    @mark.xfail(run=False)
     def test02_any_usage(self):
         """boost::any assignment and casting"""
 
@@ -101,7 +104,7 @@ class TestBOOSTVARIANT:
         cppyy.include("boost/variant/variant.hpp")
         cppyy.include("boost/variant/get.hpp")
 
-    @mark.skip
+    @mark.xfail(run=False)
     def test01_variant_usage(self):
         """boost::variant usage"""
 

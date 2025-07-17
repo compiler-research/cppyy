@@ -1,7 +1,10 @@
 # -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_VALGRIND, IS_LINUX_ARM
+from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_VALGRIND, IS_LINUX_ARM, monkey_patch
+
+mark.xfail = monkey_patch
+
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -927,7 +930,7 @@ class TestSTLSTRING:
         assert s1+s2 == "Hello, World!"
         assert s2+s1 == ", World!Hello"
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test09_string_as_str_bytes(self):
         """Python-style methods of str/bytes on std::string"""
 

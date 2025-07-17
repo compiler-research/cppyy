@@ -1,6 +1,8 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX, IS_CLING, IS_VALGRIND
+from .support import setup_make, pylong, IS_MAC_ARM, IS_MAC, IS_CLANG_REPL, IS_CLANG_DEBUG, IS_LINUX_ARM, IS_LINUX, IS_CLING, IS_VALGRIND, monkey_patch
+
+mark.xfail = monkey_patch
 
 
 currpath = py.path.local(__file__).dirpath()
@@ -1720,7 +1722,7 @@ class TestCROSSINHERITANCE:
         del o1
         assert Derived.was_py_deleted  == True
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test37_deep_tree(self):
         """Find overridable methods deep in the tree"""
 
