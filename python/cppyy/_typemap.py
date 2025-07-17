@@ -104,4 +104,4 @@ def initialize(backend):
         import cppyy, ctypes
         if arg == cppyy.nullptr: arg = 0
         ctypes.c_void_p.__init__(self, arg)
-    tm['void*'] = _create_mapper(ctypes.c_void_p, {'__init__' : voidp_init})
+    tm['void *'] = _create_mapper(ctypes.c_void_p, {'__init__' : voidp_init})

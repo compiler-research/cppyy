@@ -927,7 +927,7 @@ class TestSTLSTRING:
         assert s1+s2 == "Hello, World!"
         assert s2+s1 == ", World!Hello"
 
-    @mark.xfail
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test09_string_as_str_bytes(self):
         """Python-style methods of str/bytes on std::string"""
 
