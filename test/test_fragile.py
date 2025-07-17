@@ -399,7 +399,7 @@ class TestFRAGILE:
         assert cppyy.gbl.myvar3
         assert cppyy.gbl.myvar4
 
-    @mark.xfail
+    @mark.xfail(run=False, reason="Crashes sometimes; might have been caused by https://github.com/compiler-research/CPyCppyy/pull/109")
     def test16_opaque_handle(self):
         """Support use of opaque handles"""
 
