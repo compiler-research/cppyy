@@ -1719,6 +1719,9 @@ class TestSTLSTRING_VIEW:
 
         import cppyy, gc
 
+        if cppyy.gbl.gInterpreter.ProcessLine("__cplusplus;") <= 201402:
+            # string_view exists as of C++17
+            return
         # view on (converted) unicode
         text = cppyy.gbl.std.string_view('''\
         The standard Lorem Ipsum passage, used since the 1500s
