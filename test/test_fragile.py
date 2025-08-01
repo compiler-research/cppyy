@@ -612,6 +612,120 @@ class TestFRAGILE:
                 int add42(int i) { return i + 42; }
             }""")
 
+    def test26_macro(self):
+        """Test access to C++ pre-processor macro's"""
+
+        import cppyy
+
+        cppyy.cppdef('#define HELLO "Hello, World!"')
+        assert cppyy.macro("HELLO") == "Hello, World!"
+
+        with raises(ValueError):
+            cppyy.macro("SOME_INT")
+
+        cppyy.cppdef('#define SOME_INT 42')
+        assert cppyy.macro("SOME_INT") == 42
+
+    def test27_pickle_enums(self):
+        """Pickling of enum types"""
+
+        import cppyy
+        import pickle
+
+        cppyy.cppdef("""
+        enum MyPickleEnum { PickleFoo, PickleBar };
+        namespace MyPickleNamespace {
+          enum MyPickleEnum { PickleFoo, PickleBar };
+        }""")
+
+        e1 = cppyy.gbl.MyPickleEnum
+        assert e1.__module__ == 'cppyy.gbl'
+        assert pickle.dumps(e1.PickleFoo)
+
+        e2 = cppyy.gbl.MyPickleNamespace.MyPickleEnum
+        assert e2.__module__ == 'cppyy.gbl.MyPickleNamespace'
+        assert pickle.dumps(e2.PickleBar)
+
+    def test28_memoryview_of_empty(self):
+        """memoryview of an empty array"""
+
+        import cppyy, array
+
+        cppyy.cppdef("void f(unsigned char const *buf) {}")
+        try:
+            cppyy.gbl.f(memoryview(array.array('B', [])))
+        except TypeError:
+            pass        # used to crash in PyObject_CheckBuffer on Linux
+
+    def test29_vector_datamember(self):
+        """Offset calculation of vector datamember"""
+
+        import cppyy
+
+        cppyy.cppdef("struct VectorDatamember { std::vector<unsigned> v; };")
+        cppyy.gbl.VectorDatamember     # used to crash on Mac arm64
+
+    def test30_two_nested_ambiguity(self):
+        """Nested class ambiguity in older Clangs"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        #include <vector>
+
+        namespace Test {
+        struct Common { std::string name; };
+        struct Family1 {
+            struct Parent : Common {
+                struct Child : Common { };
+                std::vector<Child> children;
+            };
+        };
+
+        struct Family2 {
+            struct Parent : Common {
+                struct Child : Common { };
+                std::vector<Child> children;
+            };
+        }; }""")
+
+        from cppyy.gbl import Test
+
+        p = Test.Family1.Parent()
+        p.children                          # used to crash
+
+    def test31_template_with_class_enum(self):
+        """Template instantiated with class enum"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        enum class ClassEnumA { A, };
+
+        template<ClassEnumA T>
+        struct EnumTemplate {
+          int foo();
+        };
+
+        template<> int EnumTemplate<ClassEnumA::A>::foo() { return 42; }
+        template class EnumTemplate<ClassEnumA::A>;
+
+        namespace ClassEnumNS {
+          enum class ClassEnumA { A, };
+
+          template<ClassEnumA T>
+          struct EnumTemplate {
+            int foo();
+          };
+
+          template<> int EnumTemplate<ClassEnumA::A>::foo() { return 37; }
+          template class EnumTemplate<ClassEnumA::A>;
+        }""")
+
+        for ns, val in [(cppyy.gbl, 42),
+                        (cppyy.gbl.ClassEnumNS, 37)]:
+            assert ns.EnumTemplate[ns.ClassEnumA.A]().foo() == val
+
 
 class TestSIGNALS:
     def setup_class(cls):
@@ -753,3 +867,15 @@ class TestSTDNOTINGLOBAL:
         };""")
 
         assert cppyy.gbl.ELogLevel != cppyy.gbl.CppyyLegacy.ELogLevel
+
+    def test05_span_compatibility(self):
+        """Test compatibility of span under C++2a compilers that support it"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        #if __has_include(<span>)
+        #include <span>
+        std::span<int> my_test_span1;
+        #endif
+        """)
