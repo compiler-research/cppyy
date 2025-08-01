@@ -723,6 +723,112 @@ class TestSTLVECTOR:
         assert ns.test[0] == "hello"
         assert ns.test[1] == "world"
 
+    def test21_vector_of_structs_data(self):
+        """Vector of structs data() should return array-like"""
+
+        import cppyy
+        import cppyy.ll
+
+        cppyy.cppdef("""\
+        namespace ArrayLike {
+        struct __attribute__((__packed__)) Vector3f {
+            float x, y, z;
+        }; }""")
+
+        N = 5
+
+        v = cppyy.gbl.std.vector['ArrayLike::Vector3f'](N)
+
+        for i in range(N):
+            d = v[i]
+            d.x, d.y, d.z = i, i*N, i*N**2
+
+        data = v.data()
+        for i in range(N):
+            d = data[i]
+            assert d.x == float(i)
+            assert d.y == float(i*N)
+            assert d.z == float(i*N**2)
+
+      # the following should not raise
+        mv = cppyy.ll.as_memoryview(data)
+
+      # length of the view is in bytes
+        assert len(mv) == len(v)
+        assert mv.itemsize == cppyy.sizeof(cppyy.gbl.ArrayLike.Vector3f)
+        assert mv.nbytes   == cppyy.sizeof(cppyy.gbl.ArrayLike.Vector3f) * len(v)
+
+    def test22_polymorphic(self):
+        """Vector of polymorphic types should auto-cast"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        namespace Polymorphic {
+        class vertex {
+        public:
+          virtual ~vertex() {}
+        };
+
+        class Mvertex : public vertex {};
+
+        class vCont {
+        public:
+          virtual ~vCont() { for (auto& v: verts) delete v; }
+          std::vector<vertex*> verts { new vertex(), new Mvertex() };
+          const std::vector<vertex*>& vertices() { return verts; }
+        }; }""")
+
+        ns = cppyy.gbl.Polymorphic
+        cont = ns.vCont()
+        verts = cont.vertices()
+
+        assert len([x for x in verts if isinstance(x, ns.Mvertex)]) == 1
+
+    def test23_copy_conversion(self):
+        """Vector given an array of different type should copy convert"""
+
+        import cppyy
+
+        try:
+            import numpy as np
+        except ImportError:
+            skip('numpy is not installed')
+
+        x = np.array([5., 25., 125.])
+        v = cppyy.gbl.std.vector('float')(x)
+
+        for f, d in zip(x, v):
+            assert f == d
+
+    def test24_byte_vectors(self):
+        """Vectors of "byte" types should return low level views"""
+
+        import cppyy
+        import cppyy.types
+
+        vector = cppyy.gbl.std.vector
+
+        for ctype in ('unsigned char', 'signed char', 'int8_t', 'uint8_t'):
+            vc = vector[ctype](range(10))
+            data = vc.data()
+
+            assert type(data) == cppyy.types.LowLevelView
+            assert len(data) == 10
+
+            for i, d in enumerate(data):
+                assert d == i
+
+        for ctype in ('signed char', 'int8_t'):
+            vc = vector[ctype](range(-5, 5, 1))
+            data = vc.data()
+
+            assert type(data) == cppyy.types.LowLevelView
+            assert len(data) == 10
+
+            for i, d in zip(range(-5, 5, 1), data):
+                assert d == i
+
 
 class TestSTLSTRING:
     def setup_class(cls):
