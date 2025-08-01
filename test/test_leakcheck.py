@@ -2,12 +2,6 @@ import py, os, sys
 from pytest import mark, skip
 from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL
 
-currpath = py.path.local(__file__).dirpath()
-test_dct = str(currpath.join("datatypesDict"))
-
-def setup_module(mod):
-    setup_make("datatypes")
-
 nopsutil = False
 try:
     import psutil
@@ -18,9 +12,6 @@ except ImportError:
 class TestLEAKCHECK:
     def setup_class(cls):
         import cppyy, psutil
-
-        cls.test_dct = test_dct
-        cls.memory = cppyy.load_reflection_info(cls.test_dct)
 
         cls.process = psutil.Process(os.getpid())
 
