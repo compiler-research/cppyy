@@ -498,3 +498,72 @@ class TestCPP11FEATURES:
         a = Inherit()
       # Test whether this attribute was inherited
         assert a.y == 66.
+
+    def test18_unique_ptr_identity(self):
+        """std::unique_ptr identity preservation"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        namespace UniqueIdentity {
+        struct A {
+            A(int _a) : a(_a) {}
+            int a;
+        };
+
+        std::unique_ptr<A> create() { return std::make_unique<A>(37); }
+
+        struct Consumer {
+        public:
+            Consumer(std::unique_ptr<A> & ptr) : fPtr{std::move(ptr)} {
+                ptr.reset();
+            }
+
+            const A& get() const { return *fPtr; }
+            const std::unique_ptr<A>& pget() const { return fPtr; }
+
+        private:
+            std::unique_ptr<A> fPtr;
+        }; }""")
+
+        ns = cppyy.gbl.UniqueIdentity
+
+        x = ns.create()
+        assert x.a == 37
+
+        c = ns.Consumer(x)
+        x = c.get()
+        assert x.a == 37
+
+        p1 = c.pget()
+        p2 = c.pget()
+        assert p1 is p2
+
+    def test19_smartptr_from_callback(self):
+        """Return a smart pointer from a callback"""
+
+        import cppyy
+
+        cppyy.cppdef(r"""\
+        namespace SmartPtrCallback {
+        struct Dummy {
+            virtual ~Dummy() = default;
+        };
+
+        std::shared_ptr<Dummy> dummy_create() {
+            return std::make_shared<Dummy>();
+        }
+
+        typedef std::shared_ptr<Dummy> (*fff)();
+
+        std::shared_ptr<Dummy> call_creator(fff func) {
+            return func();
+        }}""")
+
+        std = cppyy.gbl.std
+        ns = cppyy.gbl.SmartPtrCallback
+
+        def pyfunc() -> std.shared_ptr[ns.Dummy]:
+             return ns.dummy_create()
+
+        assert ns.call_creator(pyfunc)

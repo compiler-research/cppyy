@@ -1256,3 +1256,138 @@ class TestREGRESSION:
         ns = cppyy.gbl.TypedefedEnum
 
         assert ns.func(ns.WEDNESDAY) == 2
+
+    def test42_char_arrays_consistence(self):
+        """Consistent usage of char[] arrays"""
+
+        import cppyy
+
+        cppyy.cppdef(r"""
+        namespace CharArrays {
+        struct Foo {
+            char val[10], *ptr;
+            char values[2][10], *pointers[2];
+        };
+
+        void set_pointers(struct Foo* foo) {
+        // populate arrays
+            strcpy(foo->val, "howdy!");
+            strcpy(foo->values[0], "hello");
+            strcpy(foo->values[1], "world!");
+
+        // set pointers
+            foo->ptr = foo->val;
+            foo->pointers[0] = foo->values[0];
+            foo->pointers[1] = foo->values[1];
+        } }""")
+
+        ns = cppyy.gbl.CharArrays
+
+        foo = ns.Foo()
+        ns.set_pointers(foo)
+
+        howdy = 'howdy!'
+        hello = 'hello'
+        world = 'world!'
+
+        assert ''.join(foo.val)[:len(howdy)] == howdy
+        assert foo.ptr == howdy
+        assert foo.values[0].as_string() == hello
+        assert foo.values[1].as_string() == world
+        assert foo.pointers[0] == 'hello'
+        assert foo.pointers[1] == 'world!'
+
+    def test43_static_with_default(self):
+        """Call a static method with default args on an instance"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        namespace StaticWithDefault {
+        struct MyClass {
+            void static smethod(const std::string& s1, const std::string& s2="") {}
+        }; }""")
+
+        ns = cppyy.gbl.StaticWithDefault
+        obj = ns.MyClass()
+
+        obj.smethod("one", "two")
+        obj.smethod("one")        # used to fail with vectorcall
+
+    def test44_heuristic_mem_policy(self):
+        """Ownership of arguments with heuristic memory policy"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        namespace MemTester {
+           void CallRef( std::string&) {}
+           void CallConstRef( const std::string&) {}
+           void CallPtr( std::string*) {}
+           void CallConstPtr( const std::string*) {}
+        };
+        """)
+
+        try:
+            # The scope with the heuristic memory policy is in a try-except-finally block
+            # to ensure the memory policy is always reset.
+            old_memory_policy = cppyy._backend.SetMemoryPolicy(cppyy._backend.kMemoryHeuristics)
+
+            # Validate the intended behavior for different argument types:
+            #   const ref : caller keeps ownership
+            #   const ptr : caller keeps ownership
+            #   ref       : caller keeps ownership
+            #   ptr       : caller passed ownership to callee
+
+            # The actual type doesn't matter
+            args = [cppyy.gbl.std.string() for i in range(4)]
+
+            cppyy.gbl.MemTester.CallConstRef(args[0])
+            assert args[0].__python_owns__
+
+            cppyy.gbl.MemTester.CallConstPtr(args[1])
+            assert args[1].__python_owns__
+
+            cppyy.gbl.MemTester.CallRef(args[2])
+            assert args[2].__python_owns__
+
+            cppyy.gbl.MemTester.CallPtr(args[3])
+            assert not args[3].__python_owns__
+            # Let's give back the ownership to Python here so there is no leak
+            cppyy._backend.SetOwnership(args[3], True)
+        except:
+            raise # rethrow the exception
+        finally:
+            cppyy._backend.SetMemoryPolicy(old_memory_policy)
+
+    def test45_typedef_resolution(self):
+        """Typedefs starting with 'c'"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        typedef const int my_custom_type_t;
+        typedef const int cmy_custom_type_t;
+        """)
+
+        assert cppyy.gbl.CppyyLegacy.TClassEdit.ResolveTypedef("my_custom_type_t") == "const int"
+        assert cppyy.gbl.CppyyLegacy.TClassEdit.ResolveTypedef("cmy_custom_type_t") == "const int"
+
+    def test46_exception_narrowing(self):
+        """Exception narrowing to C++ exception of all overloads"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        namespace OverloadThrows {
+        class Foo {
+        public:
+            void bar() { throw std::logic_error("This is fine"); }
+            void bar() const { throw std::logic_error("This is fine"); }
+        }; }""")
+
+        ns = cppyy.gbl.OverloadThrows
+
+        foo = ns.Foo()
+        with raises(cppyy.gbl.std.logic_error):
+            foo.bar()
