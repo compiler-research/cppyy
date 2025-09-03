@@ -44,6 +44,8 @@ class TestTypeHints:
                 float callme(std::string a, bool b, std::vector<int> c) { return 0.0f; }
                 template <typename T>
                 T callme(T v) { return v; }
+                template <typename T>
+                static T s_callme(T v) { return v; }
             };
             float callme(std::string a, bool b, std::vector<int> c) { return 0.0f; }
             template <typename T>
@@ -57,40 +59,40 @@ class TestTypeHints:
         from cppyy import gbl, generate_typehints
 
         typehint = generate_typehints("x")
-        assert "x: int\n" == typehint
+        assert typehint.startswith("x: int\n")
         typehint = generate_typehints("y")
-        assert "y: float\n" == typehint
+        assert typehint.startswith("y: float\n")
         typehint = generate_typehints("z")
-        assert "z: int\n" == typehint
+        assert typehint.startswith("z: int\n")
         typehint = generate_typehints("a")
-        assert "a: str\n" == typehint
+        assert typehint.startswith("a: str\n")
         typehint = generate_typehints("sa")
-        assert "sa: int\n" == typehint
+        assert typehint.startswith("sa: int\n")
         typehint = generate_typehints("usa")
-        assert "usa: int\n" == typehint
+        assert typehint.startswith("usa: int\n")
 
-        with raises(NotImplementedError) as err:
-            generate_typehints("MyKlass")
-        assert "class" in str(err)
+        typehint = generate_typehints("MyKlass")
+        assert "class MyKlass" in typehint
 
         typehint = generate_typehints("callme")
         assert (
-            '@overload\ndef callme (a: "std.string", b: bool, c: "std.vector[int]") -> float: ...\n'
-            == typehint
+            '@overload\ndef callme(a: "std.string", b: bool, c: "std.vector[int]") -> float:\n'
+            in typehint
         )
 
         typehint = generate_typehints("Klass")
-        assert "Klass = MyKlass\n" == typehint
+        assert typehint.startswith("Klass = MyKlass\n")
 
         typehint = generate_typehints("KlassFloat")
-        assert "KlassFloat = \"MyTKlass[float]\"\n" == typehint
+        assert typehint.startswith("KlassFloat = \"MyTKlass[float]\"\n")
 
-        with raises(NotImplementedError) as err:
-            generate_typehints("MyTKlass")
+        typehint = generate_typehints("MyTKlass")
+        assert "class MyTKlass[T]:" in typehint
+        assert "obj: T" in typehint
 
-        with raises(NotImplementedError) as err:
-            generate_typehints("TypeHints")
-        assert "namespace" in str(err)
+        
+        typehint = generate_typehints("TypeHints")
+        assert "class TypeHints:" in typehint
 
         with raises(TypeError) as err:
             generate_typehints("unknown")
