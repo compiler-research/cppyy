@@ -1719,7 +1719,7 @@ class TestSTLSTRING_VIEW:
 
         import cppyy, gc
 
-        if cppyy.gbl.gInterpreter.ProcessLine("__cplusplus;") <= 201402:
+        if cppyy.gbl.Cpp.Evaluate("__cplusplus;") <= 201402:
             # string_view exists as of C++17
             return
         # view on (converted) unicode
