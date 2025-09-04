@@ -874,7 +874,7 @@ class TestSTDNOTINGLOBAL:
         import cppyy
 
         cppyy.cppdef("""\
-        #if __has_include(<span>)
+        #if __cplusplus >= 202002
         #include <span>
         std::span<int> my_test_span1;
         #endif
