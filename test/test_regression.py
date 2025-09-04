@@ -1366,12 +1366,15 @@ class TestREGRESSION:
         import cppyy
 
         cppyy.cppdef("""\
+        namespace Cppyy {
+            std::string ResolveName(const std::string& name);
+        }
         typedef const int my_custom_type_t;
         typedef const int cmy_custom_type_t;
         """)
 
-        assert cppyy.gbl.CppyyLegacy.TClassEdit.ResolveTypedef("my_custom_type_t") == "const int"
-        assert cppyy.gbl.CppyyLegacy.TClassEdit.ResolveTypedef("cmy_custom_type_t") == "const int"
+        assert cppyy.gbl.Cppyy.ResolveName("my_custom_type_t") == "const int"
+        assert cppyy.gbl.Cppyy.ResolveName("cmy_custom_type_t") == "const int"
 
     def test46_exception_narrowing(self):
         """Exception narrowing to C++ exception of all overloads"""
