@@ -435,7 +435,7 @@ class TestNUMBA:
 
         ns = cppyy.gbl.RefTest
         assert ns.Box.__dict__['a'].__cpp_reflex__(cppyy.reflex.TYPE) == 'long'
-        assert ns.Box.__dict__['b'].__cpp_reflex__(cppyy.reflex.TYPE) == 'long*'
+        assert ns.Box.__dict__['b'].__cpp_reflex__(cppyy.reflex.TYPE) == 'long *'
 
         @numba.njit()
         def inc_b(d, k):
@@ -531,7 +531,7 @@ class TestNUMBA:
                 x = np.square(x)
             return x
 
-        assert ns.BoxVector.__dict__['a'].__cpp_reflex__(cppyy.reflex.TYPE) == 'std::vector<long>*'
+        assert ns.BoxVector.__dict__['a'].__cpp_reflex__(cppyy.reflex.TYPE) == 'std::vector<long> *'
 
         add_vec_fast(ns.BoxVector())
         square_vec_fast(ns.BoxVector())
