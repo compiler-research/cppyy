@@ -1,7 +1,7 @@
 import py, os, sys
 import math, time
 from pytest import mark, raises
-from .support import setup_make
+from .support import setup_make, IS_LINUX_ARM
 
 try:
     import numba
@@ -467,6 +467,7 @@ class TestNUMBA:
         assert b.value == z + k
         assert c.value == y + k
 
+    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crash in llvmlite on Linux ARM")
     def test12_std_vector_pass_by_ref(self):
         """Numba-JITing of a method that performs scalar addition to a std::vector initialised through pointers """
         import cppyy
