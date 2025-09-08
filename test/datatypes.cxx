@@ -62,6 +62,8 @@ CppyyTestData::CppyyTestData() : m_const_int(17), m_owns_arrays(false)
     for (int i = 0; i < N; ++i) {
         m_bool_array[i]      =  bool(i%2);
         m_bool_array2[i]     =  bool((i+1)%2);
+        m_schar_array[i]     =   1*i;
+        m_schar_array2[i]     =  2*i;
         m_uchar_array[i]     =   1u*i;
         m_uchar_array2[i]    =   2u*i;
 #if __cplusplus > 201402L
