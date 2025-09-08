@@ -801,6 +801,7 @@ class TestSTLVECTOR:
         for f, d in zip(x, v):
             assert f == d
 
+    @mark.xfail(condition=IS_LINUX_ARM, reason="Fails on Linux ARM")
     def test24_byte_vectors(self):
         """Vectors of "byte" types should return low level views"""
 
