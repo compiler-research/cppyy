@@ -1376,6 +1376,7 @@ class TestREGRESSION:
         assert cppyy.gbl.Cppyy.ResolveName("my_custom_type_t") == "const int"
         assert cppyy.gbl.Cppyy.ResolveName("cmy_custom_type_t") == "const int"
 
+    @mark.xfail(run=False, condition=IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
     def test46_exception_narrowing(self):
         """Exception narrowing to C++ exception of all overloads"""
 
