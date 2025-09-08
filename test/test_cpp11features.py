@@ -539,6 +539,7 @@ class TestCPP11FEATURES:
         p2 = c.pget()
         assert p1 is p2
 
+    @mark.xfail(run=False, condition=IS_LINUX_ARM and IS_VALGRIND, reason="Valgrind issues on ARM")
     def test19_smartptr_from_callback(self):
         """Return a smart pointer from a callback"""
 
