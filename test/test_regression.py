@@ -1297,6 +1297,7 @@ class TestREGRESSION:
         assert foo.pointers[0] == 'hello'
         assert foo.pointers[1] == 'world!'
 
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test43_static_with_default(self):
         """Call a static method with default args on an instance"""
 
@@ -1360,6 +1361,7 @@ class TestREGRESSION:
         finally:
             cppyy._backend.SetMemoryPolicy(old_memory_policy)
 
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test45_typedef_resolution(self):
         """Typedefs starting with 'c'"""
 

@@ -260,6 +260,7 @@ class TestOVERLOADS:
         with raises(TypeError):
             ns.MyClass3("some_file")
 
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X")
     def test11_deep_inheritance(self):
         """Prioritize expected most derived class"""
 

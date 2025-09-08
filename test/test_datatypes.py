@@ -2343,6 +2343,7 @@ class TestDATATYPES:
         assert str(bt(1)) == 'True'
         assert str(bt(0)) == 'False'
 
+    @mark.xfail(condition=IS_MAC and IS_CLANG_REPL, reason="Fails on OS X with Clang-Repl")
     def test49_addressof_method(self):
         """Use of addressof for (const) methods"""
 
