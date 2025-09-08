@@ -153,14 +153,18 @@ class TestDATATYPES:
 
         # reading of integer array types
         names = ['schar', 'uchar', 'short', 'ushort',    'int', 'uint',    'long',  'ulong']
-        alpha = [ (1, 2), (1, 2), (-1, -2),   (3, 4), (-5, -6), (7, 8), (-9, -10), (11, 12)]
+        alpha = [( 1, 2), (1, 2), (-5, -6), (7, 8), (-9, -10), (11, 23), (-13, -14), (15, 18)]
         if self.has_byte: names.append('byte'); alpha.append((3,4))
 
-        for j in range(self.N):
-            assert getattr(c, 'm_%s_array'    % names[i])[i]   == alpha[i][0]*i
-            assert getattr(c, 'get_%s_array'  % names[i])()[i] == alpha[i][0]*i
-            assert getattr(c, 'm_%s_array2'   % names[i])[i]   == alpha[i][1]*i
-            assert getattr(c, 'get_%s_array2' % names[i])()[i] == alpha[i][1]*i
+        for type_idx, name in enumerate(names):
+            for j in range(self.N):
+                assert getattr(c, f'm_{name}_array')[j]   == alpha[type_idx][0] * j
+                assert getattr(c, f'get_{name}_array')()[j] == alpha[type_idx][0] * j
+                # the signed char* array m_schar_array2 is implicitly converted to basic_string
+                # hence we only compare the value returned using the getter get_schar_array2
+                if name != 'schar':
+                    assert getattr(c, f'm_{name}_array2')[j]   == alpha[type_idx][1] * j
+                assert getattr(c, f'get_{name}_array2')()[j] == alpha[type_idx][1] * j
 
         # reading of floating point array types
         for k in range(self.N):
