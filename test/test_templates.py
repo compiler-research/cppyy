@@ -1300,8 +1300,10 @@ class TestTEMPLATED_TYPEDEFS:
         ns = cppyy.gbl.ShadowY.ShadowZ
         C = cppyy.gbl.ShadowX.ShadowC
 
-      # lookup of shadowed class will fail
-        raises(TypeError, ns.f.__getitem__(C.__cpp_name__))
+      # TODO: This should error out
+      # raises(TypeError, ns.f.__getitem__(C.__cpp_name__))
+      # lookup of shadowed class no longer fails, but gives us the same template proxy to f()
+        assert ns.f.__getitem__(C.__cpp_name__) == ns.f
 
       # direct instantiation now succeeds
         ns.f[C]()
