@@ -195,7 +195,9 @@ def getslice_cpython_test(type2test):
 class TestSTLVECTOR:
     def setup_class(cls):
         cls.test_dct = test_dct
+        from importlib import reload
         import cppyy
+        reload(cppyy)
         cls.stltypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = cppyy.gbl.N
 
