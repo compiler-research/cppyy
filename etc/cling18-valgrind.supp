@@ -12,7 +12,7 @@
    fun:_ZN5cling17IncrementalParser13ParseInternalEN4llvm9StringRefE
    fun:_ZN5cling17IncrementalParser7CompileEN4llvm9StringRefERKNS_18CompilationOptionsE
    fun:_ZN5cling11Interpreter7declareERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPPNS_11TransactionE
-   fun:_ZN3Cpp7DeclareEPKcb
+   fun:_ZN3Cpp7Declare*
 }
 {
    Cling LLVM 18 CodeGen
