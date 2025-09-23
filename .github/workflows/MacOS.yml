@@ -408,7 +408,6 @@ jobs:
           brew unlink "$pkg"
           brew link --overwrite "$pkg"
         done
-        brew upgrade --force 
         brew install eigen
         brew install boost
         brew install gnu-sed
