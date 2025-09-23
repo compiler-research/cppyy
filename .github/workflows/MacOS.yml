@@ -166,8 +166,6 @@ jobs:
           brew unlink "$pkg"
           brew link --overwrite "$pkg"
         done
-        brew upgrade openssl >/dev/null 2>&1 
-        brew upgrade
         brew install ninja
 
     - name: Build LLVM/Cling if the cache is invalid
