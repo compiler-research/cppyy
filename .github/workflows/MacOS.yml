@@ -22,22 +22,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: osx15-arm-clang-clang-repl-19
-            os: macos-15
+          - name: osx26-arm-clang-clang-repl-19
+            os: macos-26
             compiler: clang
             clang-runtime: '19'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
-          - name: osx15-arm-clang-clang-repl-18
-            os: macos-15
+          - name: osx26-arm-clang-clang-repl-18
+            os: macos-26
             compiler: clang
             clang-runtime: '18'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
-          - name: osx15-arm-clang-clang18-cling
-            os: macos-15
+          - name: osx26-arm-clang-clang18-cling
+            os: macos-26
             compiler: clang
             clang-runtime: '18'
             cling: On
@@ -116,8 +116,9 @@ jobs:
         echo "CODE_COVERAGE=0" >> $GITHUB_ENV
         echo "ncpus=$(sysctl -n hw.ncpu)" >> $GITHUB_ENV
 
-    - name: Setup compiler
-      if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+    - name: Setup Compiler on MacOS
+      if: runner.os == 'macOS'
+      shell: bash
       run: |
         vers="${compiler#*-}"
         if [[ "${{ matrix.compiler }}" == *"gcc"* ]]; then
@@ -125,13 +126,13 @@ jobs:
           echo "CC=gcc-${vers}" >> $GITHUB_ENV
           echo "CXX=g++-${vers}" >> $GITHUB_ENV
         else
-          brew install llvm@15
           if [[ "$(uname -m)" == "x86_64" ]]; then
+            brew install llvm@15
             echo "CC=/usr/local/opt/llvm@15/bin/clang" >> $GITHUB_ENV
             echo "CXX=/usr/local/opt/llvm@15/bin/clang++" >> $GITHUB_ENV
           else
-            echo "CC=/opt/homebrew/opt/llvm@15/bin/clang" >> $GITHUB_ENV
-            echo "CXX=/opt/homebrew/opt/llvm@15/bin/clang++" >> $GITHUB_ENV
+            echo "CC=/opt/homebrew/opt/llvm@20/bin/clang" >> $GITHUB_ENV
+            echo "CXX=/opt/homebrew/opt/llvm@20/bin/clang++" >> $GITHUB_ENV
           fi
         fi
         echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
@@ -250,20 +251,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: osx15-arm-clang-clang-repl-19-cppyy
-            os: macos-15
+          - name: osx26-arm-clang-clang-repl-19-cppyy
+            os: macos-26
             compiler: clang
             clang-runtime: '19'
             cling: Off
             cppyy: On
-          - name: osx15-arm-clang-clang-repl-18-cppyy
-            os: macos-15
+          - name: osx26-arm-clang-clang-repl-18-cppyy
+            os: macos-26
             compiler: clang
             clang-runtime: '18'
             cling: Off
             cppyy: On
-          - name: osx15-arm-clang-clang18-cling-cppyy
-            os: macos-15
+          - name: osx26-arm-clang-clang18-cling-cppyy
+            os: macos-26
             compiler: clang
             clang-runtime: '18'
             cling: On
@@ -343,7 +344,9 @@ jobs:
         echo "CODE_COVERAGE=0" >> $GITHUB_ENV
         echo "ncpus=$(sysctl -n hw.ncpu)" >> $GITHUB_ENV
 
-    - name: Setup compiler
+    - name: Setup Compiler on MacOS
+      if: runner.os == 'macOS'
+      shell: bash
       run: |
         vers="${compiler#*-}"
         if [[ "${{ matrix.compiler }}" == *"gcc"* ]]; then
@@ -351,13 +354,13 @@ jobs:
           echo "CC=gcc-${vers}" >> $GITHUB_ENV
           echo "CXX=g++-${vers}" >> $GITHUB_ENV
         else
-          brew install llvm@15
           if [[ "$(uname -m)" == "x86_64" ]]; then
+            brew install llvm@15
             echo "CC=/usr/local/opt/llvm@15/bin/clang" >> $GITHUB_ENV
             echo "CXX=/usr/local/opt/llvm@15/bin/clang++" >> $GITHUB_ENV
           else
-            echo "CC=/opt/homebrew/opt/llvm@15/bin/clang" >> $GITHUB_ENV
-            echo "CXX=/opt/homebrew/opt/llvm@15/bin/clang++" >> $GITHUB_ENV
+            echo "CC=/opt/homebrew/opt/llvm@20/bin/clang" >> $GITHUB_ENV
+            echo "CXX=/opt/homebrew/opt/llvm@20/bin/clang++" >> $GITHUB_ENV
           fi
         fi
         echo "SDKROOT=$(xcrun --sdk macosx --show-sdk-path)" >> $GITHUB_ENV
