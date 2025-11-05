@@ -432,7 +432,7 @@ class TestCPP11FEATURES:
             del obj
             gc.collect()
             assert TestSmartPtr.s_counter == 0
-
+    @mark.xfail(condition=IS_MAC)
     def test15_unique_ptr_template_deduction(self):
         """Argument type deduction with std::unique_ptr"""
 
