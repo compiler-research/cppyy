@@ -264,7 +264,7 @@ jobs:
             cling: Off
             cppyy: On
           - name: osx26-arm-clang-clang18-cling-cppyy
-            os: macos-15
+            os: macos-26
             compiler: clang
             clang-runtime: '18'
             cling: On
