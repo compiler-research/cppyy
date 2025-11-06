@@ -270,7 +270,6 @@ class TestCPP11FEATURES:
         assert cppyy.gbl.TestMoving1.s_instance_counter == 0
         assert cppyy.gbl.TestMoving2.s_instance_counter == 0
 
-    @mark.xfail
     def test08_initializer_list(self):
         """Initializer list construction"""
 
@@ -308,7 +307,6 @@ class TestCPP11FEATURES:
         for l in (['x'], ['x', 'y', 'z']):
             assert ns.foo(l) == std.vector['std::string'](l)
 
-    @mark.xfail
     def test09_lambda_calls(self):
         """Call (global) lambdas"""
 
@@ -453,7 +451,6 @@ class TestCPP11FEATURES:
         with raises(ValueError):  # not an RValue
             cppyy.gbl.UniqueTempl.returnptr[int](uptr_in)
 
-    @mark.xfail(run = not IS_CLING, reason = "Does not crash on Cling, but the failure causes subsequent tests to fail")
     def test16_unique_ptr_moves(self):
         """std::unique_ptr requires moves"""
 
