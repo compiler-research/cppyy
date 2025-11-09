@@ -205,10 +205,10 @@ def load_reflection_info(name):
     return True
 
 def _begin_capture_stderr():
-    _backend._begin_capture_stderr()
+    gbl.Cpp.BeginStdStreamCapture(gbl.Cpp.CaptureStreamKind.kStdErr)
 
 def _end_capture_stderr():
-    err = _backend._end_capture_stderr()
+    err = gbl.Cpp.EndStdStreamCapture()
     if err:
         try:
             return "\n%s" % err

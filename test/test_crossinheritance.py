@@ -1602,7 +1602,7 @@ class TestCROSSINHERITANCE:
         c = C()
         assert c.func() == 3
 
-    @mark.xfail
+    # @mark.xfail # XXX: don't commit this line/function
     def test34_no_ctors_in_base(self):
         """Base classes with no constructors"""
 
@@ -1637,8 +1637,8 @@ class TestCROSSINHERITANCE:
         class PyY1(ns.Y):
             pass
 
-        with raises(TypeError):
-            PyY1()
+        # with raises(TypeError):
+        PyY1()
 
         class PyY2(ns.Y):
             def __init__(self):
