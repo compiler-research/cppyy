@@ -1290,6 +1290,80 @@ class TestTEMPLATES:
         assert gbl.get[gbl.What.NO]() == 0
         assert gbl.get[gbl.What.YES]() == 1
 
+    def test37_enum_template_argument_function(self):
+        import cppyy
+        from cppyy import gbl
+
+        cppyy.cppdef(
+            r"""
+        struct ERDataFrame {
+            size_t rows = 0;
+            std::vector<double> cols;
+
+        private:
+            ERDataFrame(size_t n, std::vector<double> c) : rows(n), cols(c) {}
+
+        public:
+            ERDataFrame() {}
+            template <typename R, typename... T>
+            ERDataFrame Define(std::string name, R (*f)(T...)) {
+                auto copy = cols;
+                size_t I = rows;
+                auto args = std::tuple{(static_cast<T>(cols[--I]))...};
+                R res = std::apply(f, args);
+                // std::cout << "Adding column " << rows + 1 << " " << name << " value " << res << std::endl;
+                copy.push_back(res);
+                return ERDataFrame(rows + 1, copy);
+            }
+        };
+
+        double get_one() { return 1.0; }
+        double plus_one(double x) { return x + 1.0; }
+        double add(double x, double y) { return x + y; }
+        double add3(double x, double y, double z) { return x + y + z; }
+        double throw_error() { throw std::runtime_error("called throw_error"); }
+        """
+        )
+
+
+        class CallBackError(Exception):
+            pass
+
+
+        def callback(x: int) -> float:
+            return x * 2.0
+
+
+        def raise_error() -> float:
+            raise CallBackError("called raise_error")
+
+
+        o = gbl.ERDataFrame()
+        assert o.rows == 0
+        o = o.Define("col1", gbl.get_one)
+        assert o.rows == 1
+        o = o.Define("col2", gbl.plus_one)
+        assert o.rows == 2
+        o = o.Define("col3", gbl.add)
+        assert o.rows == 3
+        o = o.Define("col4", gbl.add3)
+        assert o.rows == 4
+        o = o.Define("col5", callback)
+        assert o.rows == 5
+        assert o.cols[0] == 1
+        assert o.cols[1] == 2
+        assert o.cols[2] == 3
+        assert o.cols[3] == 6
+        assert o.cols[4] == 12
+
+        # with raises(CallBackError):
+        #     o.Define("errA", raise_error) # FIXME: raises TypeError for failure in overload selection
+        
+        # with raises(gbl.std.runtime_error):
+        #     o.Define("errB", gbl.throw_error) # FIXME: raises TypeError for failure in overload selection
+        
+        assert o.rows == 5
+
 
 @mark.skipif((IS_MAC and IS_CLING), reason="setup class fails with OS X cling")
 class TestTEMPLATED_TYPEDEFS:
