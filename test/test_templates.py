@@ -1264,6 +1264,32 @@ class TestTEMPLATES:
         
         assert o.rows == 5
 
+    def test37_enum_template_argument_function(self):
+        import cppyy
+        from cppyy import gbl
+
+        cppyy.cppdef(
+            r"""
+        enum What { NO, YES };
+
+        template <What E>
+        struct EE {
+            What w = E;
+        };
+
+        template <What E>
+        What get() {
+            return E;
+        }
+        """
+        )
+
+        assert gbl.EE[gbl.What.NO]().w == 0
+        assert gbl.EE[gbl.What.YES]().w == 1
+
+        assert gbl.get[gbl.What.NO]() == 0
+        assert gbl.get[gbl.What.YES]() == 1
+
 
 @mark.skipif((IS_MAC and IS_CLING), reason="setup class fails with OS X cling")
 class TestTEMPLATED_TYPEDEFS:
