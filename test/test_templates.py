@@ -187,7 +187,6 @@ class TestTEMPLATES:
         assert issubclass(select_template_arg[0, int, float].argument, int)
         assert issubclass(select_template_arg[1, int, float].argument, float)
 
-    @mark.xfail
     def test08_using_of_static_data(self):
         """Derived class using static data of base"""
 
@@ -901,7 +900,6 @@ class TestTEMPLATES:
 
         ns.Templated()       # used to crash
 
-    @mark.xfail(run=False, condition=IS_CLING, reason="Crashed with Cling")
     def test31_ltlt_in_template_name(self):
         """Verify lookup of template names with << in the name"""
 
@@ -1108,7 +1106,6 @@ class TestTEMPLATES:
                         run_n = getattr(cppyy.gbl, 'TNaRun_%d' % n)
                         getattr(run_n, t)
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING), reason="Crashes on OS X + Cling")
     def test33_using_template_argument(self):
         """`using` type as template argument"""
 
@@ -1391,7 +1388,6 @@ class TestTEMPLATE_TYPE_REDUCTION:
         import cppyy
         cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test01_reduce_binary(self):
         """Squash template expressions for binary operations (like in gmpxx)"""
 

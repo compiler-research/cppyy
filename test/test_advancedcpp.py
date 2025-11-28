@@ -688,7 +688,6 @@ class TestADVANCEDCPP:
         assert cppyy.gbl.overload_one_way().gime() == 1
         assert cppyy.gbl.overload_the_other_way().gime() == "aap"
 
-    @mark.xfail(run=not IS_VALGRIND, condition =(IS_LINUX and IS_CLING), reason="Fails on Linux Cling")
     def test21_access_to_global_variables(self):
         """Access global_variables_and_pointers"""
 

@@ -235,7 +235,6 @@ class TestREGRESSION:
         cppyy.cppdef(code)
         cppyy.gbl.some_foo_calling_python()
 
-    @mark.xfail(run = False, condition = IS_CLING, reason="Crashes on Cling")
     def test10_enum_in_global_space(self):
         """Enum declared in search.h did not appear in global space"""
 
