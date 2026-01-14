@@ -22,6 +22,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - name: osx26-arm-clang-clang-repl-21
+            os: macos-26
+            compiler: clang
+            clang-runtime: '21'
+            cling: Off
+            llvm_enable_projects: "clang"
+            llvm_targets_to_build: "host"
           - name: osx26-arm-clang-clang-repl-20
             os: macos-26
             compiler: clang
@@ -51,6 +58,13 @@ jobs:
             cling-version: '1.2'
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host;NVPTX"
+          - name: osx15-x86-clang-clang-repl-21
+            os: macos-15-intel
+            compiler: clang
+            clang-runtime: '21'
+            cling: Off
+            llvm_enable_projects: "clang"
+            llvm_targets_to_build: "host"
           - name: osx15-x86-clang-clang-repl-20
             os: macos-15-intel
             compiler: clang
@@ -265,6 +279,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - name: osx26-arm-clang-clang-repl-21-cppyy
+            os: macos-26
+            compiler: clang
+            clang-runtime: '21'
+            cling: Off
+            cppyy: On
           - name: osx26-arm-clang-clang-repl-20-cppyy
             os: macos-26
             compiler: clang
@@ -289,6 +309,12 @@ jobs:
             clang-runtime: '18'
             cling: On
             cling-version: '1.2'
+            cppyy: On
+          - name: osx15-x86-clang-clang-repl-21-cppyy
+            os: macos-15-intel
+            compiler: clang
+            clang-runtime: '21'
+            cling: Off
             cppyy: On
           - name: osx15-x86-clang-clang-repl-20-cppyy
             os: macos-15-intel

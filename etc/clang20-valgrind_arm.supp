@@ -1,7 +1,0 @@
-{
- Mismatched free()
- Memcheck:Free
- fun:free
- obj:*
-}
-
