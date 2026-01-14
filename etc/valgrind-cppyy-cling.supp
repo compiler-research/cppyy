@@ -4,31 +4,6 @@
 # calls, we'll just leak all JITed code rather than risk spurious crashes in
 # hard-to-reproduce cases.
 #
-{
-   lazily JITed callfuncs
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   fun:_ZN4llvm4UsernwEm
-   fun:_ZN5clang7CodeGen13CodeGenModule23GetOrCreateLLVMFunctionEN4llvm9StringRefEPNS2_4TypeENS_10GlobalDeclEbbbNS2_13AttributeListENS0_15ForDefinition_tE
-}
-
-{
-   lazily JITed template instantiations
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:__ZN5clang24TemplateDeclInstantiator18VisitCXXMethodDeclEPNS_13CXXMethodDeclEPNS_21TemplateParameterListEb
-}
-
-{
-   lazily JITed template instantiations
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang4Sema38InstantiateClassTemplateSpecializationENS_14SourceLocationEPNS_31ClassTemplateSpecializationDeclENS_26TemplateSpecializationKindEb
-}
 
 {
    lazily JITed global operators
@@ -67,55 +42,6 @@
 }
 
 {
-   clang module symbol table
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   fun:allocate
-   ...
-   fun:_ZN5clang7CodeGen13CodeGenModule7ReleaseEv
-   fun:_ZN5cling17IncrementalParser18codeGenTransactionEPNS_11TransactionE
-   fun:_ZN5cling17IncrementalParser17commitTransactionEN4llvm14PointerIntPairIPNS_11TransactionELj2ENS0_12EParseResultENS1_21PointerLikeTypeTraitsIS4_EEEE
-}
-
-{
-   CodeGen
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZL21EmitMemberInitializerRN5clang7CodeGen15CodeGenFunctionEPKNS_13CXXRecordDeclEPNS_18CXXCtorInitializerEPKNS_18CXXConstructorDeclERNS0_15FunctionArgListE
-}
-
-{
-   CodeGen cleanup
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZL11EmitCleanupRN5clang7CodeGen15CodeGenFunctionEPNS0_12EHScopeStack7CleanupENS4_5FlagsEPN4llvm5ValueE
-}
-
-{
-   CodeGen globals
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Zn*
-   ...
-   fun:_ZN5clang7CodeGen13CodeGenModule20EmitGlobalDefinitionENS_10GlobalDeclEPN4llvm11GlobalValueE
-}
-
-{
-   CodeGen cleanup
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   fun:_ZN4llvm4UsernwEmj
-   ...
-   fun:_ZN5clang7CodeGen15CodeGenFunction15PopCleanupBlockEb
-}
-
-{
    cling Module use
    Memcheck:Leak
    match-leak-kinds: possible
@@ -125,211 +51,12 @@
 }
 
 {
-   cling Module use
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang17CodeGeneratorImpl11StartModuleERKSsRN4llvm11LLVMContextERKNS_14CodeGenOptionsE
-}
-
-{
-   cling macro
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang19PreprocessorOptions11addMacroDefEN4llvm9StringRefE
-}
-
-{
    llvm target
    Memcheck:Leak
    match-leak-kinds: possible
    fun:_Znwm
    ...
    fun:_ZN4llvm21RegisterTargetMachineINS_16X86TargetMachineEE9AllocatorERKNS_6TargetENS_9StringRefES6_S6_RKNS_13TargetOptionsENS_5Reloc5ModelENS_9CodeModel5ModelENS_10CodeGenOpt5LevelE
-}
-
-{
-   CodeGent SetFunctionAttributes
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang7CodeGen13CodeGenModule21SetFunctionAttributesENS_10GlobalDeclEPN4llvm8FunctionEbb
-}
-
-{
-   clang using statement
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZNK5clang11DeclContext16using_directivesEv
-}
-
-{
-   clang 'make decl visible'
-   Memcheck:Leak
-   match-leak-kinds: possible
-   ...
-   fun:_ZN5clang11DeclContext28makeDeclVisibleInContextImplEPNS_9NamedDeclEb
-}
-
-{
-   clang visibility
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZL24getExplicitVisibilityAuxPKN5clang9NamedDeclENS0_22ExplicitVisibilityKindEb
-}
-
-{
-   clang result of lookup declaration name
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang11DeclContext6lookupENS_15DeclarationNameE
-}
-
-{
-   clang result of lookup declaration name
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:malloc
-   ...
-   fun:_ZN5clang11DeclContext6lookupENS_15DeclarationNameE
-}
-
-{
-   clang ASTReader
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:malloc
-   ...
-   fun:_ZN5clang9ASTReader*
-}
-
-{
-   clang ASTReader
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang9ASTReader*
-}
-
-{
-   clang ASTReader
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:realloc
-   ...
-   fun:_ZN5clang9ASTReader*
-}
-
-{
-   Sema ActOnEndOfTranslation
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang4Sema25ActOnEndOfTranslationUnitEv
-}
-
-{
-   Function CodeGen
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang7CodeGen15CodeGenFunction12GenerateCodeENS_10GlobalDeclEPN4llvm8FunctionERKNS0_14CGFunctionInfoE
-}
-
-{
-   clang CodeGenFunction Emit*
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang7CodeGen15CodeGenFunction*Emit*
-}
-
-{
-   clang CodeGenFunction global state
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   fun:_ZN4llvm4UsernwEmj
-   ...
-   fun:_ZL21emitPointerArithmeticRN5clang7CodeGen15CodeGenFunctionERKN12_GLOBAL__N_19BinOpInfoEb
-}
-
-{
-   clang CodeGenModule Emit*
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang7CodeGen13CodeGenModule*Emit*
-}
-
-{
-   clang CodeGenModule Emit*
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang7CodeGen13CodeGenModule*emit*
-}
-
-{
-   CodeGen VTables
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   fun:_ZN4llvm4UsernwEmj
-   ...
-   fun:_ZN5clang7CodeGen14CodeGenVTables17*
-}
-
-{
-   clang AddIncludePath
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang19HeaderSearchOptions7AddPathEN4llvm9StringRefENS_8frontend15IncludeDirGroupEbb
-}
-
-{
-   clang FileManager
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang12HeaderSearch10LookupFileEN4llvm9StringRefENS_14SourceLocationEbPKNS_15DirectoryLookupERS6_NS1_8ArrayRefISt4pairIPKNS_9FileEntryEPKNS_14DirectoryEntryEEEEPNS1_15SmallVectorImplIcEESK_PNS_9ModuleMap11KnownHeaderEbbb
-}
-
-{
-   clang getFile
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang11FileManager7getFileEN4llvm9StringRefEbb
-}
-
-{
-   clang ScalarExprEmitter
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN12_GLOBAL__N_117ScalarExprEmitter20EmitScalarConversionEPN4llvm5ValueEN5clang8QualTypeES5_
 }
 
 {
@@ -452,15 +179,6 @@
    TObject::TObject() uses uninitialized value when allocated on the stack
    Memcheck:Cond
    fun:TObject
-}
-
-{
-   dictgen fwd decls
-   Memcheck:Leak
-   match-leak-kinds: possible
-   fun:_Znwm
-   ...
-   fun:_ZN5clang6Parser30ParseCXXClassMemberDeclarationENS_15AccessSpecifierEPNS_13AttributeListERKNS0_18ParsedTemplateInfoEPNS_21ParsingDeclRAIIObjectE
 }
 
 {
