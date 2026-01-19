@@ -26,6 +26,7 @@ jobs:
             os: macos-26
             compiler: clang
             clang-runtime: '21'
+            python-version: '3.14'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
@@ -33,6 +34,7 @@ jobs:
             os: macos-26
             compiler: clang
             clang-runtime: '20'
+            python-version: '3.13'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
@@ -40,6 +42,7 @@ jobs:
             os: macos-26
             compiler: clang
             clang-runtime: '19'
+            python-version: '3.12'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
@@ -47,6 +50,7 @@ jobs:
             os: macos-26
             compiler: clang
             clang-runtime: '18'
+            python-version: '3.11'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
@@ -54,6 +58,7 @@ jobs:
             os: macos-26
             compiler: clang
             clang-runtime: '18'
+            python-version: '3.14'
             cling: On
             cling-version: '1.2'
             llvm_enable_projects: "clang"
@@ -62,6 +67,7 @@ jobs:
             os: macos-15-intel
             compiler: clang
             clang-runtime: '21'
+            python-version: '3.14'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
@@ -69,6 +75,7 @@ jobs:
             os: macos-15-intel
             compiler: clang
             clang-runtime: '20'
+            python-version: '3.13'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
@@ -76,6 +83,7 @@ jobs:
             os: macos-15-intel
             compiler: clang
             clang-runtime: '19'
+            python-version: '3.12'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
@@ -83,6 +91,7 @@ jobs:
             os: macos-15-intel
             compiler: clang
             clang-runtime: '18'
+            python-version: '3.11'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host"
@@ -90,6 +99,7 @@ jobs:
             os: macos-15-intel
             compiler: clang
             clang-runtime: '18'
+            python-version: '3.14'
             cling: On
             cling-version: '1.2'
             llvm_enable_projects: "clang"
@@ -105,7 +115,7 @@ jobs:
     - name: Set up Python 
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: ${{ matrix.python-version }}
 
     - name: Save PR Info
       run: |
@@ -283,30 +293,35 @@ jobs:
             os: macos-26
             compiler: clang
             clang-runtime: '21'
+            python-version: '3.14'
             cling: Off
             cppyy: On
           - name: osx26-arm-clang-clang-repl-20-cppyy
             os: macos-26
             compiler: clang
             clang-runtime: '20'
+            python-version: '3.13'
             cling: Off
             cppyy: On
           - name: osx26-arm-clang-clang-repl-19-cppyy
             os: macos-26
             compiler: clang
             clang-runtime: '19'
+            python-version: '3.12'
             cling: Off
             cppyy: On
           - name: osx26-arm-clang-clang-repl-18-cppyy
             os: macos-26
             compiler: clang
             clang-runtime: '18'
+            python-version: '3.11'
             cling: Off
             cppyy: On
           - name: osx26-arm-clang-clang18-cling-cppyy
             os: macos-26
             compiler: clang
             clang-runtime: '18'
+            python-version: '3.14'
             cling: On
             cling-version: '1.2'
             cppyy: On
@@ -314,30 +329,35 @@ jobs:
             os: macos-15-intel
             compiler: clang
             clang-runtime: '21'
+            python-version: '3.14'
             cling: Off
             cppyy: On
           - name: osx15-x86-clang-clang-repl-20-cppyy
             os: macos-15-intel
             compiler: clang
             clang-runtime: '20'
+            python-version: '3.13'
             cling: Off
             cppyy: On
           - name: osx15-x86-clang-clang-repl-19-cppyy
             os: macos-15-intel
             compiler: clang
             clang-runtime: '19'
+            python-version: '3.12'
             cling: Off
             cppyy: On
           - name: osx15-x86-clang-clang-repl-18-cppyy
             os: macos-15-intel
             compiler: clang
             clang-runtime: '18'
+            python-version: '3.11'
             cling: Off
             cppyy: On
           - name: osx15-x86-clang-clang18-cling-cppyy
             os: macos-15-intel
             compiler: clang
             clang-runtime: '18'
+            python-version: '3.14'
             cling: On
             cling-version: '1.2'
             cppyy: On
@@ -368,7 +388,7 @@ jobs:
     - name: Set up Python 
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: ${{ matrix.python-version }}
 
     - name: Save PR Info
       run: |
@@ -566,13 +586,13 @@ jobs:
         echo ::endgroup::
         echo ::group::Run complete test suite
         set -o pipefail
-        python -m pytest -sv -ra | tee complete_testrun.log 2>&1
+        python -m pytest -v -ra | tee complete_testrun.log 2>&1
         set +o pipefail
         echo ::group::Crashing Test Logs
         # See if we don't have a crash that went away
         # Comment out all xfails but the ones that have a run=False condition.
         find . -name "*.py" -exec sed -i '/run=False/!s/^ *@mark.xfail\(.*\)/#&/' {} \;
-        python -m pytest -n 1 -m "xfail" --runxfail -sv -ra --max-worker-restart 512 | tee test_crashed.log 2>&1 || true
+        python -m pytest -n 1 -m "xfail" --runxfail -v -ra --max-worker-restart 512 | tee test_crashed.log 2>&1 || true
         git checkout .
         echo ::endgroup::
         echo ::group::XFAIL Test Logs
@@ -580,7 +600,7 @@ jobs:
         # avoid conditionally crashing xfails
         find . -name "*.py" -exec gsed -i -E 's/(^ *)@mark.xfail\(run=(.*)/\1@mark.skipif(condition=not \2/g' {} \;
         # See if we don't have an xfail that went away
-        python -m pytest --runxfail -sv -ra  | tee test_xfailed.log 2>&1 || true
+        python -m pytest --runxfail -v -ra  | tee test_xfailed.log 2>&1 || true
         git checkout .
         echo ::endgroup::
         echo ::group::Passing Test Logs
