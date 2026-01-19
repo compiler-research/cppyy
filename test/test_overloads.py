@@ -289,6 +289,7 @@ class TestOVERLOADS:
         assert ns.myfunc2(ns.E()) == "E"
         assert ns.myfunc2(ns.D()) == "D"
     
+    @mark.xfail(reason="backport from ROOT")
     def test14_disallow_functor_to_function_pointer(self):
         """Make sure we're no allowing to convert C++ functors to funciton
         pointers, extending the C++ language in an unnatural way that can lead

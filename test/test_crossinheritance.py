@@ -15,7 +15,7 @@ class TestCROSSINHERITANCE:
         import cppyy
         cls.example01 = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail(run=not (IS_CLANG_DEBUG or IS_CLING), reason="Crashes with ClangRepl with 'toString not implemented' and on Cling")
+    @mark.xfail(reason="Crashes with ClangRepl with 'toString not implemented' and on Cling")
     def test01_override_function(self):
         """Test ability to override a simple function"""
 
