@@ -1409,7 +1409,7 @@ class TestDATATYPES:
         gc.collect()
         raises(TypeError, c, 3, 3) # lambda gone out of scope
 
-    @mark.xfail(run=False, condition=IS_MAC_ARM, reason="Crashes with exception not being caught on Apple Silicon")
+    @mark.xfail(run=False, condition=IS_MAC, reason="Crashes on MacOS")
     def test28_callable_through_function_passing(self):
         """Passing callables through std::function"""
 
