@@ -599,7 +599,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m uv pip install pytest
         python -m uv pip install pytest-xdist
-        python -m uv pip install numba==0.61.2
+        if [[ "${{ matrix.python-version }}" != "3.14" ]]; then
+          python -m uv pip install numba==0.61.2
+        fi
         python -m uv pip install psutil
         echo ::endgroup::
         echo ::group::Run complete test suite

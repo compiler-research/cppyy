@@ -582,7 +582,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pytest
         python -m pip install pytest-xdist
-        python -m pip install numba==0.61.2
+        if [[ "${{ matrix.python-version }}" != "3.14" ]]; then
+          python -m pip install numba==0.61.2
+        fi
         echo ::endgroup::
         echo ::group::Run complete test suite
         set -o pipefail
