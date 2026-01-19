@@ -9,8 +9,12 @@ class TestREGRESSION:
     def setup_class(cls):
         import cppyy
 
-        def stringpager(text, cls=cls):
-            cls.helpout.append(text)
+        if sys.hexversion < 0x30d0000:
+            def stringpager(text, cls=cls):
+                cls.helpout.append(text)
+        else:
+            def stringpager(text, title='', cls=cls):
+                cls.helpout.append(text)
 
         import pydoc
         pydoc.pager = stringpager
@@ -1007,7 +1011,7 @@ class TestREGRESSION:
         pt_type = cppyy.gbl.property_types.ReferenceWavefunction['double']
         assert cppyy.gbl.std.get[0](cppyy.gbl.property_types.run_as[pt_type]()) ==  20.
 
-    @mark.xfail(run=False, reason="Crashes on ClangRepl with 'toString not implemented', and on Cling")
+    # @mark.xfail(run=False, reason="Crashes on ClangRepl with 'toString not implemented', and on Cling")
     def test34_print_empty_collection(self):
         """Print empty collection through Cling"""
 

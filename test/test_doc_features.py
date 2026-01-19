@@ -987,7 +987,7 @@ class TestADVERTISED:
         assert n.p[2] == 0x3
         assert len(n.p) == 3
 
-    @mark.xfail(condition=(IS_CLANG_REPL and IS_MAC), run=False, reason="Crashes with ClangRepl with 'toString not implemented'")
+    # @mark.xfail(condition=(IS_CLANG_REPL and IS_MAC), run=False, reason="Crashes with ClangRepl with 'toString not implemented'")
     def test09_custom_str(self):
         """Example of customized str"""
 

@@ -187,7 +187,6 @@ class TestTEMPLATES:
         assert issubclass(select_template_arg[0, int, float].argument, int)
         assert issubclass(select_template_arg[1, int, float].argument, float)
 
-    @mark.xfail
     def test08_using_of_static_data(self):
         """Derived class using static data of base"""
 
@@ -1108,7 +1107,6 @@ class TestTEMPLATES:
                         run_n = getattr(cppyy.gbl, 'TNaRun_%d' % n)
                         getattr(run_n, t)
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING), reason="Crashes on OS X + Cling")
     def test33_using_template_argument(self):
         """`using` type as template argument"""
 
@@ -1161,6 +1159,33 @@ class TestTEMPLATES:
         assert ns.stringify(1, 2, 3)                                 == "1 2 3 "
         assert ns.stringify["const char*"]("Aap")                    == "Aap "
         assert ns.stringify(ctypes.c_char_p(bytes("Noot", "ascii"))) == "Noot "
+
+    def test35_templated_callbacks(self):
+        import cppyy
+
+        cppyy.cppdef(
+            r"""
+        std::string foo() { return "foo!";}
+
+        std::string bar(int a, float b) {
+          return "bar(" + std::to_string(a) + ", " + std::to_string(b) + ")";
+        }
+
+        template <typename T, typename U>
+        std::string baz(T a, U b, std::string c) {
+          return "baz(" + std::to_string(a) + ", " + std::to_string(b) + ", \"" + c + "\")";
+        }
+
+        template<typename F, typename... Args>
+        std::string dataframe_define_mock(F callable, Args&&... args) {
+            return callable(std::forward<Args>(args)...);
+        }
+        """
+        )
+
+        assert cppyy.gbl.dataframe_define_mock(cppyy.gbl.foo) == "foo!"
+        assert cppyy.gbl.dataframe_define_mock(cppyy.gbl.bar, 42, 11.11) == "bar(42, 11.110000)"
+        assert cppyy.gbl.dataframe_define_mock(cppyy.gbl.baz["int", "double"], 33, 101.101, "hello") == "baz(33, 101.101000, \"hello\")"
 
     @mark.xfail(condition=IS_MAC, reason="Conversion fails in OSX")
     def test36_templated_callbacks(self):
@@ -1236,6 +1261,32 @@ class TestTEMPLATES:
         #     o.Define("errB", gbl.throw_error) # FIXME: raises TypeError for failure in overload selection
         
         assert o.rows == 5
+
+    def test37_enum_template_argument_function(self):
+        import cppyy
+        from cppyy import gbl
+
+        cppyy.cppdef(
+            r"""
+        enum What { NO, YES };
+
+        template <What E>
+        struct EE {
+            What w = E;
+        };
+
+        template <What E>
+        What get() {
+            return E;
+        }
+        """
+        )
+
+        assert gbl.EE[gbl.What.NO]().w == 0
+        assert gbl.EE[gbl.What.YES]().w == 1
+
+        assert gbl.get[gbl.What.NO]() == 0
+        assert gbl.get[gbl.What.YES]() == 1
 
 
 @mark.skipif((IS_MAC and IS_CLING), reason="setup class fails with OS X cling")
@@ -1391,7 +1442,6 @@ class TestTEMPLATE_TYPE_REDUCTION:
         import cppyy
         cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test01_reduce_binary(self):
         """Squash template expressions for binary operations (like in gmpxx)"""
 

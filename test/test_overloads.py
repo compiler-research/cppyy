@@ -288,3 +288,43 @@ class TestOVERLOADS:
 
         assert ns.myfunc2(ns.E()) == "E"
         assert ns.myfunc2(ns.D()) == "D"
+    
+    @mark.xfail(reason="backport from ROOT")
+    def test14_disallow_functor_to_function_pointer(self):
+        """Make sure we're no allowing to convert C++ functors to funciton
+        pointers, extending the C++ language in an unnatural way that can lead
+        to wrong overload resolutions."""
+
+        import cppyy
+
+        cppyy.cppdef("""
+        class Test14Functor {
+        public:
+            double operator () (double* args, double*) {
+                return 4.0 * args[0];
+            }
+        };
+        int test14_foo(double (*fcn)(double*, double*)) {
+            return 0;
+        }
+        template<class T>
+        int test14_foo(T fcn) {
+            return 1;
+        }
+        int test14_bar(double (*fcn)(double*, double*)) {
+            return 0;
+        }
+        int test14_baz(double (*fcn)(double*, double*)) {
+            return 0;
+        }
+        int test14_baz(std::function<double(double*, double*)> const &fcn) {
+            return 2;
+        }
+        """)
+
+        functor = cppyy.gbl.Test14Functor()
+        assert cppyy.gbl.test14_foo(functor) == 1 # should resolve to foo(T fcn)
+        # not allowed, because there is only an overload taking a function pointer
+        raises(TypeError, cppyy.gbl.test14_bar, functor)
+        # The "baz" function has a std::function overload, which should be selected
+        assert cppyy.gbl.test14_baz(functor) == 2 # should resolve to baz(std::function)
