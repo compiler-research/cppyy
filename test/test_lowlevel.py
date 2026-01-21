@@ -517,6 +517,22 @@ class TestLOWLEVEL:
         g = cppyy.gbl
         assert g.test15_templated_arrays_gmpxx.vector.value_type[g.std.vector[g.mpz_class]]
 
+    def test16_addressof_nullptr(self):
+        import cppyy
+        from cppyy import gbl
+
+        cppyy.cppdef(r"""
+        namespace LLV {
+        int x = 10;
+        int *ptr_x = &x;
+        int *ptr_null = nullptr;
+        }
+        """)
+
+        assert type(gbl.LLV.ptr_x) == cppyy._backend.LowLevelView
+        assert type(gbl.LLV.ptr_null) == cppyy._backend.LowLevelView
+        assert cppyy.addressof(gbl.LLV.ptr_x)
+        assert cppyy.addressof(gbl.LLV.ptr_null) == 0
 
 class TestMULTIDIMARRAYS:
     def setup_class(cls):
@@ -746,3 +762,33 @@ class TestMULTIDIMARRAYS:
         for i, v in enumerate(("s1", "s23", "s456")):
             assert len(ns.str_array[i]) == 8
             assert list(ns.str_array[i])[:len(v)] == list(v)
+    
+    @mark.xfail(condition=IS_CLING, reason="fails with cling")
+    def test06_3D_custom_struct(self):
+        import cppyy
+        from cppyy import gbl
+
+        cppyy.cppdef(r"""
+        constexpr int S = 4;
+
+        struct Klass {
+            static int i;
+            int k;
+            Klass() : k(++i) {}
+        };
+        int Klass::i = 0;
+        Klass klasses[S][S + 3][S + 7];
+
+        bool consume_klass(Klass* c, int i, int j, int k) {
+            if (c->k == ((S + 7) * (i * (S + 3) + j) + (k + 1))) return true;
+            return false;
+        }
+        """)
+
+        assert gbl.klasses
+        # assert type(gbl.klasses) == cppyy._backend.LowLevelView # FIXME: https://github.com/compiler-research/CPyCppyy/issues/141
+
+        for i in range(gbl.S):
+            for j in range(gbl.S + 3):
+                for k in range(gbl.S + 7):
+                    assert gbl.consume_klass(gbl.klasses[i][j][k], i, j, k)
