@@ -255,8 +255,7 @@ def macro(cppm):
 def load_library(name):
     """Explicitly load a shared library."""
     with _stderr_capture() as err:
-        CppInterOp = gbl.Cpp
-        result = CppInterOp.LoadLibrary(name)
+        result = gbl.Cpp.LoadLibrary(name, True)
     if result == False:
         raise RuntimeError('Could not load library "%s": %s' % (name, err.err))
 
@@ -265,7 +264,7 @@ def load_library(name):
 def include(header):
     """Load (and JIT) header file <header> into Cling."""
     with _stderr_capture() as err:
-        errcode = gbl.Cpp.Declare('#include "%s"' % header)
+        errcode = gbl.Cpp.Declare('#include "%s"' % header, False)
     if not errcode == 0:
         raise ImportError('Failed to load header file "%s"%s' % (header, err.err))
     return True
@@ -274,8 +273,8 @@ def c_include(header):
     """Load (and JIT) header file <header> into Cling."""
     with _stderr_capture() as err:
         errcode = gbl.Cpp.Declare("""extern "C" {
-#include "%s"
-}""" % header)
+                                    #include "%s"
+                                    }""" % header, False)
     if not errcode == 0:
         raise ImportError('Failed to load header file "%s"%s' % (header, err.err))
     return True
@@ -407,7 +406,7 @@ def sizeof(tt):
         try:
             sz = ctypes.sizeof(tt)
         except TypeError:
-            sz = gbl.Cpp.Evaluate("sizeof(%s)" % (_get_name(tt),))
+            sz = gbl.Cpp.Evaluate("sizeof(%s)" % (_get_name(tt),), _backend.nullptr)
         _sizes[tt] = sz
         return sz
 

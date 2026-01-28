@@ -152,31 +152,31 @@ gbl.__class__.__repr__ = lambda cls : '<namespace cppyy.gbl at 0x%x>' % id(cls)
 gbl.std =  _backend.CreateScopeProxy('std')
 # for move, we want our "pythonized" one, not the C++ template
 gbl.std.move  = _backend.move
-
+# CppInterOp proxy object to access its API
+Cpp = gbl.Cpp
 
 #- add to the dynamic path as needed -----------------------------------------
 import os
 def add_default_paths():
-    libCppInterOp = gbl.Cpp
     if os.getenv('CONDA_PREFIX'):
       # MacOS, Linux
         lib_path = os.path.join(os.getenv('CONDA_PREFIX'), 'lib')
-        if os.path.exists(lib_path): libCppInterOp.AddSearchPath(lib_path)
+        if os.path.exists(lib_path): Cpp.AddSearchPath(lib_path, True, False)
 
       # Windows
         lib_path = os.path.join(os.getenv('CONDA_PREFIX'), 'Library', 'lib')
-        if os.path.exists(lib_path): libCppInterOp.AddSearchPath(lib_path)
+        if os.path.exists(lib_path): Cpp.AddSearchPath(lib_path, True, False)
 
   # assuming that we are in PREFIX/lib/python/site-packages/cppyy, add PREFIX/lib to the search path
     lib_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir, os.path.pardir, os.path.pardir))
-    if os.path.exists(lib_path): libCppInterOp.AddSearchPath(lib_path)
+    if os.path.exists(lib_path): Cpp.AddSearchPath(lib_path, True, False)
 
     try:
         with open('/etc/ld.so.conf') as ldconf:
             for line in ldconf:
                 f = line.strip()
                 if (os.path.exists(f)):
-                    libCppInterOp.AddSearchPath(f)
+                    Cpp.AddSearchPath(f, True, False)
     except IOError:
         pass
 add_default_paths()
@@ -191,13 +191,12 @@ default       = _backend.default
 
 def load_reflection_info(name):
 #    with _stderr_capture() as err:
-    CppInterOp = gbl.Cpp
     #FIXME: Remove the .so and add logic in libcppinterop
     name = name + ".so"
-    result = CppInterOp.LoadLibrary(name)
+    result = Cpp.LoadLibrary(name, True)
     if name.endswith("Dict.so"):
-        header = name[:-7] + ".h";
-        CppInterOp.Declare('#include "' + header +'"')
+        header = name[:-7] + ".h"
+        Cpp.Declare('#include "' + header +'"', False)
 
     if result == False:
         raise RuntimeError('Could not load library "%s"' % (name))
