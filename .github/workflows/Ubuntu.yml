@@ -46,14 +46,6 @@ jobs:
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host;NVPTX"
-          - name: ubu24-x86-gcc12-clang-repl-18
-            os: ubuntu-24.04
-            compiler: gcc-12
-            clang-runtime: '18'
-            python-version: '3.11'
-            cling: Off
-            llvm_enable_projects: "clang"
-            llvm_targets_to_build: "host;NVPTX"
           - name: ubu24-x86-gcc9-clang18-cling
             os: ubuntu-24.04
             compiler: gcc-9
@@ -84,14 +76,6 @@ jobs:
             compiler: gcc-12
             clang-runtime: '19'
             python-version: '3.12'
-            cling: Off
-            llvm_enable_projects: "clang"
-            llvm_targets_to_build: "host;NVPTX"
-          - name: ubu24-arm-gcc12-clang-repl-18
-            os: ubuntu-24.04-arm
-            compiler: gcc-12
-            clang-runtime: '18'
-            python-version: '3.11'
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host;NVPTX"
@@ -305,13 +289,6 @@ jobs:
             python-version: '3.12'
             cling: Off
             cppyy: On
-          - name: ubu24-x86-gcc12-clang-repl-18-cppyy
-            os: ubuntu-24.04
-            compiler: gcc-12
-            clang-runtime: '18'
-            python-version: '3.11'
-            cling: Off
-            cppyy: On
           - name: ubu24-x86-gcc9-clang18-cling-cppyy
             os: ubuntu-24.04
             compiler: gcc-9
@@ -340,13 +317,6 @@ jobs:
             compiler: gcc-12
             clang-runtime: '19'
             python-version: '3.12'
-            cling: Off
-            cppyy: On
-          - name: ubu24-arm-gcc12-clang-repl-18-cppyy
-            os: ubuntu-24.04-arm
-            compiler: gcc-12
-            clang-runtime: '18'
-            python-version: '3.11'
             cling: Off
             cppyy: On
           - name: ubu24-arm-gcc9-clang18-cling-cppyy
