@@ -4,6 +4,7 @@
 
 import ctypes
 import sys
+import types
 
 def _create_mapper(cls, extra_dct=None):
     def mapper(name, scope):
@@ -47,7 +48,15 @@ def with_metaclass(meta, *bases):
     class metaclass(type):
 
         def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
+            if sys.version_info[:2] >= (3, 7):
+                # This version introduced PEP 560 that requires a bit
+                # of extra care (we mimic what is done by __build_class__).
+                resolved_bases = types.resolve_bases(bases)
+                if resolved_bases is not bases:
+                    d['__orig_bases__'] = bases
+            else:
+                resolved_bases = bases
+            return meta(name, resolved_bases, d)
 
         @classmethod
         def __prepare__(cls, name, this_bases):
