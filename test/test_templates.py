@@ -444,6 +444,7 @@ class TestTEMPLATES:
         assert f_T[int]() is None
         assert cppyy.gbl.T_WithEmptyBody.side_effect == "side effect"
 
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X, related to symbol dispatch. Common with Linux LLVM18 dispatch builds")
     def test18_greedy_overloads(self):
         """void*/void** should not pre-empt template instantiations"""
 

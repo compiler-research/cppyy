@@ -723,6 +723,7 @@ class TestSTLVECTOR:
         assert ns.test[0] == "hello"
         assert ns.test[1] == "world"
 
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X, related to symbol dispatch. Common with Linux LLVM18 dispatch builds")
     def test21_vector_of_structs_data(self):
         """Vector of structs data() should return array-like"""
 
@@ -758,6 +759,7 @@ class TestSTLVECTOR:
         assert mv.itemsize == cppyy.sizeof(cppyy.gbl.ArrayLike.Vector3f)
         assert mv.nbytes   == cppyy.sizeof(cppyy.gbl.ArrayLike.Vector3f) * len(v)
 
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X, related to symbol dispatch. Common with Linux LLVM18 dispatch builds")
     def test22_polymorphic(self):
         """Vector of polymorphic types should auto-cast"""
 

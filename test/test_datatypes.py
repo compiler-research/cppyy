@@ -1,8 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL, IS_CLING, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX
-
-IS_MAC = IS_MAC_X86 or IS_MAC_ARM
+from .support import setup_make, pylong, pyunicode, IS_CLING, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("datatypesDict"))
@@ -2343,7 +2341,9 @@ class TestDATATYPES:
         assert str(bt(1)) == 'True'
         assert str(bt(0)) == 'False'
 
-    @mark.xfail(condition=IS_MAC and IS_CLANG_REPL, reason="Fails on OS X with Clang-Repl")
+    # This test is known to fail on MacOS with Clang-Repl, but currently with the symbol dispatch,
+    # the IS_CLANG_REPL variable is not set, tricking pytest into thinking the test should pass.
+    @mark.xfail(condition=IS_MAC, reason="Fails on OS X with Clang-Repl")
     def test49_addressof_method(self):
         """Use of addressof for (const) methods"""
 
