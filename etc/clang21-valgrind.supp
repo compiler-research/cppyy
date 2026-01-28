@@ -3,7 +3,7 @@
     Memcheck:Free
     fun:free
     obj:*
-    fun:_ZNK3Cpp7JitCall6InvokeEPvNS0_7ArgListES1_
+    fun:_ZNK7CppImpl7JitCall6InvokeEPvNS0_7ArgListES1_
     fun:_ZL11WrapperCallPvmS_S_S_
     fun:_ZN5Cppyy5CallVEPvS0_mS0_
     fun:_ZL8GILCallVPvS_PN8CPyCppyy11CallContextE
