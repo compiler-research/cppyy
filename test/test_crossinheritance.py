@@ -1210,7 +1210,7 @@ class TestCROSSINHERITANCE:
 
         import cppyy
 
-        cppyy.gbl.Cpp.Declare("""\
+        cppyy.cppdef("""\
         namespace NonStandardOffset {
         struct Calc1 {
           virtual int calc1() = 0;

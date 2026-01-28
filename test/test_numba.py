@@ -1,7 +1,7 @@
 import py, os, sys
 import math, time
 from pytest import mark, raises
-from .support import setup_make, IS_LINUX_ARM
+from .support import setup_make, IS_LINUX_ARM, IS_MAC
 
 try:
     import numba
@@ -759,7 +759,7 @@ class TestNUMBA_DOC:
         assert type(tsa(a)) == int
         assert tsa(a) == 285
 
-    @mark.xfail
+    @mark.xfail(run=not IS_MAC, reason="Crashes on Mac with dispatch build")
     def test02_class_features(self):
         """Numba support documentation example: class features"""
 
