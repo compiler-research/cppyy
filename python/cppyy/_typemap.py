@@ -2,6 +2,7 @@
     for typedef-ed C++ builtin types.
 """
 
+import ctypes
 import sys
 
 def _create_mapper(cls, extra_dct=None):
@@ -99,7 +100,6 @@ def initialize(backend):
         tm[tp] = float_tm
 
     # void*
-    import ctypes
     def voidp_init(self, arg=0):
         import cppyy, ctypes
         if arg == cppyy.nullptr: arg = 0
