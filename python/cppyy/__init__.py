@@ -50,8 +50,6 @@ __all__ = [
     'set_debug',              # enable/disable debug output
     ]
 
-from ._version import __version__
-
 import ctypes, os, sys, sysconfig, warnings
 
 if not 'CLING_STANDARD_PCH' in os.environ:
@@ -72,6 +70,9 @@ try:
     ispypy = True
 except ImportError:
     ispypy = False
+
+from . import _typemap
+from ._version import __version__
 
 # import separately instead of in the above try/except block for easier to
 # understand tracebacks
@@ -96,7 +97,6 @@ except: pass
 
 
 #- external typemap ----------------------------------------------------------
-from . import _typemap
 _typemap.initialize(_backend)               # also creates (u)int8_t mapper
 
 try:
