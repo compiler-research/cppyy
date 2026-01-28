@@ -202,10 +202,10 @@ class _stderr_capture(object):
         if self._capture:
             self.err = _end_capture_stderr()
 
-def cppdef(src):
+def cppdef(src, verbose = True):
     """Declare C++ source <src> to Cling."""
     with _stderr_capture() as err:
-        errcode = gbl.Cpp.Declare(src)
+        errcode = gbl.Cpp.Declare(src, not verbose)
     if not errcode == 0 or err.err:
         if 'warning' in err.err.lower() and not 'error' in err.err.lower():
             warnings.warn(err.err, SyntaxWarning)
