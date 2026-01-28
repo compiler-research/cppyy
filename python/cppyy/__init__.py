@@ -235,6 +235,9 @@ def cppexec(stmt):
 
     return True
 
+def evaluate(input, HadError = _backend.nullptr):
+    return gbl.Cpp.Evaluate(input, HadError)
+
 def macro(cppm):
     """Attempt to evalute a C/C++ pre-processor macro as a constant"""
 
