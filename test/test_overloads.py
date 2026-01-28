@@ -288,13 +288,38 @@ class TestOVERLOADS:
 
         assert ns.myfunc2(ns.E()) == "E"
         assert ns.myfunc2(ns.D()) == "D"
-    
 
-    def test12_disallow_functor_to_function_pointer(self):
+    def test12_static_call_from_derived_instance(self):
+        """Test calling a static member function via a derived instance."""
+
+        import cppyy
+
+        cppyy.cppdef("""
+            class Base {
+            public:
+                static int StaticMethod() {
+                    return 42;
+                }
+            };
+
+            class Derived : public Base {
+            };
+        """)
+
+        d = cppyy.gbl.Derived()
+
+        # Call static method through base class directly
+        result_direct = cppyy.gbl.Base.StaticMethod()
+
+        # Call static method through instance
+        result_instance = d.StaticMethod()
+
+        assert result_instance == result_direct
+    
+    def test13_disallow_functor_to_function_pointer(self):
         """Make sure we're no allowing to convert C++ functors to function
         pointers, extending the C++ language in an unnatural way that can lead
         to wrong overload resolutions."""
-
         import cppyy
 
         cppyy.cppdef("""
@@ -334,7 +359,7 @@ class TestOVERLOADS:
         # The "baz" function has a std::function overload, which should be selected
         assert cppyy.gbl.test14_baz(functor) == 2 # should resolve to baz(std::function)
 
-    def test13_explicit_constructor_in_implicit_conversion(self):
+    def test14_explicit_constructor_in_implicit_conversion(self):
         """Check that explicit constructors are not used in implicit conversion."""
 
         import cppyy
