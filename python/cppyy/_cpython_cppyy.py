@@ -9,6 +9,7 @@ __all__ = [
     'load_reflection_info',
     'addressof',
     'bind_object',
+    'generate_typehints',
     'nullptr',
     'default',
     '_backend',
@@ -188,6 +189,7 @@ addressof     = _backend.addressof
 bind_object   = _backend.bind_object
 nullptr       = _backend.nullptr
 default       = _backend.default
+generate_typehints   = _backend.generate_typehints
 
 def load_reflection_info(name):
 #    with _stderr_capture() as err:
