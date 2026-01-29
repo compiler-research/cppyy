@@ -333,3 +333,27 @@ class TestOVERLOADS:
         raises(TypeError, cppyy.gbl.test14_bar, functor)
         # The "baz" function has a std::function overload, which should be selected
         assert cppyy.gbl.test14_baz(functor) == 2 # should resolve to baz(std::function)
+
+    def test13_explicit_constructor_in_implicit_conversion(self):
+        """Check that explicit constructors are not used in implicit conversion."""
+
+        import cppyy
+
+        cppyy.cppdef("""struct Test12Class {
+          explicit Test12Class(int arg) {}
+        };
+        int test12_foo(Test12Class const&) { return 0; }
+        int test12_foo(bool) { return 1; }
+        int test12_bar(Test12Class const&) { return 0; }
+        int test12_bar(bool = true) { return 1; }
+        int call_test12_foo() { return test12_foo(1); }
+        int call_test12_bar() { return test12_bar(1); }
+        """)
+
+        # Check that the cppyy overload resolution figures out the right
+        # overload when calling the functions with an integer. In the past,
+        # this used to go wrong for the "bar" function with the default bool
+        # argument: cppyy went for the overload that takes the test class, even
+        # though implicit construction of the test class is forbidden.
+        assert cppyy.gbl.test12_foo(1) == cppyy.gbl.call_test12_foo()
+        assert cppyy.gbl.test12_bar(1) == cppyy.gbl.call_test12_bar()
