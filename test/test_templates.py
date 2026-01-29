@@ -1290,6 +1290,29 @@ class TestTEMPLATES:
 
         assert gbl.get[gbl.What.NO]() == 0
         assert gbl.get[gbl.What.YES]() == 1
+    
+    def test38_constructor_implicit_conversion(self):
+        """Implicit conversion to call a templated constructor"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        namespace ConstructorImplicitConversion {
+        struct IntWrapper {
+            IntWrapper(int i) : m_i(i) {}
+            int m_i;
+        };
+        struct S {
+            template <typename T>
+            S(IntWrapper a, T b) : m_a(a.m_i) {}
+
+            int m_a = 0;
+        }; }""")
+
+        ns = cppyy.gbl.ConstructorImplicitConversion
+
+        a = ns.S(1, 2)
+        assert a.m_a == 1
 
 
 @mark.skipif((IS_MAC and IS_CLING), reason="setup class fails with OS X cling")
