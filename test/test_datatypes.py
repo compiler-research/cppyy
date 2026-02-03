@@ -15,9 +15,6 @@ class TestDATATYPES:
         import cppyy
         cls.datatypes = cppyy.load_reflection_info(cls.test_dct)
         cls.N = 5 #cppyy.gbl.N
-        at_least_17 = 201402 < cppyy.evaluate("__cplusplus")
-        cls.has_byte     = at_least_17
-        cls.has_optional = at_least_17
 
     def test01_instance_data_read_access(self):
         """Read access to instance public data and verify values"""
@@ -46,8 +43,7 @@ class TestDATATYPES:
         # reading integer types
         assert c.m_int8    == - 9; assert c.get_int8_cr()    == - 9; assert c.get_int8_r()    == - 9
         assert c.m_uint8   ==   9; assert c.get_uint8_cr()   ==   9; assert c.get_uint8_r()   ==   9
-        if self.has_byte:
-            assert c.m_byte == ord('d'); assert c.get_byte_cr() == ord('d'); assert c.get_byte_r() == ord('d')
+        assert c.m_byte == ord('d'); assert c.get_byte_cr() == ord('d'); assert c.get_byte_r() == ord('d')
         assert c.m_short   == -11; assert c.get_short_cr()   == -11; assert c.get_short_r()   == -11
         assert c.m_ushort  ==  11; assert c.get_ushort_cr()  ==  11; assert c.get_ushort_r()  ==  11
         assert c.m_int     == -22; assert c.get_int_cr()     == -22; assert c.get_int_r()     == -22
@@ -150,9 +146,8 @@ class TestDATATYPES:
             assert c.get_bool_array2()[i]   ==   bool((i+1)%2)
 
         # reading of integer array types
-        names = ['schar', 'uchar', 'short', 'ushort',    'int', 'uint',    'long',  'ulong']
-        alpha = [( 1, 2), (1, 2), (-5, -6), (7, 8), (-9, -10), (11, 23), (-13, -14), (15, 18)]
-        if self.has_byte: names.append('byte'); alpha.append((3,4))
+        names = ['schar', 'uchar', 'short', 'ushort', 'int', 'uint', 'long', 'ulong', 'byte']
+        alpha = [( 1, 2), (1, 2), (-5, -6), (7, 8), (-9, -10), (11, 23), (-13, -14), (15, 18), (3,4)]
 
         for type_idx, name in enumerate(names):
             for j in range(self.N):
@@ -174,8 +169,7 @@ class TestDATATYPES:
         # out-of-bounds checks
         raises(IndexError, c.m_schar_array.__getitem__,  self.N)
         raises(IndexError, c.m_uchar_array.__getitem__,  self.N)
-        if self.has_byte:
-            raises(IndexError, c.m_byte_array.__getitem__,   self.N)
+        raises(IndexError, c.m_byte_array.__getitem__,   self.N)
         raises(IndexError, c.m_short_array.__getitem__,  self.N)
         raises(IndexError, c.m_ushort_array.__getitem__, self.N)
         raises(IndexError, c.m_int_array.__getitem__,    self.N)
@@ -247,8 +241,7 @@ class TestDATATYPES:
         raises(ValueError, c.set_char32, "string")
 
         # integer types
-        names = ['int8', 'uint8', 'short', 'ushort', 'int', 'uint', 'long', 'ulong', 'llong', 'ullong']
-        if self.has_byte: names.append('byte')
+        names = ['int8', 'uint8', 'short', 'ushort', 'int', 'uint', 'long', 'ulong', 'llong', 'ullong', 'byte']
 
         for i in range(len(names)):
             setattr(c, 'm_'+names[i], i)
@@ -314,13 +307,11 @@ class TestDATATYPES:
         c.destroy_arrays()
 
         # integer arrays
-        names = ['uchar', 'short', 'ushort', 'int', 'uint', 'long', 'ulong']
-        if self.has_byte: names.append('byte')
+        names = ['uchar', 'short', 'ushort', 'int', 'uint', 'long', 'ulong', 'byte']
 
         import array
         a = range(self.N)
-        atypes = ['B', 'h', 'H', 'i', 'I', 'l', 'L']
-        if self.has_byte: atypes.append('B')
+        atypes = ['B', 'h', 'H', 'i', 'I', 'l', 'L', 'B']
         for j in range(len(names)):
             b = array.array(atypes[j], a)
             setattr(c, 'm_'+names[j]+'_array', b)     # buffer copies
@@ -407,9 +398,8 @@ class TestDATATYPES:
         assert type(CppyyTestData.s_char32) == pyunicode
 
         # integer types
-        if self.has_byte:
-            assert CppyyTestData.s_byte == ord('b')
-            assert c.s_byte             == ord('b')
+        assert CppyyTestData.s_byte == ord('b')
+        assert c.s_byte             == ord('b')
         assert CppyyTestData.s_int8     == - 87
         assert c.s_int8                 == - 87
         assert CppyyTestData.s_uint8    ==   87
@@ -475,11 +465,10 @@ class TestDATATYPES:
         assert CppyyTestData.s_char32   == u'\u00ef'
 
         # integer types
-        if self.has_byte:
-            c.s_byte                     =   66
-            assert CppyyTestData.s_byte ==   66
-            CppyyTestData.s_byte         =   66
-            assert c.s_byte             ==   66
+        c.s_byte                     =   66
+        assert CppyyTestData.s_byte ==   66
+        CppyyTestData.s_byte         =   66
+        assert c.s_byte             ==   66
         c.s_short                        = -102
         assert CppyyTestData.s_short    == -102
         CppyyTestData.s_short            = -203
@@ -1142,17 +1131,14 @@ class TestDATATYPES:
         CppyyTestData = cppyy.gbl.CppyyTestData
 
         c = CppyyTestData()
-        byte_array_names = []
-        if self.has_byte:
-            byte_array_names = ['get_byte_array', 'get_byte_array2']
         for func in ['get_bool_array',   'get_bool_array2',
                      'get_uchar_array',  'get_uchar_array2',
                      'get_ushort_array', 'get_ushort_array2',
                      'get_int_array',    'get_int_array2',
                      'get_uint_array',   'get_uint_array2',
                      'get_long_array',   'get_long_array2',
-                     'get_ulong_array',  'get_ulong_array2']+\
-                     byte_array_names:
+                     'get_ulong_array',  'get_ulong_array2',
+                     'get_byte_array', 'get_byte_array2']:
             arr = getattr(c, func)()
             arr.reshape((self.N,))
             assert len(arr) == self.N
@@ -1267,9 +1253,7 @@ class TestDATATYPES:
             assert f(pbuf, len(buf)) == total
 
         run(self, cppyy.gbl.sum_uc_data, buf, total)
-
-        if self.has_byte:
-            run(self, cppyy.gbl.sum_byte_data, buf, total)
+        run(self, cppyy.gbl.sum_byte_data, buf, total)
 
     @mark.xfail(run=False, condition=IS_MAC, reason="Crashes on OSX")
     def test26_function_pointers(self):
@@ -2035,19 +2019,18 @@ class TestDATATYPES:
         r1 = ns.make_R1()
         assert r1.e == ns.E.A
 
-        if self.has_optional:
-            cppyy.cppdef("""\
-            namespace AggregateTest {
-            struct R2 {
-                std::optional<S> s = {};
-            };
+        cppyy.cppdef("""\
+        namespace AggregateTest {
+        struct R2 {
+            std::optional<S> s = {};
+        };
 
-            R2 make_R2() {
-                return {1};
-            } }""")
+        R2 make_R2() {
+            return {1};
+        } }""")
 
-            r2 = ns.make_R2()
-            assert r2.s.x == 1
+        r2 = ns.make_R2()
+        assert r2.s.x == 1
 
     def test41_complex_numpy_arrays(self):
         """Usage of complex numpy arrays"""

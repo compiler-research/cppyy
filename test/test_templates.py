@@ -297,12 +297,11 @@ class TestTEMPLATES:
         assert iavec[5] == 5
 
       # with variadic template
-        if cppyy.evaluate("__cplusplus") > 201402:
-            assert nsup.matryoshka[int, 3].type
-            assert nsup.matryoshka[int, 3, 4].type
-            assert nsup.make_vector[int , 3]
-            assert nsup.make_vector[int , 3]().m_val == 3
-            assert nsup.make_vector[int , 4]().m_val == 4
+        assert nsup.matryoshka[int, 3].type
+        assert nsup.matryoshka[int, 3, 4].type
+        assert nsup.make_vector[int , 3]
+        assert nsup.make_vector[int , 3]().m_val == 3
+        assert nsup.make_vector[int , 4]().m_val == 4
 
       # with inner types using
         assert cppyy.evaluate("using_problem::Bar::Foo")

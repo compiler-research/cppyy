@@ -789,7 +789,6 @@ class TestSIGNALS:
 class TestSTDNOTINGLOBAL:
     def setup_class(cls):
         import cppyy
-        cls.has_byte = 201402 < cppyy.evaluate("__cplusplus")
 
     @mark.xfail(condition=IS_MAC, reason="Fails on OS X, related to symbol dispatch. Common with Linux LLVM18 dispatch builds")
     def test01_stl_in_std(self):
@@ -797,9 +796,7 @@ class TestSTDNOTINGLOBAL:
 
         import cppyy
 
-        names = ['array', 'function', 'list', 'set', 'vector']
-        if self.has_byte:
-            names.append('byte')
+        names = ['array', 'function', 'list', 'set', 'vector', 'byte']
 
         for name in names:
             getattr(cppyy.gbl.std, name)
