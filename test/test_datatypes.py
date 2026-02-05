@@ -1153,7 +1153,7 @@ class TestDATATYPES:
             for i in range(self.N):
                 assert arr[i] == l[i]
 
-    @mark.xfail(condition=(IS_CLING), reason = "Fails on Cling")
+    @mark.xfail
     def test24_voidp(self):
         """Test usage of void* data"""
 

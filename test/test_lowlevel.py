@@ -762,8 +762,8 @@ class TestMULTIDIMARRAYS:
         for i, v in enumerate(("s1", "s23", "s456")):
             assert len(ns.str_array[i]) == 8
             assert list(ns.str_array[i])[:len(v)] == list(v)
-    
-    @mark.xfail(condition=IS_CLING, reason="fails with cling")
+
+    @mark.xfail
     def test06_3D_custom_struct(self):
         import cppyy
         from cppyy import gbl

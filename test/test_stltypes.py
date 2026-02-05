@@ -702,7 +702,6 @@ class TestSTLVECTOR:
 
         assert cppsum == pysum
 
-    @mark.xfail(condition=IS_CLING, reason="Fails on Cling")
     def test20_vector_cstring(self):
         """Usage of a vector of const char*"""
 
