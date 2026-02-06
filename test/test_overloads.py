@@ -288,3 +288,30 @@ class TestOVERLOADS:
 
         assert ns.myfunc2(ns.E()) == "E"
         assert ns.myfunc2(ns.D()) == "D"
+
+    def test12_static_call_from_derived_instance(self):
+        """Test calling a static member function via a derived instance."""
+
+        import cppyy
+
+        cppyy.cppdef("""
+            class Base {
+            public:
+                static int StaticMethod() {
+                    return 42;
+                }
+            };
+
+            class Derived : public Base {
+            };
+        """)
+
+        d = cppyy.gbl.Derived()
+
+        # Call static method through base class directly
+        result_direct = cppyy.gbl.Base.StaticMethod()
+
+        # Call static method through instance
+        result_instance = d.StaticMethod()
+
+        assert result_instance == result_direct

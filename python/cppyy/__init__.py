@@ -50,8 +50,6 @@ __all__ = [
     'set_debug',              # enable/disable debug output
     ]
 
-from ._version import __version__
-
 import ctypes, os, sys, sysconfig, warnings
 
 if not 'CLING_STANDARD_PCH' in os.environ:
@@ -72,6 +70,9 @@ try:
     ispypy = True
 except ImportError:
     ispypy = False
+
+from . import _typemap
+from ._version import __version__
 
 # import separately instead of in the above try/except block for easier to
 # understand tracebacks
@@ -96,7 +97,6 @@ except: pass
 
 
 #- external typemap ----------------------------------------------------------
-from . import _typemap
 _typemap.initialize(_backend)               # also creates (u)int8_t mapper
 
 try:
@@ -178,7 +178,7 @@ class make_smartptr(object):
                 return py_make_smartptr(cls, self.ptrcls)
         except AttributeError:
             pass
-        if type(cls) == str and not cls in ('int', 'float'):
+        if isinstance(cls, str) and not cls in ('int', 'float'):
             return py_make_smartptr(getattr(gbl, cls), self.ptrcls)
         return self.maker[cls]
 
@@ -387,7 +387,7 @@ def set_debug(enable=True):
     gbl.Cpp.EnableDebugOutput(enable)
 
 def _get_name(tt):
-    if type(tt) == str:
+    if isinstance(tt, str):
         return tt
     try:
         ttname = tt.__cpp_name__
@@ -398,7 +398,7 @@ def _get_name(tt):
 _sizes = {}
 def sizeof(tt):
     """Returns the storage size (in chars) of C++ type <tt>."""
-    if not isinstance(tt, type) and not type(tt) == str:
+    if not isinstance(tt, type) and not isinstance(tt, str):
         tt = type(tt)
     try:
         return _sizes[tt]
@@ -431,7 +431,7 @@ def multi(*bases):      # after six, see also _typemap.py
   # contruct a "no conflict" meta class; the '_meta' is needed by convention
     nc_meta = type.__new__(type, 'cppyy_nc_meta', tuple(type(b) for b in bases if type(b) is not type), {})
     class faux_meta(type):
-        def __new__(cls, name, this_bases, d):
+        def __new__(mcs, name, this_bases, d):
             return nc_meta(name, bases, d)
     return type.__new__(faux_meta, 'faux_meta', (), {})
 
