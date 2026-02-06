@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import mark, skip
-from .support import setup_make, pylong, pyunicode, IS_CLANG_REPL
+from support import setup_make, pylong, pyunicode, IS_CLANG_REPL
 
 nopsutil = False
 try:

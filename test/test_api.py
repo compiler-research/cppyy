@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import ispypy, IS_MAC, IS_LINUX_ARM
+from support import ispypy, IS_MAC, IS_LINUX_ARM
 
 
 class TestAPI:

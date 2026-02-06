@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, maxvalue, IS_WINDOWS, IS_MAC, IS_CLANG_REPL, IS_CLING
+from support import setup_make, pylong, maxvalue, IS_WINDOWS, IS_MAC, IS_CLANG_REPL, IS_CLING
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("operatorsDict"))
