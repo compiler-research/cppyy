@@ -1752,6 +1752,28 @@ class TestSTLSTRING_VIEW:
 
         assert "Lorem ipsum dolor sit amet" in str(text)
 
+    @mark.xfail(run = not IS_MAC, condition=IS_MAC or IS_CLING, reason="Crashes on OSX, fails with cling")
+    def  test03_string_view_pythonize(self):
+        """Pythonization of std::string_view"""
+
+        import cppyy
+
+        cppyy.cppdef("""
+        std::string_view s = "Hello, World!";
+        """)
+
+        from cppyy.gbl import s
+
+        assert(s == "Hello, World!")
+        assert(str(s) == "Hello, World!")
+        
+        cppyy.cppdef(
+        """
+        bool is_equal_cpp = s == "Hello, World!";
+        """)
+
+        from cppyy.gbl import is_equal_cpp
+        assert(is_equal_cpp)
 
 class TestSTLDEQUE:
     def setup_class(cls):
