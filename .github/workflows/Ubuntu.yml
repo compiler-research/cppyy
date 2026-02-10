@@ -438,6 +438,7 @@ jobs:
     - name: Build and Test/Install CppInterOp
       run: |
         cd ${{ github.workspace }}/CppInterOp
+        git checkout e142e7ad494e2b2e6048b48c68f1d66df00fb713
         LLVM_DIR="$${{ github.workspace }}/llvm-project"
         LLVM_BUILD_DIR="${{ github.workspace }}/llvm-project/build"
         cling_on=$(echo "${{ matrix.cling }}" | tr '[:lower:]' '[:upper:]')
