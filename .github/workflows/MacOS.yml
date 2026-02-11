@@ -528,7 +528,9 @@ jobs:
         # source virtual environment
         source ${{ github.workspace }}/CppInterOp/.venv/bin/activate
         cd ${{ github.workspace }}
-        python -m pip install --upgrade . --no-deps
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements.txt
+        python -m pip install --upgrade . --no-deps --verbose
         cd ..
 
     - name: Run cppyy
@@ -549,12 +551,6 @@ jobs:
         cd ${{ github.workspace }}/test/
         echo ::group::Prepare For Testing
         make all
-        python -m pip install --upgrade pip
-        python -m pip install pytest
-        python -m pip install pytest-xdist
-        if [[ "${{ matrix.python-version }}" != "3.14" ]]; then
-          python -m pip install numba==0.61.2
-        fi
         echo ::endgroup::
         echo ::group::Run complete test suite
         set -o pipefail
