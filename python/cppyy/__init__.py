@@ -45,7 +45,7 @@ __all__ = [
     'typeid',                 # typeid of a C++ type
     'multi',                  # helper for multiple inheritance
     'add_include_path',       # add a path to search for headers
-    'add_library_path',       # add a path to search for headers
+    'add_library_path',       # add a path to search for libraries
     'add_autoload_map',       # explicitly include an autoload map
     'set_debug',              # enable/disable debug output
     ]
@@ -289,7 +289,7 @@ def add_library_path(path):
     """Add a path to the library search paths available to Cling."""
     if not os.path.isdir(path):
         raise OSError('No such directory: %s' % path)
-    gbl.gSystem.AddDynamicPath(path)
+    gbl.Cpp.AddSearchPath(path, True, False)
 
 # add access to Python C-API headers
 apipath = sysconfig.get_path('include', 'posix_prefix' if os.name == 'posix' else os.name)
