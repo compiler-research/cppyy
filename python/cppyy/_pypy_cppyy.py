@@ -10,6 +10,7 @@ __all__ = [
     'gbl',
     'addressof',
     'bind_object',
+    'generate_typehints',
     'nullptr',
     ]
 
