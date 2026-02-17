@@ -187,7 +187,6 @@ class TestTEMPLATES:
         assert issubclass(select_template_arg[0, int, float].argument, int)
         assert issubclass(select_template_arg[1, int, float].argument, float)
 
-    @mark.xfail
     def test08_using_of_static_data(self):
         """Derived class using static data of base"""
 
@@ -1467,7 +1466,6 @@ class TestTEMPLATE_TYPE_REDUCTION:
         import cppyy
         cls.templates = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail
     def test01_reduce_binary(self):
         """Squash template expressions for binary operations (like in gmpxx)"""
 
