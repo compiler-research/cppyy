@@ -512,6 +512,7 @@ jobs:
         python3 -m venv ${{ github.workspace }}/CppInterOp/.venv
         source ${{ github.workspace }}/CppInterOp/.venv/bin/activate
         cd ${{ github.workspace }}/CPyCppyy
+        # git checkout 1512561de56bfa739339cc32348c03ce5323f974
         mkdir build
         cd build
         cmake ..
