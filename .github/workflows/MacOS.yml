@@ -554,7 +554,7 @@ jobs:
         echo ::endgroup::
         echo ::group::Run complete test suite
         set -o pipefail
-        python -m pytest -v -ra | tee complete_testrun.log 2>&1
+        python -m pytest -v -ra -n ${{ env.ncpus }} | tee complete_testrun.log 2>&1
         set +o pipefail
         echo ::group::Crashing Test Logs
         # See if we don't have a crash that went away
