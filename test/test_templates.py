@@ -1108,7 +1108,7 @@ class TestTEMPLATES:
                         run_n = getattr(cppyy.gbl, 'TNaRun_%d' % n)
                         getattr(run_n, t)
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING), reason="Crashes on OS X + Cling")
+    @mark.xfail(run = False, condition=IS_MAC and IS_CLING, reason="Crashes on OS X + Cling")
     def test33_using_template_argument(self):
         """`using` type as template argument"""
 
@@ -1120,7 +1120,7 @@ class TestTEMPLATES:
         using testptr = Test*;
 
         template<typename T>
-        bool testfun(T const& x) { return !(bool)x; }
+        bool testfun(T x) { return !(bool)x; }
         }""")
 
         ns = cppyy.gbl.UsingPtr
@@ -1129,7 +1129,7 @@ class TestTEMPLATES:
 
         # TODO: raises TypeError; the problem is that the type is resolved
         # from UsingPtr::Test*const& to UsingPtr::Test*& (ie. `const` is lost)
-        # assert ns.testfun["UsingPtr::testptr"](cppyy.nullptr)
+        assert ns.testfun["UsingPtr::testptr"](cppyy.nullptr)
 
         assert ns.testptr.__name__     == "Test"
         assert ns.testptr.__cpp_name__ == "UsingPtr::Test*"

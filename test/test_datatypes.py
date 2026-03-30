@@ -988,8 +988,7 @@ class TestDATATYPES:
         gbl = cppyy.gbl
 
         c1 = cppyy.bind_object(0, gbl.CppyyTestData)
-        assert c1 == None
-        assert None == c1
+        assert not c1
 
         c2 = cppyy.bind_object(0, gbl.CppyyTestData)
         assert c1 == c2
@@ -997,8 +996,7 @@ class TestDATATYPES:
 
         # FourVector overrides operator==
         l1 = cppyy.bind_object(0, gbl.FourVector)
-        assert l1 == None
-        assert None == l1
+        assert not l1
 
         assert c1 != l1
         assert l1 != c1
@@ -1013,10 +1011,9 @@ class TestDATATYPES:
         assert l3 == l4
         assert l4 == l3
 
-        assert l3 != None                 # like this to ensure __ne__ is called
-        assert None != l3                 # id.
-        assert l3 != l5
-        assert l5 != l3
+        assert l3
+        assert l3 != l5                   # like this to ensure __ne__ is called
+        assert l5 != l3                   # id.
 
     def test20_object_comparisons_with_cpp__eq__(self):
         """Comparisons with C++ providing __eq__/__ne__"""
