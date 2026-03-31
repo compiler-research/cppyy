@@ -1316,8 +1316,39 @@ class TestSTLMAP:
                 a[str(i)] = i
                 assert a[str(i)] == i
             assert a
+            assert len(a) == self.N
 
-        assert len(a) == self.N
+            if mtype != std.unordered_map:
+                # NOTE: this should pass for std.unordered_map as well, but it doesn't
+                # the failure case is broken out into test02a below, should be merged back
+                # here when fixed by removing this condition
+                itercount = 0
+                for key, value in a:
+                    assert int(str(key)) == value
+                    itercount += 1
+                assert itercount == len(a)
+
+    @mark.xfail(reason="map iteration is broken for std.unordered_map<string, x>")
+    def test02a_keyed_maptype(self):
+        """this test should just be part of the above, but it fails, so we broke out the failing part"""
+
+        import cppyy
+        std = cppyy.gbl.std
+
+        for mtype in (std.map, std.unordered_map):
+            a = mtype(std.string, int)()
+            assert not a
+            for i in range(self.N):
+                a[str(i)] = i
+                assert a[str(i)] == i
+            assert a
+            assert len(a) == self.N
+
+            itercount = 0
+            for key, value in a:
+                assert int(str(key)) == value
+                itercount += 1
+            assert itercount == len(a)
 
     def test03_empty_maptype(self):
         """Test behavior of empty map<int,int>"""
@@ -1629,14 +1660,19 @@ class TestSTLARRAY:
 
         a = std.array[gbl.ArrayTest.Point, 4]()
         assert len(a) == 4
+        pxsum = 0
         for i in range(len(a)):
             a[i].px = i
+            pxsum += a[i].px
             assert a[i].px == i
             a[i].py = i**2
             assert a[i].py == i**2
 
+        assert sum([v.px for v in a]) == pxsum
+
         if ispypy:
             raise RuntimeError("test fails with crash")
+
         # test assignment
         assert a[2]
         a[2] = gbl.ArrayTest.Point(6, 7)
@@ -1687,6 +1723,20 @@ class TestSTLARRAY:
 
         with raises(TypeError):
             cppyy.gbl.std.array["double",3](['a', 1.0, 1.0])
+
+    @mark.xfail(reason="std::array<nanoseconds> iteration fails")
+    def test05_array_of_chrono_types_should_be_iterable(self):
+        import cppyy
+        cppyy.cppdef("""
+        #include <chrono>
+        using namespace std::chrono_literals;
+        std::vector<std::chrono::nanoseconds>   vtimes  = {10ns, 500ns, 1us};
+        std::array<std::chrono::nanoseconds, 3> atimes = {10ns, 500ns, 1us};
+        """)
+        # this works normally...
+        assert sum([v.count() for v in cppyy.gbl.vtimes]) == 1510
+        # ... but this doesn't, fails complaining about not being able to iterate
+        assert sum([v.count() for v in cppyy.gbl.atimes]) == 1510
 
 
 class TestSTLSTRING_VIEW:
