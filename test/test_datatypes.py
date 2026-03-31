@@ -2341,3 +2341,18 @@ class TestDATATYPES:
 
         assert [ns.test[i]  for i in range(6)] == [-0x12, -0x34, -0x56, -0x78, 0x0, 0x0]
         assert [ns.utest[i] for i in range(6)] == [ 0x12,  0x34,  0x56,  0x78, 0x0, 0x0]
+
+    @mark.xfail(reason="enum class : bool is broken, doesn't populate underlying _member_names_, for example")
+    def test51_enum_integrity(self):
+        import cppyy
+        import enum
+
+        cppyy.cppdef("enum class Eint : int { ON = 1, OFF = 0 };")
+        Eint = cppyy.gbl.Eint
+        cls_Eint0 = enum.Enum("Eint0", [(n, v) for n, v in Eint.__dict__.items() if isinstance(v, Eint)])
+        assert len(cls_Eint0.__dict__["_member_names_"]) == 2
+
+        cppyy.cppdef("enum class Ebool : bool { ON = true, OFF = false };")
+        Ebool = cppyy.gbl.Ebool
+        cls_Ebool0 = enum.Enum("Ebool0", [(n, v) for n, v in Ebool.__dict__.items() if isinstance(v, Ebool)])
+        assert len(cls_Ebool0.__dict__["_member_names_"]) == 2
