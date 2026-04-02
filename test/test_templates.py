@@ -1,6 +1,6 @@
 import py, os
 from pytest import raises, mark
-from .support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX_ARM, IS_VALGRIND
+from support import setup_make, pylong, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_LINUX_ARM, IS_VALGRIND
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("templatesDict"))
@@ -297,12 +297,11 @@ class TestTEMPLATES:
         assert iavec[5] == 5
 
       # with variadic template
-        if cppyy.evaluate("__cplusplus") > 201402:
-            assert nsup.matryoshka[int, 3].type
-            assert nsup.matryoshka[int, 3, 4].type
-            assert nsup.make_vector[int , 3]
-            assert nsup.make_vector[int , 3]().m_val == 3
-            assert nsup.make_vector[int , 4]().m_val == 4
+        assert nsup.matryoshka[int, 3].type
+        assert nsup.matryoshka[int, 3, 4].type
+        assert nsup.make_vector[int , 3]
+        assert nsup.make_vector[int , 3]().m_val == 3
+        assert nsup.make_vector[int , 4]().m_val == 4
 
       # with inner types using
         assert cppyy.evaluate("using_problem::Bar::Foo")
@@ -1109,7 +1108,7 @@ class TestTEMPLATES:
                         run_n = getattr(cppyy.gbl, 'TNaRun_%d' % n)
                         getattr(run_n, t)
 
-    @mark.xfail(run=not(IS_MAC and IS_CLING), reason="Crashes on OS X + Cling")
+    @mark.xfail(run = False, condition=IS_MAC and IS_CLING, reason="Crashes on OS X + Cling")
     def test33_using_template_argument(self):
         """`using` type as template argument"""
 
@@ -1121,7 +1120,7 @@ class TestTEMPLATES:
         using testptr = Test*;
 
         template<typename T>
-        bool testfun(T const& x) { return !(bool)x; }
+        bool testfun(T x) { return !(bool)x; }
         }""")
 
         ns = cppyy.gbl.UsingPtr
@@ -1130,7 +1129,7 @@ class TestTEMPLATES:
 
         # TODO: raises TypeError; the problem is that the type is resolved
         # from UsingPtr::Test*const& to UsingPtr::Test*& (ie. `const` is lost)
-        # assert ns.testfun["UsingPtr::testptr"](cppyy.nullptr)
+        assert ns.testfun["UsingPtr::testptr"](cppyy.nullptr)
 
         assert ns.testptr.__name__     == "Test"
         assert ns.testptr.__cpp_name__ == "UsingPtr::Test*"

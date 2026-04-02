@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
+from support import setup_make, IS_WINDOWS, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC
 
 
 class TestREGRESSION:
@@ -264,7 +264,7 @@ class TestREGRESSION:
         a = cppyy.gbl.CObjA()
         co = cppyy.ll.as_cobject(a)
 
-        assert a == cppyy.bind_object(co, 'CObjA')
+        assert a is cppyy.bind_object(co, 'CObjA')
         assert a.m_int == 42
         assert cppyy.bind_object(co, 'CObjA').m_int == 42
 
@@ -1031,17 +1031,16 @@ class TestREGRESSION:
 
         import cppyy
 
-        if cppyy.evaluate("__cplusplus") > 201402:
-            cppyy.cppdef("""\
-            #include <filesystem>
-            std::string stack_std_path() {
-                std::filesystem::path p = "/usr";
-                std::ostringstream os;
-                os << p;
-                return os.str();
-            }""")
+        cppyy.cppdef("""\
+        #include <filesystem>
+        std::string stack_std_path() {
+            std::filesystem::path p = "/usr";
+            std::ostringstream os;
+            os << p;
+            return os.str();
+        }""")
 
-            assert cppyy.gbl.stack_std_path() == '"/usr"'
+        assert cppyy.gbl.stack_std_path() == '"/usr"'
 
     def test36_ctypes_sizeof(self):
         """cppyy.sizeof forwards to ctypes.sizeof where necessary"""
@@ -1401,3 +1400,27 @@ class TestREGRESSION:
         foo = ns.Foo()
         with raises(cppyy.gbl.std.logic_error):
             foo.bar()
+    
+    def test47_initializer_list_fail(self, capfd):
+        """Conversion to intializer_list requires default constructor"""
+
+        import cppyy
+
+        cppyy.cppdef("""\
+        namespace regression_test47 {
+        std::size_t size = 0;
+        struct IntWrapper { IntWrapper(int i) : fInt(i) {} int fInt; };
+        void f(std::initializer_list<IntWrapper> l) {}
+        void f(std::vector<IntWrapper> l) { size = l.size(); }
+        }""")
+
+        r47 = cppyy.gbl.regression_test47
+
+        assert r47.size == 0
+        capfd.readouterr()  # discard any output produced so far
+
+        r47.f([1])
+        assert r47.size == 1
+        (out, err) = capfd.readouterr()
+        assert out == ""
+        assert err == ""

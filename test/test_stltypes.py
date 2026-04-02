@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_VALGRIND, IS_LINUX_ARM
+from support import setup_make, pylong, pyunicode, maxvalue, ispypy, IS_CLANG_REPL, IS_CLING, IS_CLANG_DEBUG, IS_MAC_X86, IS_MAC_ARM, IS_MAC, IS_VALGRIND, IS_LINUX_ARM
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("stltypesDict"))
@@ -1316,8 +1316,39 @@ class TestSTLMAP:
                 a[str(i)] = i
                 assert a[str(i)] == i
             assert a
+            assert len(a) == self.N
 
-        assert len(a) == self.N
+            if mtype != std.unordered_map:
+                # NOTE: this should pass for std.unordered_map as well, but it doesn't
+                # the failure case is broken out into test02a below, should be merged back
+                # here when fixed by removing this condition
+                itercount = 0
+                for key, value in a:
+                    assert int(str(key)) == value
+                    itercount += 1
+                assert itercount == len(a)
+
+    @mark.xfail(reason="map iteration is broken for std.unordered_map<string, x>")
+    def test02a_keyed_maptype(self):
+        """this test should just be part of the above, but it fails, so we broke out the failing part"""
+
+        import cppyy
+        std = cppyy.gbl.std
+
+        for mtype in (std.map, std.unordered_map):
+            a = mtype(std.string, int)()
+            assert not a
+            for i in range(self.N):
+                a[str(i)] = i
+                assert a[str(i)] == i
+            assert a
+            assert len(a) == self.N
+
+            itercount = 0
+            for key, value in a:
+                assert int(str(key)) == value
+                itercount += 1
+            assert itercount == len(a)
 
     def test03_empty_maptype(self):
         """Test behavior of empty map<int,int>"""
@@ -1629,14 +1660,19 @@ class TestSTLARRAY:
 
         a = std.array[gbl.ArrayTest.Point, 4]()
         assert len(a) == 4
+        pxsum = 0
         for i in range(len(a)):
             a[i].px = i
+            pxsum += a[i].px
             assert a[i].px == i
             a[i].py = i**2
             assert a[i].py == i**2
 
+        assert sum([v.px for v in a]) == pxsum
+
         if ispypy:
             raise RuntimeError("test fails with crash")
+
         # test assignment
         assert a[2]
         a[2] = gbl.ArrayTest.Point(6, 7)
@@ -1688,6 +1724,20 @@ class TestSTLARRAY:
         with raises(TypeError):
             cppyy.gbl.std.array["double",3](['a', 1.0, 1.0])
 
+    @mark.xfail(reason="std::array<nanoseconds> iteration fails")
+    def test05_array_of_chrono_types_should_be_iterable(self):
+        import cppyy
+        cppyy.cppdef("""
+        #include <chrono>
+        using namespace std::chrono_literals;
+        std::vector<std::chrono::nanoseconds>   vtimes  = {10ns, 500ns, 1us};
+        std::array<std::chrono::nanoseconds, 3> atimes = {10ns, 500ns, 1us};
+        """)
+        # this works normally...
+        assert sum([v.count() for v in cppyy.gbl.vtimes]) == 1510
+        # ... but this doesn't, fails complaining about not being able to iterate
+        assert sum([v.count() for v in cppyy.gbl.atimes]) == 1510
+
 
 class TestSTLSTRING_VIEW:
     def setup_class(cls):
@@ -1700,9 +1750,7 @@ class TestSTLSTRING_VIEW:
         """Usage of std::string_view as formal argument"""
 
         import cppyy
-        if cppyy.evaluate("__cplusplus") <= 201402:
-            # string_view exists as of C++17
-            return
+
         countit = cppyy.gbl.StringViewTest.count
         countit_cr = cppyy.gbl.StringViewTest.count_cr
 
@@ -1722,9 +1770,6 @@ class TestSTLSTRING_VIEW:
 
         import cppyy, gc
 
-        if cppyy.evaluate("__cplusplus;") <= 201402:
-            # string_view exists as of C++17
-            return
         # view on (converted) unicode
         text = cppyy.gbl.std.string_view('''\
         The standard Lorem Ipsum passage, used since the 1500s
@@ -1757,6 +1802,28 @@ class TestSTLSTRING_VIEW:
 
         assert "Lorem ipsum dolor sit amet" in str(text)
 
+    @mark.xfail(run = not IS_MAC, condition=IS_MAC or IS_CLING, reason="Crashes on OSX, fails with cling")
+    def  test03_string_view_pythonize(self):
+        """Pythonization of std::string_view"""
+
+        import cppyy
+
+        cppyy.cppdef("""
+        std::string_view s = "Hello, World!";
+        """)
+
+        from cppyy.gbl import s
+
+        assert(s == "Hello, World!")
+        assert(str(s) == "Hello, World!")
+        
+        cppyy.cppdef(
+        """
+        bool is_equal_cpp = s == "Hello, World!";
+        """)
+
+        from cppyy.gbl import is_equal_cpp
+        assert(is_equal_cpp)
 
 class TestSTLDEQUE:
     def setup_class(cls):
@@ -2153,3 +2220,98 @@ class TestSTLEXCEPTION:
 
         gc.collect()
         assert cppyy.gbl.GetMyErrorCount() == 0
+
+def has_cpp_20():
+    import cppyy
+
+    return cppyy.evaluate("__cplusplus") >= 202002
+
+
+@mark.skipif(not has_cpp_20(), reason="std::span requires C++20")
+class TestSTLSPAN:
+    import cppyy
+
+    def test01_span_iterators(self):
+        """
+        Test that std::span::begin() and std::span::end() can be used.
+        """
+        import cppyy
+
+        l1 = [1, 2, 3]
+        v = cppyy.gbl.std.vector(int)(l1)
+        s = cppyy.gbl.std.span(int)(v)
+        s.begin()
+        s.end()
+        # Check that the iteration also works, which uses begin() and end()
+        # internally.
+        assert [b for b in s] == l1
+
+    def test02_span_argument_conversions(self):
+        """
+        Test conversion of various Python objects to std::span arguments.
+
+        Covers:
+        1) Python proxy spans
+        2) NumPy arrays
+        3) array.array
+        4) Type mismatch errors
+        5) std::vector implicit conversion
+        6) const std::span behavior
+        """
+        import cppyy
+        import numpy as np
+        import array
+        import pytest
+
+        cppyy.cppdef("""
+        #include <span>
+        #include <vector>
+
+        template<class T>
+        size_t sum_span(std::span<T> s) {
+            size_t total = 0;
+            for (size_t i = 0; i < s.size(); ++i)
+                total += (size_t)s[i];
+            return total;
+        }
+
+        template<class T>
+        size_t sum_span_const(std::span<const T> s) {
+            size_t total = 0;
+            for (size_t i = 0; i < s.size(); ++i)
+                total += (size_t)s[i];
+            return total;
+        }
+        """)
+
+        data = [1., 2., 3.]
+        expected = sum(data)
+
+        # 1) Python proxy span
+        v = cppyy.gbl.std.vector["double"](data)
+        s = cppyy.gbl.std.span["double"](v)
+        assert cppyy.gbl.sum_span["double"](s) == expected
+        assert cppyy.gbl.sum_span_const["double"](s) == expected
+
+        # 2) NumPy array
+        np_arr = np.array(data, dtype=np.float64)
+        assert cppyy.gbl.sum_span["double"](np_arr) == expected
+        assert cppyy.gbl.sum_span_const["double"](np_arr) == expected
+
+        # 3) array.array
+        arr = array.array('d', data)
+        assert cppyy.gbl.sum_span["double"](arr) == expected
+        assert cppyy.gbl.sum_span_const["double"](arr) == expected
+
+        # 4) Type mismatch → should raise TypeError
+        np_double = np.array([1.0, 2.0, 3.0], dtype=np.float32)
+        with pytest.raises(TypeError):
+            cppyy.gbl.sum_span["double"](np_double)
+
+        # 5) std::vector implicit conversion
+        v2 = cppyy.gbl.std.vector["double"](data)
+        assert cppyy.gbl.sum_span["double"](v2) == expected
+        assert cppyy.gbl.sum_span_const["double"](v2) == expected
+
+        # 6) const span behaves the same (already checked above, but explicit case)
+        assert cppyy.gbl.sum_span_const["double"](np_arr) == expected

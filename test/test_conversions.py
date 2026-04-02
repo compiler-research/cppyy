@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, mark
-from .support import setup_make, IS_LINUX, IS_CLANG_REPL, IS_CLING, IS_MAC
+from support import setup_make, IS_LINUX, IS_CLANG_REPL, IS_CLING, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("conversionsDict"))

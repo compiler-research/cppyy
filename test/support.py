@@ -5,6 +5,9 @@ currpath = py.path.local(__file__).dirpath()
 
 
 def setup_make(targetname):
+    if os.getenv("CPPYY_TEST_SKIP_MAKE", False):
+        return
+
     if sys.platform == 'win32':
         popen = subprocess.Popen([sys.executable, "make_dict_win32.py", targetname], cwd=str(currpath),
                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

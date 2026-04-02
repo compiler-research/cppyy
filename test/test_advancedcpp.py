@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, IS_WINDOWS, IS_MAC, IS_LINUX, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86, IS_VALGRIND, IS_CLING
+from support import setup_make, pylong, IS_WINDOWS, IS_MAC, IS_LINUX, ispypy, IS_CLANG_REPL, IS_MAC_ARM, IS_MAC_X86, IS_VALGRIND, IS_CLING
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("advancedcppDict"))
@@ -451,10 +451,10 @@ class TestADVANCEDCPP:
         #assert o == cppyy.bind_object(cobj, o.__class__)
         #assert o == cppyy.bind_object(cobj, "some_concrete_class")
         assert cppyy.addressof(o) == cppyy.addressof(cppyy.bind_object(addr, some_concrete_class))
-        assert o == cppyy.bind_object(addr, some_concrete_class)
-        assert o == cppyy.bind_object(addr, type(o))
-        assert o == cppyy.bind_object(addr, o.__class__)
-        assert o == cppyy.bind_object(addr, "some_concrete_class")
+        assert o is cppyy.bind_object(addr, some_concrete_class)
+        assert o is cppyy.bind_object(addr, type(o))
+        assert o is cppyy.bind_object(addr, o.__class__)
+        assert o is cppyy.bind_object(addr, "some_concrete_class")
         raises(TypeError, cppyy.bind_object, addr, "does_not_exist")
         raises(TypeError, cppyy.bind_object, addr, 1)
 
@@ -537,13 +537,13 @@ class TestADVANCEDCPP:
         b = base_class()
         d = derived_class()
 
-        assert b == b.cycle(b)
+        assert b is b.cycle(b)
         assert id(b) == id(b.cycle(b))
-        assert b == d.cycle(b)
+        assert b is d.cycle(b)
         assert id(b) == id(d.cycle(b))
-        assert d == b.cycle(d)
+        assert d is b.cycle(d)
         assert id(d) == id(b.cycle(d))
-        assert d == d.cycle(d)
+        assert d is d.cycle(d)
         assert id(d) == id(d.cycle(d))
 
         assert isinstance(b.cycle(b), base_class)

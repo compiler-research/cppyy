@@ -46,13 +46,14 @@ jobs:
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host;NVPTX"
-          - name: ubu24-x86-gcc9-clang18-cling
+          - name: ubu24-x86-gcc14-clang20-cling
             os: ubuntu-24.04
-            compiler: gcc-9
-            clang-runtime: '18'
+            compiler: gcc-14
+            clang-runtime: '20'
             python-version: '3.14'
             cling: On
-            cling-version: '1.2'
+            cling-version: '1.3'
+            root-llvm-tag: 'cling-llvm20-20260119-01'
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host;NVPTX"
           - name: ubu24-arm-gcc12-clang-repl-21
@@ -79,13 +80,14 @@ jobs:
             cling: Off
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host;NVPTX"
-          - name: ubu24-arm-gcc9-clang18-cling
+          - name: ubu24-arm-gcc14-clang20-cling
             os: ubuntu-24.04-arm
-            compiler: gcc-9
-            clang-runtime: '18'
+            compiler: gcc-14
+            clang-runtime: '20'
             python-version: '3.14'
             cling: On
-            cling-version: '1.2'
+            cling-version: '1.3'
+            root-llvm-tag: 'cling-llvm20-20260119-01'
             llvm_enable_projects: "clang"
             llvm_targets_to_build: "host;NVPTX"
             
@@ -128,7 +130,7 @@ jobs:
         path: |
           llvm-project
           ${{ matrix.cling=='On' && 'cling' || '' }}
-        key: ${{ env.CLING_HASH }}-${{ runner.os }}-${{ matrix.os }}-${{ matrix.compiler }}-clang-${{ matrix.clang-runtime }}.x-patch-${{ hashFiles(format('patches/llvm/clang{0}-*.patch', matrix.clang-runtime)) || 'none' }}
+        key: ${{ env.CLING_HASH }}-${{ runner.os }}-${{ matrix.os }}-${{ matrix.compiler }}-clang-${{ matrix.clang-runtime }}-${{ matrix.root-llvm-tag || 'none' }}.x-patch-${{ hashFiles(format('patches/llvm/clang{0}-*.patch', matrix.clang-runtime)) || 'none' }}
         lookup-only: true
 
     - name: Setup default Build Type
@@ -176,12 +178,8 @@ jobs:
       run: |
         cling_on=$(echo "${{ matrix.cling }}" | tr '[:lower:]' '[:upper:]')
         if [[ "${cling_on}" == "ON" ]]; then
-          git clone https://github.com/root-project/cling.git
-          cd ./cling 
-          git checkout tags/v${{ matrix.cling-version }}
-          git apply -v ${{ github.workspace }}/CppInterOp/patches/llvm/cling1.2-LookupHelper.patch
-          cd ..
-          git clone --depth=1 -b cling-llvm${{ matrix.clang-runtime }} https://github.com/root-project/llvm-project.git
+          git clone --depth=1 --branch v${{ matrix.cling-version }} https://github.com/root-project/cling.git
+          git clone --depth=1 -b ${{ matrix.root-llvm-tag }} https://github.com/root-project/llvm-project.git
         else # repl
           git clone --depth=1 -b release/${{ matrix.clang-runtime }}.x https://github.com/llvm/llvm-project.git
         fi
@@ -289,13 +287,14 @@ jobs:
             python-version: '3.12'
             cling: Off
             cppyy: On
-          - name: ubu24-x86-gcc9-clang18-cling-cppyy
+          - name: ubu24-x86-gcc14-clang20-cling-cppyy
             os: ubuntu-24.04
-            compiler: gcc-9
-            clang-runtime: '18'
+            compiler: gcc-14
+            clang-runtime: '20'
             python-version: '3.14'
             cling: On
-            cling-version: '1.2'
+            cling-version: '1.3'
+            root-llvm-tag: 'cling-llvm20-20260119-01'
             cppyy: On
           - name: ubu24-arm-gcc12-clang-repl-21-cppyy
             os: ubuntu-24.04-arm
@@ -319,13 +318,14 @@ jobs:
             python-version: '3.12'
             cling: Off
             cppyy: On
-          - name: ubu24-arm-gcc9-clang18-cling-cppyy
+          - name: ubu24-arm-gcc14-clang20-cling-cppyy
             os: ubuntu-24.04-arm
-            compiler: gcc-9
-            clang-runtime: '18'
+            compiler: gcc-14
+            clang-runtime: '20'
             python-version: '3.14'
             cling: On
-            cling-version: '1.2'
+            cling-version: '1.3'
+            root-llvm-tag: 'cling-llvm20-20260119-01'
             cppyy: On
 
     steps:
@@ -426,7 +426,7 @@ jobs:
         path: |
           llvm-project
           ${{ matrix.cling=='On' && 'cling' || '' }}
-        key: ${{ env.CLING_HASH }}-${{ runner.os }}-${{ matrix.os }}-${{ matrix.compiler }}-clang-${{ matrix.clang-runtime }}.x-patch-${{ hashFiles(format('patches/llvm/clang{0}-*.patch', matrix.clang-runtime)) || 'none' }}
+        key: ${{ env.CLING_HASH }}-${{ runner.os }}-${{ matrix.os }}-${{ matrix.compiler }}-clang-${{ matrix.clang-runtime }}-${{ matrix.root-llvm-tag || 'none' }}.x-patch-${{ hashFiles(format('patches/llvm/clang{0}-*.patch', matrix.clang-runtime)) || 'none' }}
 
     - name: Setup code coverage
       if: ${{ success() && (matrix.coverage == true) }}
@@ -544,7 +544,8 @@ jobs:
         # source virtual environment
         source ${{ github.workspace }}/CppInterOp/.venv/bin/activate
         cd ${{ github.workspace }}
-        python -m pip install uv
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements.txt
         python -m uv pip install --upgrade . --no-deps --verbose
         cd ..
 
@@ -566,13 +567,6 @@ jobs:
         cd ${{ github.workspace }}/test
         echo ::group::Prepare For Testing
         make all
-        python -m pip install --upgrade pip
-        python -m uv pip install pytest
-        python -m uv pip install pytest-xdist
-        if [[ "${{ matrix.python-version }}" != "3.14" ]]; then
-          python -m uv pip install numba==0.61.2
-        fi
-        python -m uv pip install psutil
         echo ::endgroup::
         echo ::group::Run complete test suite
         set -o pipefail

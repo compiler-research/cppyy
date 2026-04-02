@@ -1,8 +1,6 @@
 #ifndef CPP11FEATURES_H
 #define CPP11FEATURES_H
 
-#if __cplusplus >= 201103L
-
 #include <functional>
 #include <memory>
 #include <vector>
@@ -123,7 +121,5 @@ namespace std {
         size_t operator()(const StructWithHash&) const { return 17; }
     };
 } // namespace std
-
-#endif // c++11 and later
 
 #endif // CPP11FEATURES_H

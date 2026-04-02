@@ -1,6 +1,6 @@
 import py, os, sys
 from pytest import raises, skip, mark
-from .support import setup_make, pylong, ispypy, IS_CLANG_REPL, IS_CLING, IS_MAC_ARM, IS_MAC_X86, IS_MAC
+from support import setup_make, pylong, ispypy, IS_CLANG_REPL, IS_CLING, IS_MAC_ARM, IS_MAC_X86, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
 test_dct = str(currpath.join("example01Dict"))
@@ -513,6 +513,10 @@ class TestPYTHONIFY:
 
         void foobar(const MyClass& m1 = MyClass(), const MyClass& m2 = MyClass()) {
             /* empty */
+        }
+
+        bool barfoo(bool opt1=false, bool opt2=true) {
+            return opt1 && opt2;
         } }""")
 
         def pyfoo(a=10, b=20, c=5, d=4):
@@ -534,6 +538,12 @@ class TestPYTHONIFY:
         assert ns.bar(b = " greeting") == "a greeting"
 
         ns.foobar(m2 = ns.MyClass())
+
+        assert not ns.barfoo()
+        assert not ns.barfoo(opt2=True)
+        assert not ns.barfoo(opt2=False)
+        assert     ns.barfoo(opt1=True, opt2=True)
+        assert not ns.barfoo(opt1=True, opt2=False)
 
 
 class TestPYTHONIFY_UI:
