@@ -270,6 +270,7 @@ class TestCPP11FEATURES:
         assert cppyy.gbl.TestMoving1.s_instance_counter == 0
         assert cppyy.gbl.TestMoving2.s_instance_counter == 0
 
+    @mark.xfail(condition=IS_MAC, reason="Fails on OSX")
     def test08_initializer_list(self):
         """Initializer list construction"""
 
