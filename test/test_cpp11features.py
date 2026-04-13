@@ -450,7 +450,7 @@ class TestCPP11FEATURES:
         with raises(ValueError):  # not an RValue
             cppyy.gbl.UniqueTempl.returnptr[int](uptr_in)
 
-    @mark.xfail(run = not IS_CLING, reason = "Does not crash on Cling, but the failure causes subsequent tests to fail")
+    @mark.xfail(IS_CLING, reason = "Does not crash on Cling, but the failure causes subsequent tests to fail")
     def test16_unique_ptr_moves(self):
         """std::unique_ptr requires moves"""
 
