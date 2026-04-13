@@ -26,7 +26,6 @@ class TestREFLEX:
         with raises(TypeError):
             cppyy.addressof('doesnotexist')
 
-    @mark.xfail
     def test02_method_reflection(self):
         """Method reflection tooling"""
 
@@ -51,7 +50,6 @@ class TestREFLEX:
         assert ns.MyData_m1.__init__.__cpp_reflex__(r.RETURN_TYPE, r.AS_TYPE)   == ns.MyData_m1
         assert ns.MyData_m1.__init__.__cpp_reflex__(r.RETURN_TYPE, r.AS_STRING) == 'ReflexTest::MyData_m1'
 
-    @mark.xfail
     def test03_datamember_reflection(self):
         """Data member reflection tooling"""
 
