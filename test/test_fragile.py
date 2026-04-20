@@ -590,18 +590,20 @@ class TestFRAGILE:
                 int add42(int i) { return i + 42; }
             }""")
 
-        with warnings.catch_warnings(record=True) as w:
-          # missing return statement
-            cppyy.cppdef("""\
-            namespace fragile {
-                void add42d(double d) {
-                  #warning return plastic for recycling!
-                }
-            }""")
+      # isolate the warning configuration
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")  # turn warnings into errors
 
-        assert len(w) == 1
-        assert issubclass(w[-1].category, SyntaxWarning)
-        assert "return" in str(w[-1].message)
+          # missing return statement
+            with raises(SyntaxWarning) as exc:
+                cppyy.cppdef("""\
+                namespace fragile {
+                    void add42d(double d) {
+                    #warning return plastic for recycling!
+                    }
+                }""")
+
+            assert "return" in str(exc.value)
 
       # mix of error and warning
         with raises(SyntaxError):
