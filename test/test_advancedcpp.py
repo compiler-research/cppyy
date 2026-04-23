@@ -591,7 +591,7 @@ class TestADVANCEDCPP:
         """Verify that class-level overloaded new/delete are called"""
 
         import cppyy
-
+        cppyy.include("new")
         assert cppyy.gbl.new_overloader.s_instances == 0
         nl = cppyy.gbl.new_overloader()
         assert cppyy.gbl.new_overloader.s_instances == 1
