@@ -276,7 +276,7 @@ class TestTEMPLATES:
         assert round(RTTest2[int](1, 3.1).m_double - 4.1, 8) == 0.
         assert round(RTTest2[int]().m_double + 1., 8) == 0.
 
-    @mark.xfail(run=False, condition=IS_CLING, reason="Crashes on Cling")
+    @mark.xfail(IS_CLING, reason="Crashes on Cling")
     def test12_template_aliases(self):
         """Access to templates made available with 'using'"""
 

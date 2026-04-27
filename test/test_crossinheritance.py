@@ -36,7 +36,7 @@ class TestCROSSINHERITANCE:
         assert Base1.call_get_value(Base1())   == 42
         assert Base1.call_get_value(Derived()) == 13
 
-    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes pytest on Linux ARM")
+    @mark.xfail(IS_LINUX_ARM, reason="Crashes pytest on Linux ARM")
     def test02_constructor(self):
         """Test constructor usage for derived classes"""
 

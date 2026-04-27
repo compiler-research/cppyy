@@ -166,7 +166,7 @@ class TestCONCURRENT:
         assert "RuntimeError" in w.err_msg
         assert "all wrong"    in w.err_msg
 
-    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes pytest on Linux ARM")
+    @mark.xfail(IS_LINUX_ARM, reason="Crashes pytest on Linux ARM")
     def test05_float2d_callback(self):
         """Passing of 2-dim float arguments"""
 

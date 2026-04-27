@@ -64,7 +64,7 @@ class TestAPI:
         m2 = API.Instance_FromVoidPtr(voidp, 'APICheck2')
         assert m is m2
 
-    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes pytest on Linux ARM")
+    @mark.xfail(IS_LINUX_ARM, reason="Crashes pytest on Linux ARM")
     def test04_custom_converter(self):
         """Custom type converter"""
 

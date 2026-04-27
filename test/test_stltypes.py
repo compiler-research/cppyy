@@ -391,7 +391,7 @@ class TestSTLVECTOR:
         assert v2[-1] == v[-2]
         assert v2[self.N-4] == v[-2]
 
-    @mark.xfail(run=False, condition=(IS_MAC and IS_CLING), reason="Crashes on OSX Cling")
+    @mark.xfail(IS_MAC and IS_CLING, reason="Crashes on OSX Cling")
     def test07_vector_bool(self):
         """Usability of std::vector<bool> which can be a specialization"""
 
