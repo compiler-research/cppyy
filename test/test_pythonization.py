@@ -148,7 +148,7 @@ class TestClassPYTHONIZATION:
         assert mine.__smartptr__().get().m_check == 0xcdcdcdcd
         assert mine.say_hi() == "Hi!"
 
-    @mark.xfail(run=False, condition=IS_VALGRIND and IS_LINUX_ARM and IS_CLANG_REPL, reason="Crashes on Valgind Clang-Repl-ARM")
+    @mark.xfail(IS_VALGRIND and IS_LINUX_ARM and IS_CLANG_REPL,reason="Crashes on Valgrind Clang-Repl-ARM")
     def test05_converters(self):
         """Smart pointer argument passing"""
 

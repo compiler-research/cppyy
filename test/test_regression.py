@@ -197,7 +197,7 @@ class TestREGRESSION:
 
         assert sys.getrefcount(x) == old_refcnt
 
-    @mark.xfail(run=False, condition=IS_MAC and IS_CLING, reason="Crahes on OSX-Cling")
+    @mark.xfail(IS_MAC and IS_CLING, reason="Crahes on OSX-Cling")
     def test08_typedef_identity(self):
         """Nested typedefs should retain identity"""
 

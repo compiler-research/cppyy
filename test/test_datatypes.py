@@ -1251,7 +1251,7 @@ class TestDATATYPES:
         run(self, cppyy.gbl.sum_uc_data, buf, total)
         run(self, cppyy.gbl.sum_byte_data, buf, total)
 
-    @mark.xfail(run=False, condition=IS_MAC, reason="Crashes on OSX")
+    @mark.skipif(IS_MAC, reason="Crashes on OSX")
     def test26_function_pointers(self):
         """Function pointer passing"""
 

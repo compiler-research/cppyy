@@ -15,7 +15,7 @@ class TestCPP11FEATURES:
         import cppyy
         cls.cpp11features = cppyy.load_reflection_info(cls.test_dct)
 
-    @mark.xfail(run=False, condition=IS_LINUX_ARM, reason="Crashes pytest on Linux ARM")
+    @mark.xfail(IS_LINUX_ARM, reason="Crashes pytest on Linux ARM")
     def test01_smart_ptr(self):
         """Usage and access of std::shared/unique_ptr<>"""
 
