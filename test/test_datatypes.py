@@ -1,5 +1,5 @@
 import py, os, sys
-from pytest import raises, skip, mark
+from pytest import raises, skip, xfail, mark
 from support import setup_make, pylong, pyunicode, IS_CLING, IS_MAC
 
 currpath = py.path.local(__file__).dirpath()
@@ -2355,3 +2355,92 @@ class TestDATATYPES:
         Ebool = cppyy.gbl.Ebool
         cls_Ebool0 = enum.Enum("Ebool0", [(n, v) for n, v in Ebool.__dict__.items() if isinstance(v, Ebool)])
         assert len(cls_Ebool0.__dict__["_member_names_"]) == 2
+
+    def test52_8bit_goodness(self):
+        import cppyy
+        cppyy.cppdef("""
+        namespace ns52 {
+          int8_t ti8;
+          uint8_t tui8;
+
+          enum class Tei8 : int8_t {M1=-1, M0=0, P1=1};
+          auto tei8m1 = Tei8::M1;
+
+          enum class Teui8 : uint8_t {P0,P1,P2};
+          auto teui8p1 = Teui8::P1;
+        }""")
+
+        from cppyy.gbl import ns52
+
+        assert ns52.ti8 == 0
+        ns52.ti8 = 123
+        assert ns52.ti8 == 123
+        ns52.ti8 = -1
+        assert ns52.ti8 == -1
+
+        assert ns52.tui8 == 0
+        ns52.tui8 = 123
+        assert ns52.tui8 == 123
+
+        assert ns52.tei8m1 == ns52.Tei8.M1
+        assert ns52.tei8m1 == -1
+
+        assert ns52.teui8p1 == ns52.Teui8.P1
+        pteui8p2 = ns52.Teui8.P2
+        assert pteui8p2 == ns52.Teui8.P2
+
+    def test53_basic_nanoseconds_goodness(self):
+        import cppyy
+        cppyy.cppdef("""
+        namespace ns53 {
+            auto f0(int64_t x) { return std::chrono::nanoseconds{x}.count(); }
+            auto f1(std::chrono::nanoseconds x) { return x.count(); }
+        }
+        """)
+        from cppyy.gbl import std, ns53
+        assert ns53.f0(1000) == 1000
+        assert ns53.f1(std.chrono.nanoseconds(1000)) == 1000
+
+        # no autoconversion from int to nanoseconds in C++
+        with raises(TypeError):
+            ns53.f1(1000)
+
+    @mark.xfail(reason="optional on enum uint8_t is broken")
+    def test54_optional_use(self):
+        import cppyy
+        cppyy.cppdef("""
+        #include <string>
+        namespace ns54 {
+            std::optional<int> toi;
+            std::optional<std::string> tos;
+
+            enum class Tei : int {ZERO, ONE, TWO};
+            std::optional<Tei> tei;
+
+            enum class Tec : char {ZERO, ONE, TWO};
+            std::optional<Tec> tec;
+
+            enum class Teu8 : uint8_t {ZERO, ONE, TWO};
+            std::optional<Teu8> teu8;
+        }
+        """)
+        from cppyy.gbl import ns54
+
+        ns54.toi = 5
+        assert ns54.toi == 5
+
+        assert ns54.tos.value_or("what") == "what"
+        ns54.tos = "hello"
+        assert ns54.tos == "hello"
+
+        assert ns54.tei.value_or(ns54.Tei.TWO) == ns54.Tei.TWO
+        ns54.tei = ns54.Tei.TWO
+        assert ns54.tei == ns54.Tei.TWO
+
+        assert ns54.tec.value_or(ns54.Tec.TWO) == ns54.Tec.TWO
+        ns54.tec = ns54.Tec.TWO
+        assert ns54.tec == ns54.Tec.TWO
+
+        assert ns54.teu8.value_or(ns54.Teu8.TWO) == ns54.Teu8.TWO
+        ns54.teu8 = ns54.Teu8.TWO
+        assert ns54.teu8 == ns54.Teu8.TWO
