@@ -1428,3 +1428,18 @@ class TestREGRESSION:
         (out, err) = capfd.readouterr()
         assert out == ""
         assert err == ""
+
+    def test48_templated_using_with_const(self):
+        """Test parsing of template arguments mixed with using clause and constants"""
+
+        import cppyy
+        from cppyy import gbl
+
+        cppyy.cppdef("""
+            template <typename T, int N>
+            struct NN {
+              bool F = true;
+            };
+        """)
+
+        assert gbl.NN["std::vector<int>::value_type, 5"]().F is True
