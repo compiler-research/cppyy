@@ -501,7 +501,7 @@ class TestFRAGILE:
 
         assert capture.str() == "Hello, World\n"
 
-    @mark.xfail(condition=IS_MAC or IS_CLANG_REPL, reason="Fails with ClangRepl")
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails with ClangRepl")
     def test21_failing_cppcode(self):
         """Check error behavior of failing C++ code"""
 
@@ -614,9 +614,7 @@ class TestFRAGILE:
                 int add42(int i) { return i + 42; }
             }""")
 
-    # This test is known to fail on MacOS with Clang-Repl, but currently with the symbol dispatch,
-    # the IS_CLANG_REPL variable is not set, tricking pytest into thinking the test should pass.
-    @mark.xfail(condition=IS_CLANG_REPL or IS_MAC, reason="Fails on ClangRepl")
+    @mark.xfail(condition=IS_CLANG_REPL, reason="Fails on ClangRepl")
     def test26_macro(self):
         """Test access to C++ pre-processor macro's"""
 
@@ -792,7 +790,6 @@ class TestSTDNOTINGLOBAL:
     def setup_class(cls):
         import cppyy
 
-    @mark.xfail(condition=IS_MAC, reason="Fails on OS X, related to symbol dispatch. Common with Linux LLVM18 dispatch builds")
     def test01_stl_in_std(self):
         """STL classes should live in std:: only"""
 
