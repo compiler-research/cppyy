@@ -1317,32 +1317,6 @@ class TestSTLMAP:
             assert a
             assert len(a) == self.N
 
-            if mtype != std.unordered_map:
-                # NOTE: this should pass for std.unordered_map as well, but it doesn't
-                # the failure case is broken out into test02a below, should be merged back
-                # here when fixed by removing this condition
-                itercount = 0
-                for key, value in a:
-                    assert int(str(key)) == value
-                    itercount += 1
-                assert itercount == len(a)
-
-    @mark.xfail(reason="map iteration is broken for std.unordered_map<string, x>")
-    def test02a_keyed_maptype(self):
-        """this test should just be part of the above, but it fails, so we broke out the failing part"""
-
-        import cppyy
-        std = cppyy.gbl.std
-
-        for mtype in (std.map, std.unordered_map):
-            a = mtype(std.string, int)()
-            assert not a
-            for i in range(self.N):
-                a[str(i)] = i
-                assert a[str(i)] == i
-            assert a
-            assert len(a) == self.N
-
             itercount = 0
             for key, value in a:
                 assert int(str(key)) == value
