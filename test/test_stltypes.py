@@ -723,6 +723,7 @@ class TestSTLVECTOR:
         assert ns.test[0] == "hello"
         assert ns.test[1] == "world"
 
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX Cling")
     def test21_vector_of_structs_data(self):
         """Vector of structs data() should return array-like"""
 

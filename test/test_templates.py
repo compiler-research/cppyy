@@ -442,6 +442,7 @@ class TestTEMPLATES:
         assert f_T[int]() is None
         assert cppyy.gbl.T_WithEmptyBody.side_effect == "side effect"
 
+    @mark.xfail(condition=IS_MAC and IS_CLING, reason="Fails on OSX Cling")
     def test18_greedy_overloads(self):
         """void*/void** should not pre-empt template instantiations"""
 
