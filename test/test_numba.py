@@ -1,7 +1,7 @@
 import py, os, sys
 import math, time
 from pytest import mark, raises
-from .support import setup_make, IS_LINUX_ARM
+from .support import setup_make, IS_LINUX_ARM, IS_VALGRIND
 
 try:
     import numba
@@ -9,6 +9,8 @@ try:
 except ImportError:
     has_numba = False
 
+if IS_LINUX_ARM and IS_VALGRIND:
+    has_numba = False
 
 class TestREFLEX:
     def setup_class(cls):
