@@ -3,11 +3,11 @@
     Memcheck:Free
     fun:free
     obj:*
-    fun:_ZNK7CppImpl7JitCall6InvokeEPvNS0_7ArgListES1_
-    fun:_ZL11WrapperCallPvmS_S_S_
-    fun:_ZN5Cppyy5CallVEPvS0_mS0_
-    fun:_ZL8GILCallVPvS_PN8CPyCppyy11CallContextE
-    fun:_ZN8CPyCppyy12_GLOBAL__N_112VoidExecutor7ExecuteEPvS2_PNS_11CallContextE
+    fun:_ZNK3Cpp7JitCall6InvokeEPvNS0_7ArgListES1_
+    fun:_ZL11WrapperCallN3Cpp7FuncRefEmPvS1_S1_
+    fun:_ZN5Cppyy5CallVEN3Cpp7FuncRefENS0_9ObjectRefEmPv
+    fun:_ZL8GILCallVN3Cpp7FuncRefENS_9ObjectRefEPN8CPyCppyy11CallContextE
+    fun:_ZN8CPyCppyy12_GLOBAL__N_112VoidExecutor7ExecuteEN3Cpp7FuncRefENS2_9ObjectRefEPNS_11CallContextE
     fun:_ZN8CPyCppyy9CPPMethod11ExecuteFastEPvlPNS_11CallContextE
     fun:_ZN8CPyCppyy9CPPMethod7ExecuteEPvlPNS_11CallContextE
     fun:_ZN8CPyCppyy11CPPFunction4CallERPNS_11CPPInstanceEPKP7_objectmS5_PNS_11CallContextE
