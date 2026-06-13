@@ -1,0 +1,70 @@
+# Best-effort, NON-GATING Bazel build of the full cppyy stack. The supported
+# build is setup.py/CMake; this job never blocks a PR (continue-on-error). The
+# build/test steps run for real and surface a regression as a warning, not a
+# false green.
+#
+# TEMPORARY fork coupling: the Bazel infra (cppyy/bazel/ and the MODULE.bazel
+# files of all four repos) currently lives ONLY on the conrade-ctc forks @
+# bazel-build-upstream, not on the compiler-research default branches. Until it
+# merges upstream, the sibling repos are cloned from the fork (FORK_OWNER /
+# FORK_BRANCH below). After the merge, repoint those two variables at
+# compiler-research + the default branch.
+name: bazel (best-effort)
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  bazel:
+    name: bazel (best-effort) llvm${{ matrix.llvm }}
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        llvm: ["22"]
+    steps:
+      # No `path:` -> cppyy is $GITHUB_WORKSPACE; siblings are cloned alongside
+      # it so the local_path_overrides (../CppInterOp, ../cppyy-backend,
+      # ../CPyCppyy) resolve. cppyy_bazel is this repo's own bazel/ subdir.
+      - name: Checkout cppyy
+        uses: actions/checkout@v4
+
+      - name: Clone sibling repos (fork carries the Bazel infra)
+        run: |
+          set -eux
+          FORK_OWNER="conrade-ctc"            # TODO: compiler-research after infra merges
+          FORK_BRANCH="bazel-build-upstream"  # TODO: default branch after infra merges
+          cd "$GITHUB_WORKSPACE/.."
+          for repo in CppInterOp cppyy-backend CPyCppyy; do
+            git clone --depth=1 -b "$FORK_BRANCH" \
+              "https://github.com/${FORK_OWNER}/${repo}.git"
+          done
+
+      - name: Setup LLVM ${{ matrix.llvm }}
+        uses: compiler-research/ci-workflows/actions/setup-llvm@main
+        with:
+          version: ${{ matrix.llvm }}
+          os: ubuntu-24.04
+
+      - name: Point LLVM_DIR at the tree root for the @llvm Bazel extension
+        run: |
+          # setup-llvm sets LLVM_DIR=<prefix>/lib/cmake/llvm (CMake convention);
+          # cppyy/bazel/llvm.bzl needs the tree root holding bin/llvm-config.
+          echo "LLVM_DIR=${GITHUB_WORKSPACE}/install" >> "$GITHUB_ENV"
+
+      - name: bazel build //...
+        run: |
+          bazelisk build //... \
+            || echo "::warning::bazel build //... failed (best-effort, non-gating)"
+
+      - name: bazel test //:tests
+        run: |
+          bazelisk test //:tests \
+            || echo "::warning::bazel test //:tests failed (best-effort, non-gating)"

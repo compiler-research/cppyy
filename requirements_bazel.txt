@@ -1,0 +1,6 @@
+# pytest and its runtime deps, pinned so pip.parse builds a complete hub
+# (the pytest package references these as sibling packages).
+pytest==8.3.4
+pluggy==1.5.0
+iniconfig==2.0.0
+packaging==24.2
