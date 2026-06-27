@@ -1443,3 +1443,64 @@ class TestREGRESSION:
         """)
 
         assert gbl.NN["std::vector<int>::value_type, 5"]().F is True
+
+    def test51_nontype_enum_template_arg(self):
+        """Regression test for a class template with a non-type enum parameter
+
+
+        clang prints such an argument as a C-style cast, e.g.
+        ``NonTypeEnumTmpl::Impl<float, (NonTypeEnumTmpl::EOp)0>``. Resolving
+        that name (as happens when a base pointer is auto-downcast to its
+        actual derived type) used to either fail to instantiate the template
+        ("non-type template parameter must be an expression") or leave the
+        interpreter in an error state that broke the next, unrelated JIT call
+        wrapper ("failed to resolve function").
+        """
+
+        import cppyy
+
+        cppyy.cppdef(r"""
+        namespace NonTypeEnumTmpl {
+            enum class EOp { Add = 0, Sub = 1, Mul = 2 };
+
+            struct Base {
+                virtual ~Base() {}
+                virtual int code() const = 0;
+            };
+
+            template <typename T, EOp Op>
+            struct Impl : public Base {
+                int code() const override { return (int)Op; }
+            };
+
+            // Factory returning a *raw* base pointer whose dynamic type carries
+            // a non-type enum template argument. Auto-downcasting it back to
+            // Python makes cppyy resolve the actual type by name, i.e. the
+            // cast-form "Impl<float, (EOp)0>".
+            Base* get(int which) {
+                static Impl<float, EOp::Add> a;
+                static Impl<float, EOp::Sub> s;
+                static Impl<float, EOp::Mul> m;
+                if (which == 0) return &a;
+                if (which == 1) return &s;
+                return &m;
+            }
+
+            // Called after the downcast to detect interpreter poisoning: its
+            // call wrapper is JIT-compiled only on first use.
+            int probe(int x) { return x + 1; }
+        }
+        """)
+
+        ns = cppyy.gbl.NonTypeEnumTmpl
+
+        # resolving the derived template type during the auto-downcast must not
+        # crash and must yield the actual (derived) class...
+        op = ns.get(0)
+        assert op.code() == 0
+        assert 'Impl<float' in type(op).__cpp_name__
+        assert ns.get(1).code() == 1
+        assert ns.get(2).code() == 2
+
+        # ...nor leave the interpreter unable to compile a later call wrapper
+        assert ns.probe(41) == 42
