@@ -1444,6 +1444,82 @@ class TestREGRESSION:
 
         assert gbl.NN["std::vector<int>::value_type, 5"]().F is True
 
+    def test50_using_decl_base_this_offset(self):
+        """A using-declaration-imported method from a non-zero-offset base must
+        adjust the `this` pointer to that base's subobject.
+
+        When a derived class pulls a base method into its own overload set with
+        `using Base::method;` (typically to merge it with a same-named local
+        overload), the method is still declared in the base. If that base is not
+        the first one, its subobject sits at a non-zero offset in the derived
+        object. The `this` offset used to be computed against the class the
+        method was bound on (the derived class) rather than its declaring base,
+        yielding a zero offset; the call then wrote through an unadjusted
+        pointer, corrupting memory and crashing on destruction.
+        """
+
+        import cppyy
+
+        cppyy.cppdef(r"""
+        namespace UsingDeclThisOffset {
+
+        // Fat first base so that SecondBase lands at a non-zero offset in Derived.
+        struct FirstBase {
+            long long a, b, c, d, e, f, g, h;
+            FirstBase() : a(11), b(22), c(33), d(44), e(55), f(66), g(77), h(88) {}
+            long long get_a() const { return a; }
+            long long get_h() const { return h; }
+        };
+
+        struct SecondBase {
+            int value;
+            SecondBase() : value(-1) {}
+            void set_value(int v) { value = v; }   // 1-arg setter in a non-zero-offset base
+            int  get_value() const { return value; }
+        };
+
+        struct Derived : public FirstBase, public SecondBase {
+            int extra;
+            Derived() : extra(0) {}
+            using SecondBase::set_value;                // import the 1-arg overload
+            void set_value(int v, int w) { value = v + w; extra = w; }  // local 2-arg overload
+        };
+
+        std::ptrdiff_t secondbase_offset() {
+            Derived* d = new Derived();
+            std::ptrdiff_t off = (char*)static_cast<SecondBase*>(d) - (char*)d;
+            delete d;
+            return off;
+        }
+
+        } """)
+
+        ns = cppyy.gbl.UsingDeclThisOffset
+
+        # the bug only manifests when SecondBase is at a non-zero offset
+        assert ns.secondbase_offset() != 0
+
+        d = ns.Derived()
+
+        # the 1-arg call resolves to the using-imported SecondBase::set_value(int)
+        d.set_value(42)
+
+        # the value lands in the correct SecondBase subobject ...
+        assert d.get_value() == 42
+        # ... and the FirstBase subobject (at offset 0) is left untouched; with a
+        # wrong (zero) `this` offset the write would have clobbered FirstBase::a.
+        assert d.get_a() == 11
+        assert d.get_h() == 88
+
+        # the local 2-arg overload still works and likewise leaves FirstBase intact
+        d.set_value(10, 5)
+        assert d.get_value() == 15
+        assert d.extra == 5
+        assert d.get_a() == 11
+
+        # destruction must not crash (heap integrity preserved)
+        del d
+
     def test51_nontype_enum_template_arg(self):
         """Regression test for a class template with a non-type enum parameter
 
