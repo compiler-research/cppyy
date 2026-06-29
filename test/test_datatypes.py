@@ -2403,6 +2403,7 @@ class TestDATATYPES:
         with raises(TypeError):
             ns53.f1(1000)
 
+    @mark.xfail(condition= IS_MAC, reason="std::optional<std::string>::value_or rvalue conversion fails on OS X clang-repl (InstanceMoveConverter)")
     def test54_optional_use(self):
         import cppyy
         cppyy.cppdef("""
