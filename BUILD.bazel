@@ -1,0 +1,259 @@
+load("@cppyy_bazel//:defs.bzl", "jit_cxx_interp_args")
+load("@cppyy_bazel//:rules.bzl", "cppyy_py_test", "cppyy_test_dict_sos")
+load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:packaging.bzl", "py_wheel")
+
+package(default_visibility = ["//visibility:public"])
+
+# The pytest the py_tests run under. Defaults to the standalone build's hermetic
+# hub; a consumer whose Python toolchain already provides pytest (e.g. nebula's
+# conda interpreter) overrides this to :ambient_pytest so no hub wheel is needed:
+#   --@cppyy//:pytest=@cppyy//:ambient_pytest
+label_flag(
+    name = "pytest",
+    build_setting_default = "@cppyy_test_deps//pytest",
+)
+
+# Empty stand-in: pytest comes from the interpreter, not a Bazel dep.
+py_library(name = "ambient_pytest")
+
+# The JIT C++ toolchain the py_tests need at RUN time (clang-repl compiles
+# in-process). Default empty -> standalone uses the host. A consumer without one
+# stages headers/clang into runfiles here, paired with :jit_cxx_interp_args:
+#   --@cppyy//:jit_cxx_data=//my/pkg:cppjit_jit_cxx_data
+label_flag(
+    name = "jit_cxx_data",
+    build_setting_default = ":jit_cxx_data_default",
+)
+
+filegroup(
+    name = "jit_cxx_data_default",
+    srcs = [],
+)
+
+# The matching --gcc-toolchain / -stdlib++-isystem args (CPPINTEROP_JIT_CXX_ARGS
+# make-var, appended to the py_tests' interpreter env). Default empty; a consumer
+# staging :jit_cxx_data overrides with its own jit_cxx_interp_args() target:
+#   --@cppyy//:jit_cxx_interp_args=//my/pkg:cppjit_jit_cxx_interp_args
+label_flag(
+    name = "jit_cxx_interp_args",
+    build_setting_default = ":jit_cxx_interp_args_default",
+)
+
+jit_cxx_interp_args(
+    name = "jit_cxx_interp_args_default",
+    args = "",
+)
+
+# test/*.cxx + test/*.h consumed by the dict solibs and as py_test data.
+filegroup(
+    name = "cxxh",
+    srcs = glob([
+        "test/*.cxx",
+        "test/*.h",
+    ]),
+)
+
+# Convenience aggregate of the cross-repo runtime artifacts the tests load.
+filegroup(
+    name = "data",
+    srcs = [
+        "@cppinterop//:solib",
+        "@cppyy_backend//:solib",
+        "@cpycppyy//:solib",
+    ],
+)
+
+# Pure-Python cppyy package. Package list mirrors setup.py find_packages
+# (cppyy + cppyy.__pyinstaller); cppyy_compat is not part of the wheel.
+py_library(
+    name = "lib",
+    srcs = glob([
+        "python/cppyy/**/*.py",
+    ]),
+    # The CPyCppyy extension (libcppyy.so) is dlopened by `import cppyy` at
+    # runtime; carry it (+ its headers) so any consumer of the python package
+    # gets it in runfiles. The backend solib comes via @cppyy_backend//:pylib.
+    data = [
+        "@cpycppyy//:headers",
+        "@cpycppyy//:solib",
+    ],
+    imports = ["python"],
+    deps = ["@cppyy_backend//:pylib"],
+)
+
+# Per-key <key>.a + <key>Dict.so, mirroring test/Makefile's dict list.
+cppyy_test_dict_sos([
+    "advancedcpp",
+    "advancedcpp2",
+    "conversions",
+    "cpp11features",
+    "crossinheritance",
+    "datatypes",
+    "doc_helper",
+    "example01",
+    "fragile",
+    "operators",
+    "overloads",
+    "pythonizables",
+    "std_streams",
+    "stltypes",
+    "templates",
+])
+
+# One py_test per test/test_*.py; sokeys are the dicts each loads via setup_make().
+cppyy_py_test(
+    name = "test_aclassloader",
+    sokeys = ["example01"],
+)
+
+cppyy_py_test(
+    name = "test_advancedcpp",
+    sokeys = [
+        "advancedcpp",
+        "advancedcpp2",
+    ],
+)
+
+cppyy_py_test(name = "test_api")
+
+cppyy_py_test(
+    name = "test_basic_api",
+    sokeys = ["example01"],
+)
+
+cppyy_py_test(name = "test_boost")
+
+cppyy_py_test(name = "test_concurrent")
+
+cppyy_py_test(
+    name = "test_conversions",
+    sokeys = ["conversions"],
+)
+
+cppyy_py_test(
+    name = "test_cpp11features",
+    sokeys = ["cpp11features"],
+)
+
+# Run the c++23 feature tests in-process (CPPYY_TEST_CPP23_CHILD=1) with a
+# c++23 interpreter, instead of the upstream parent->child pytest re-exec, which
+# is fragile under the test sandbox (the child changes cwd, breaking the
+# runfiles-relative env paths).
+cppyy_py_test(
+    name = "test_cpp23features",
+    extra_env = {
+        "CPPYY_TEST_CPP23_CHILD": "1",
+        "CPPINTEROP_EXTRA_INTERPRETER_ARGS": "-std=c++23",
+    },
+)
+
+cppyy_py_test(
+    name = "test_crossinheritance",
+    sokeys = ["crossinheritance"],
+)
+
+cppyy_py_test(
+    name = "test_datatypes",
+    sokeys = ["datatypes"],
+)
+
+cppyy_py_test(
+    name = "test_doc_features",
+    sokeys = ["doc_helper"],
+)
+
+cppyy_py_test(name = "test_eigen")
+
+cppyy_py_test(
+    name = "test_fragile",
+    sokeys = ["fragile"],
+)
+
+cppyy_py_test(
+    name = "test_lowlevel",
+    sokeys = ["datatypes"],
+)
+
+cppyy_py_test(
+    name = "test_operators",
+    sokeys = ["operators"],
+)
+
+cppyy_py_test(
+    name = "test_overloads",
+    sokeys = ["overloads"],
+)
+
+cppyy_py_test(
+    name = "test_pythonify",
+    sokeys = ["example01"],
+)
+
+cppyy_py_test(
+    name = "test_pythonization",
+    sokeys = ["pythonizables"],
+)
+
+cppyy_py_test(name = "test_regression")
+
+cppyy_py_test(
+    name = "test_stltypes",
+    sokeys = ["stltypes"],
+)
+
+cppyy_py_test(
+    name = "test_streams",
+    sokeys = ["std_streams"],
+)
+
+cppyy_py_test(
+    name = "test_templates",
+    sokeys = ["templates"],
+)
+
+# leakcheck and numba are flaky/heavy in upstream CI. The frozen cppyy_py_test
+# macro takes no tags param, so they are declared as normal targets but kept
+# OUT of the :tests suite below.
+cppyy_py_test(name = "test_leakcheck")
+
+cppyy_py_test(name = "test_numba")
+
+# Cross-repo test_suite cannot use wildcards; list every gated target.
+test_suite(
+    name = "tests",
+    tests = [
+        ":test_aclassloader",
+        ":test_advancedcpp",
+        ":test_api",
+        ":test_basic_api",
+        ":test_boost",
+        ":test_concurrent",
+        ":test_conversions",
+        ":test_cpp11features",
+        ":test_cpp23features",
+        ":test_crossinheritance",
+        ":test_datatypes",
+        ":test_doc_features",
+        ":test_eigen",
+        ":test_fragile",
+        ":test_lowlevel",
+        ":test_operators",
+        ":test_overloads",
+        ":test_pythonify",
+        ":test_pythonization",
+        ":test_regression",
+        ":test_stltypes",
+        ":test_streams",
+        ":test_templates",
+        # test_leakcheck, test_numba intentionally excluded (flaky/heavy).
+    ],
+)
+
+py_wheel(
+    name = "cppyy_wheel",
+    distribution = "cppyy",
+    strip_path_prefixes = ["python"],
+    version = "0.1.0.dev0",
+    deps = [":lib"],
+)
