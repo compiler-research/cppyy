@@ -1697,7 +1697,6 @@ class TestSTLARRAY:
         with raises(TypeError):
             cppyy.gbl.std.array["double",3](['a', 1.0, 1.0])
 
-    @mark.xfail(reason="std::array<nanoseconds> iteration fails")
     def test05_array_of_chrono_types_should_be_iterable(self):
         import cppyy
         cppyy.cppdef("""
@@ -1706,9 +1705,7 @@ class TestSTLARRAY:
         std::vector<std::chrono::nanoseconds>   vtimes  = {10ns, 500ns, 1us};
         std::array<std::chrono::nanoseconds, 3> atimes = {10ns, 500ns, 1us};
         """)
-        # this works normally...
         assert sum([v.count() for v in cppyy.gbl.vtimes]) == 1510
-        # ... but this doesn't, fails complaining about not being able to iterate
         assert sum([v.count() for v in cppyy.gbl.atimes]) == 1510
 
 
