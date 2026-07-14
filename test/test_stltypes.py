@@ -2288,3 +2288,26 @@ class TestSTLSPAN:
 
         # 6) const span behaves the same (already checked above, but explicit case)
         assert cppyy.gbl.sum_span_const["double"](np_arr) == expected
+
+
+class TestSTLANY:
+
+    def test01_make_any(self):
+        """
+        Test that std::make_any can be used for class types.
+        """
+        import cppyy
+
+        cppyy.cppdef("""
+        #include <any>
+
+        namespace STLANY {
+
+        class MyClass{};
+
+        } // namespace STLANY
+        """)
+
+        my_inst = cppyy.gbl.STLANY.MyClass()
+
+        cppyy.gbl.std.make_any["STLANY::MyClass*", "STLANY::MyClass*"](my_inst)
