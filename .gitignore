@@ -44,3 +44,10 @@ bench/*.log
 bench/swig_*.py
 bench/*_wrap.cxx
 bench/*_main
+
+# Bazel convenience symlinks and module lock
+/bazel-bin
+/bazel-out
+/bazel-testlogs
+/bazel-cppyy
+MODULE.bazel.lock

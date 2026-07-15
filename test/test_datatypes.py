@@ -764,8 +764,9 @@ class TestDATATYPES:
 
         assert sc.vraioufaux.faux == False
         assert sc.vraioufaux.vrai == True
-        assert type(sc.vraioufaux.faux) == bool  # no bool as base class
-        assert isinstance(sc.vraioufaux.faux, bool)
+        assert type(sc.vraioufaux.faux) == sc.vraioufaux
+        assert isinstance(sc.vraioufaux.faux, int)   # no bool as base class
+        assert 'bool' in repr(sc.vraioufaux.faux)
 
     def test12_enum_scopes(self):
         """Enum accessibility and scopes"""
@@ -2339,7 +2340,6 @@ class TestDATATYPES:
         assert [ns.test[i]  for i in range(6)] == [-0x12, -0x34, -0x56, -0x78, 0x0, 0x0]
         assert [ns.utest[i] for i in range(6)] == [ 0x12,  0x34,  0x56,  0x78, 0x0, 0x0]
 
-    @mark.xfail(reason="enum class : bool is broken, doesn't populate underlying _member_names_, for example")
     def test51_enum_integrity(self):
         import cppyy
         import enum
@@ -2403,7 +2403,7 @@ class TestDATATYPES:
         with raises(TypeError):
             ns53.f1(1000)
 
-    @mark.xfail(reason="optional on enum uint8_t is broken")
+    @mark.xfail(condition= IS_MAC, reason="std::optional<std::string>::value_or rvalue conversion fails on OS X clang-repl (InstanceMoveConverter)")
     def test54_optional_use(self):
         import cppyy
         cppyy.cppdef("""
@@ -2417,6 +2417,9 @@ class TestDATATYPES:
 
             enum class Tec : char {ZERO, ONE, TWO};
             std::optional<Tec> tec;
+
+            enum class Tei8 : int8_t {ZERO, ONE, TWO};
+            std::optional<Tei8> tei8;
 
             enum class Teu8 : uint8_t {ZERO, ONE, TWO};
             std::optional<Teu8> teu8;
@@ -2439,6 +2442,42 @@ class TestDATATYPES:
         ns54.tec = ns54.Tec.TWO
         assert ns54.tec == ns54.Tec.TWO
 
+        assert ns54.tei8.value_or(ns54.Tei8.TWO) == ns54.Tei8.TWO
+        ns54.tei8 = ns54.Tei8.TWO
+        assert ns54.tei8 == ns54.Tei8.TWO
+
         assert ns54.teu8.value_or(ns54.Teu8.TWO) == ns54.Teu8.TWO
         ns54.teu8 = ns54.Teu8.TWO
         assert ns54.teu8 == ns54.Teu8.TWO
+
+    def test55_qt_cache_alias_collision(self):
+        """`unsigned char` and `uint8_t` share a canonical type but cppyy
+        wires them to different converters (str vs int). Locks in the
+        QT-keyed cache's alias-collision skip in Converters.cxx."""
+
+        import cppyy
+
+        cppyy.cppdef("""
+        #include <cstdint>
+        namespace ns55 {
+            void take_uchar(unsigned char) {}
+            void take_uint8(uint8_t)       {}
+            void take_schar(signed char)   {}
+            void take_int8(int8_t)         {}
+        }
+        """)
+        ns = cppyy.gbl.ns55
+
+        # `unsigned char`: UCharConverter -- accepts 1-char str.
+        ns.take_uchar('e')
+        ns.take_uchar(101)        # int also accepted as a char value
+        raises(TypeError, ns.take_uchar, 1.5)
+
+        # `uint8_t`: UInt8Converter -- accepts int.
+        ns.take_uint8(101)
+        raises(TypeError, ns.take_uint8, 'e')
+
+        # Symmetric for the signed pair.
+        ns.take_schar('e')
+        ns.take_int8(101)
+        raises(TypeError, ns.take_int8, 'e')
